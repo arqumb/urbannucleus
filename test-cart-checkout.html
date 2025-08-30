@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Cart to Checkout - URBAN NUCLEUS</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-section {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #000;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 5px;
+            transition: background 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #333;
+        }
+        .btn-secondary {
+            background: #666;
+        }
+        .btn-secondary:hover {
+            background: #555;
+        }
+        .code-block {
+            background: #f1f1f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        .cart-preview {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test Cart to Checkout Functionality</h1>
+    
+    <div class="test-section">
+        <h2>Test 1: Simulate Cart with Single Item</h2>
+        <p>This test simulates a cart with one product and redirects to checkout.</p>
+        
+        <div class="cart-preview">
+            <strong>Cart Preview:</strong>
+            <ul>
+                <li>AJ1 Low 'Trophy Room Away' (UA) - ₹8,499 - Size: US 11 - Qty: 1</li>
+            </ul>
+            <strong>Total: ₹8,499</strong>
+        </div>
+        
+        <button class="btn" onclick="testSingleItemCart()">Test Single Item Cart → Checkout</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 2: Simulate Cart with Multiple Items</h2>
+        <p>This test simulates a cart with multiple products and redirects to checkout.</p>
+        
+        <div class="cart-preview">
+            <strong>Cart Preview:</strong>
+            <ul>
+                <li>AJ1 Low 'Trophy Room Away' (UA) - ₹8,499 - Size: US 11 - Qty: 1</li>
+                <li>Nike Air Max 90 - ₹6,999 - Size: US 10 - Qty: 2</li>
+                <li>Adidas Ultraboost - ₹12,999 - Size: US 9.5 - Qty: 1</li>
+            </ul>
+            <strong>Total: ₹35,496</strong>
+        </div>
+        
+        <button class="btn" onclick="testMultipleItemsCart()">Test Multiple Items Cart → Checkout</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 3: Test Cart Data Structure</h2>
+        <p>This test shows the exact data structure that will be sent to checkout.</p>
+        
+        <button class="btn btn-secondary" onclick="showCartDataStructure()">Show Cart Data Structure</button>
+        
+        <div id="dataStructureOutput" style="display: none;">
+            <div class="code-block">
+                <pre id="dataStructureContent"></pre>
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>How It Works</h2>
+        <ol>
+            <li><strong>Cart Page</strong>: When user clicks "Proceed to Checkout", cart data is prepared</li>
+            <li><strong>Data Preparation</strong>: All product details (id, name, price, image, size, quantity, sku, category) are collected</li>
+            <li><strong>URL Encoding</strong>: Cart data is JSON encoded and passed as URL parameter</li>
+            <li><strong>Checkout Page</strong>: Receives cart data and displays all items with images and details</li>
+            <li><strong>Order Summary</strong>: Shows subtotal, tax message, and total</li>
+        </ol>
+    </div>
+    
+    <div class="test-section">
+        <h2>Expected Results</h2>
+        <ul>
+            <li>✅ <strong>All Product Data</strong> - Names, prices, images, sizes, quantities</li>
+            <li>✅ <strong>Correct Images</strong> - Product images displayed in order summary</li>
+            <li>✅ <strong>Accurate Totals</strong> - Subtotal and total calculated correctly</li>
+            <li>✅ <strong>Edit Functionality</strong> - "Edit Order" button returns to cart</li>
+            <li>✅ <strong>Add More Products</strong> - "Add More Products" button goes to collections</li>
+        </ul>
+    </div>
+
+    <script>
+        // Test 1: Single Item Cart
+        function testSingleItemCart() {
+            const cartData = {
+                items: [
+                    {
+                        id: 13,
+                        name: "AJ1 Low 'Trophy Room Away' (UA)",
+                        price: 8499,
+                        image: "http://localhost:3000/uploads/images/1754842044992-20991826.JPG",
+                        size: "US 11",
+                        quantity: 1,
+                        sku: "10",
+                        category: "Sneakers"
+                    }
+                ],
+                subtotal: 8499,
+                total: 8499,
+                itemCount: 1
+            };
+            
+            console.log('🧪 Testing single item cart:', cartData);
+            const encodedData = encodeURIComponent(JSON.stringify(cartData));
+            window.location.href = `checkout.html?cart=${encodedData}`;
+        }
+        
+        // Test 2: Multiple Items Cart
+        function testMultipleItemsCart() {
+            const cartData = {
+                items: [
+                    {
+                        id: 13,
+                        name: "AJ1 Low 'Trophy Room Away' (UA)",
+                        price: 8499,
+                        image: "http://localhost:3000/uploads/images/1754842044992-20991826.JPG",
+                        size: "US 11",
+                        quantity: 1,
+                        sku: "10",
+                        category: "Sneakers"
+                    },
+                    {
+                        id: 14,
+                        name: "Nike Air Max 90",
+                        price: 6999,
+                        image: "uploads/images/1754636223677-118256129.png",
+                        size: "US 10",
+                        quantity: 2,
+                        sku: "11",
+                        category: "Sneakers"
+                    },
+                    {
+                        id: 15,
+                        name: "Adidas Ultraboost",
+                        price: 12999,
+                        image: "uploads/images/1754801882851-563674824.png",
+                        size: "US 9.5",
+                        quantity: 1,
+                        sku: "12",
+                        category: "Running"
+                    }
+                ],
+                subtotal: 35496,
+                total: 35496,
+                itemCount: 3
+            };
+            
+            console.log('🧪 Testing multiple items cart:', cartData);
+            const encodedData = encodeURIComponent(JSON.stringify(cartData));
+            window.location.href = `checkout.html?cart=${encodedData}`;
+        }
+        
+        // Test 3: Show Data Structure
+        function showCartDataStructure() {
+            const output = document.getElementById('dataStructureOutput');
+            const content = document.getElementById('dataStructureContent');
+            
+            const sampleCart = {
+                items: [
+                    {
+                        id: 13,
+                        name: "AJ1 Low 'Trophy Room Away' (UA)",
+                        price: 8499,
+                        image: "http://localhost:3000/uploads/images/1754842044992-20991826.JPG",
+                        size: "US 11",
+                        quantity: 1,
+                        sku: "10",
+                        category: "Sneakers"
+                    }
+                ],
+                subtotal: 8499,
+                total: 8499,
+                itemCount: 1
+            };
+            
+            content.textContent = JSON.stringify(sampleCart, null, 2);
+            output.style.display = 'block';
+        }
+        
+        // Log when page loads
+        console.log('🧪 Cart to Checkout Test Page Loaded');
+        console.log('📋 Available test functions:');
+        console.log('  - testSingleItemCart()');
+        console.log('  - testMultipleItemsCart()');
+        console.log('  - showCartDataStructure()');
+    </script>
+</body>
+</html>
+

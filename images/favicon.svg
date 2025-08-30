@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <style>
+      .favicon-globe { fill: none; stroke: #1a1a1a; stroke-width: 1.5; }
+      .favicon-sparkle { fill: #1a1a1a; }
+    </style>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="32" height="32" fill="#f5f5f0" rx="4"/>
+  
+  <!-- Globe/Sphere Design -->
+  <g transform="translate(16, 16)">
+    <!-- Outer ellipse -->
+    <ellipse cx="0" cy="0" rx="12" ry="6" class="favicon-globe"/>
+    <!-- Inner ellipse -->
+    <ellipse cx="0" cy="0" rx="8" ry="4" class="favicon-globe"/>
+    
+    <!-- Cross lines -->
+    <line x1="-12" y1="0" x2="12" y2="0" class="favicon-globe"/>
+    <line x1="0" y1="-6" x2="0" y2="6" class="favicon-globe"/>
+  </g>
+  
+  <!-- Small sparkle -->
+  <circle cx="26" cy="8" r="1" class="favicon-sparkle"/>
+</svg>
+
+
+
+
+
+
+

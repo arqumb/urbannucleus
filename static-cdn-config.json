@@ -1,0 +1,13 @@
+{
+  "jsDelivr": {
+    "baseUrl": "https://cdn.jsdelivr.net/gh/username/urban-nucleus@main",
+    "usage": {
+      "css": "https://cdn.jsdelivr.net/gh/username/urban-nucleus@main/combined.min.css",
+      "js": "https://cdn.jsdelivr.net/gh/username/urban-nucleus@main/combined.min.js"
+    }
+  },
+  "githubPages": {
+    "baseUrl": "https://username.github.io/urban-nucleus",
+    "setup": "Push assets to gh-pages branch"
+  }
+}

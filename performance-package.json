@@ -1,0 +1,26 @@
+{
+  "name": "urban-nucleus-performance",
+  "version": "1.0.0",
+  "description": "Performance optimization tools for Urban Nucleus website",
+  "scripts": {
+    "optimize": "node optimize-all.js",
+    "optimize:images": "node optimize-images.js",
+    "optimize:resources": "node minify-resources.js",
+    "analyze": "node analyze-performance.js",
+    "compress": "node compress-assets.js",
+    "test:lighthouse": "lighthouse http://localhost:3000 --output json --output html --output-path ./reports/lighthouse",
+    "test:performance": "node test-performance.js"
+  },
+  "devDependencies": {
+    "sharp": "^0.33.0",
+    "uglify-js": "^3.17.4",
+    "clean-css-cli": "^5.6.2",
+    "html-minifier-terser": "^7.2.0",
+    "lighthouse": "^11.4.0",
+    "compression": "^1.7.4",
+    "gzip-size": "^7.0.0"
+  },
+  "keywords": ["performance", "optimization", "web", "ecommerce"],
+  "author": "Urban Nucleus",
+  "license": "ISC"
+}

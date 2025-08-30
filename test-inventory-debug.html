@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Debug Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ccc; border-radius: 5px; }
+        .test-button { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px; }
+        .test-button:hover { background: #0056b3; }
+        .result { background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 10px 0; white-space: pre-wrap; }
+        .error { background: #f8d7da; color: #721c24; }
+        .success { background: #d4edda; color: #155724; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Inventory Debug Test</h1>
+    
+    <div class="test-section">
+        <h3>Test Product API</h3>
+        <input type="number" id="productIdInput" placeholder="Enter Product ID" value="265" style="padding: 5px; margin-right: 10px;">
+        <button class="test-button" onclick="testProductAPI()">Test Product API</button>
+        <div id="productResult" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>Test Size Rendering</h3>
+        <button class="test-button" onclick="testSizeRendering()">Test Size Rendering</button>
+        <div id="sizeResult" class="result"></div>
+        <div id="sizeContainer"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>Database Check</h3>
+        <button class="test-button" onclick="checkDatabase()">Check Database</button>
+        <div id="dbResult" class="result"></div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:3000';
+        
+        async function testProductAPI() {
+            const productId = document.getElementById('productIdInput').value;
+            const resultDiv = document.getElementById('productResult');
+            
+            try {
+                resultDiv.textContent = 'Testing API for product ID: ' + productId + '...';
+                resultDiv.className = 'result';
+                
+                const response = await fetch(`${API_BASE_URL}/products/${productId}`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = `✅ API Success!\n\nProduct: ${data.name}\nTotal Inventory: ${data.inventory}\nSizes: ${data.sizes ? data.sizes.length : 0}\n\nSizes Detail:\n${JSON.stringify(data.sizes, null, 2)}`;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = `❌ API Error: ${data.error || 'Unknown error'}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Network Error: ${error.message}`;
+            }
+        }
+        
+        function testSizeRendering() {
+            const resultDiv = document.getElementById('sizeResult');
+            const containerDiv = document.getElementById('sizeContainer');
+            
+            // Test data
+            const testSizes = [
+                { size: 'US 7', inventory: 24 },
+                { size: 'US 8', inventory: 21 },
+                { size: 'US 9', inventory: 16 },
+                { size: 'US 10', inventory: 18 },
+                { size: 'US 11', inventory: 20 }
+            ];
+            
+            resultDiv.className = 'result success';
+            resultDiv.textContent = `Testing size rendering with ${testSizes.length} sizes...`;
+            
+            // Render sizes
+            containerDiv.innerHTML = testSizes.map(size => `
+                <button class="size-option ${size.inventory > 0 ? 'available' : 'out-of-stock'}" 
+                        data-size="${size.size}" 
+                        data-inventory="${size.inventory}"
+                        ${size.inventory > 0 ? '' : 'disabled'}
+                        style="margin: 5px; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                    ${size.size}
+                    ${size.inventory > 0 ? `<span class="inventory">${size.inventory} left</span>` : '<span class="inventory">Out of stock</span>'}
+                </button>
+            `).join('');
+            
+            resultDiv.textContent += '\n✅ Sizes rendered successfully!';
+        }
+        
+        async function checkDatabase() {
+            const resultDiv = document.getElementById('dbResult');
+            resultDiv.textContent = 'Checking database through API...';
+            resultDiv.className = 'result';
+            
+            try {
+                // Test multiple products to see inventory status
+                const products = [265, 266, 267, 268, 269];
+                let results = [];
+                
+                for (const productId of products) {
+                    try {
+                        const response = await fetch(`${API_BASE_URL}/products/${productId}`);
+                        const data = await response.json();
+                        
+                        if (response.ok) {
+                            const hasInventory = data.sizes && data.sizes.some(s => s.inventory > 0);
+                            results.push(`${productId}: ${data.name} - ${hasInventory ? '✅ Has inventory' : '❌ No inventory'}`);
+                        } else {
+                            results.push(`${productId}: Error - ${data.error}`);
+                        }
+                    } catch (error) {
+                        results.push(`${productId}: Network error`);
+                    }
+                }
+                
+                resultDiv.className = 'result success';
+                resultDiv.textContent = 'Database Check Results:\n\n' + results.join('\n');
+                
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Error: ${error.message}`;
+            }
+        }
+        
+        // Auto-run tests on page load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                testProductAPI();
+                testSizeRendering();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

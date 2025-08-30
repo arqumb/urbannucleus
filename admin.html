@@ -1,0 +1,4277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Urban Nucleus</title>
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Professional Notification System */
+        .notification-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 10002;
+            max-width: 400px;
+        }
+        
+        .notification {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            margin-bottom: 16px;
+            padding: 20px;
+            border-left: 4px solid #4caf50;
+            transform: translateX(100%);
+            transition: transform 0.3s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            border-left-color: #4caf50;
+        }
+        
+        .notification.error {
+            border-left-color: #f44336;
+        }
+        
+        .notification.warning {
+            border-left-color: #ff9800;
+        }
+        
+        .notification.info {
+            border-left-color: #2196f3;
+        }
+
+        /* Newsletter and Contact Forms Styles */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .stat-content h3 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .stat-content p {
+            margin: 4px 0 0 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .table-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            background: #f8f9fa;
+        }
+
+        .table-header h3 {
+            margin: 0;
+            color: #333;
+            font-size: 1.2rem;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .table-actions select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        .data-table th {
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 1px solid #e0e0e0;
+            background: #f8f9fa;
+        }
+
+        .data-table td {
+            padding: 16px;
+            border-bottom: 1px solid #f0f0f0;
+            vertical-align: middle;
+        }
+
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-active, .status-new {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-inactive, .status-unsubscribed {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-read {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-replied {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-closed {
+            background: #e2e3e5;
+            color: #383d41;
+        }
+
+        .loading-row, .empty-row, .error-row {
+            text-align: center;
+            padding: 40px 16px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .error-row {
+            color: #dc3545;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .status-dropdown {
+            margin-top: 4px;
+        }
+
+        .status-select {
+            padding: 4px 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            background: white;
+            cursor: pointer;
+            min-width: 80px;
+        }
+
+        .status-select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            border-radius: 6px;
+        }
+
+        .subject-cell {
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Enhanced Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            animation: fadeIn 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(-50px) scale(0.95);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            max-width: 700px;
+            width: 95%;
+            max-height: 85vh;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-header {
+            padding: 24px 28px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .modal-header h3::before {
+            content: "✉️";
+            font-size: 1.2rem;
+        }
+
+        .modal-close {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            color: white;
+            padding: 8px;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 28px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .contact-details {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .detail-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 16px;
+            border-radius: 12px;
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .detail-row:hover {
+            background: #f0f0f0;
+            transform: translateX(4px);
+        }
+
+        .detail-row strong {
+            color: #333;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .detail-row strong::before {
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: #667eea;
+        }
+
+        .detail-row strong[data-field="name"]::before { content: "👤"; }
+        .detail-row strong[data-field="email"]::before { content: "📧"; }
+        .detail-row strong[data-field="phone"]::before { content: "📱"; }
+        .detail-row strong[data-field="subject"]::before { content: "📝"; }
+        .detail-row strong[data-field="status"]::before { content: "🏷️"; }
+        .detail-row strong[data-field="date"]::before { content: "📅"; }
+
+        .detail-value {
+            color: #444;
+            font-size: 1rem;
+            word-break: break-word;
+        }
+
+        .message-row {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-left: 4px solid #28a745;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .message-row .message-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 12px;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            font-size: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e0e0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .modal-footer {
+            padding: 24px 28px;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            gap: 16px;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .modal-status-update {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-status-update label {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.9rem;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 16px;
+        }
+
+        .email-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .email-client-help {
+            border-top: 1px solid #e0e0e0;
+            padding-top: 16px;
+        }
+
+        .email-client-help details summary {
+            padding: 8px 0;
+            border-radius: 4px;
+            transition: color 0.2s ease;
+        }
+
+        .email-client-help details summary:hover {
+            color: #667eea;
+        }
+
+        .email-client-help details[open] summary {
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .email-client-help a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .email-client-help a:hover {
+            text-decoration: underline;
+        }
+
+        /* Customer Management Styles */
+        .customers-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .customers-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 40px 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        .customers-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .customers-table-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .customers-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .customers-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+            padding: 16px 12px;
+            text-align: left;
+            border: none;
+        }
+
+        .customers-table td {
+            padding: 16px 12px;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+
+        .customers-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .customer-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .customer-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .customer-email {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .loading-text {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Customer Details Modal Styles */
+        .customer-details {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .customer-summary {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .customer-avatar {
+            font-size: 3rem;
+            opacity: 0.9;
+        }
+
+        .customer-basic-info h4 {
+            margin: 0 0 8px 0;
+            font-size: 1.5rem;
+        }
+
+        .customer-basic-info p {
+            margin: 0 0 8px 0;
+            opacity: 0.9;
+        }
+
+        .customer-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .customer-stats-mini {
+            display: flex;
+            gap: 24px;
+            margin-left: auto;
+        }
+
+        .stat-mini {
+            text-align: center;
+        }
+
+        .stat-mini strong {
+            display: block;
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+        }
+
+        .stat-mini span {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .customer-tabs {
+            margin-top: 24px;
+        }
+
+        .tab-buttons {
+            display: flex;
+            border-bottom: 2px solid #eee;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-btn:hover {
+            color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .info-item {
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-item label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .info-item label i {
+            margin-right: 8px;
+            color: #667eea;
+        }
+
+        .info-item value {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .orders-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+
+        .order-info strong {
+            display: block;
+            color: #333;
+        }
+
+        .order-date {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .order-details {
+            text-align: right;
+        }
+
+        .order-status {
+            display: block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-processing { background: #cce5ff; color: #004085; }
+        .status-shipped { background: #d4edda; color: #155724; }
+        .status-delivered { background: #d4edda; color: #155724; }
+        .status-cancelled { background: #f8d7da; color: #721c24; }
+
+        .order-total {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .activity-timeline {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .activity-item i {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #667eea;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .activity-content strong {
+            display: block;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .activity-content span {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .customers-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .customer-summary {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .customer-stats-mini {
+                margin-left: 0;
+                justify-content: center;
+            }
+
+            .tab-buttons {
+                flex-direction: column;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .email-option-btn {
+            display: flex !important;
+            align-items: center;
+            gap: 12px;
+            padding: 16px !important;
+            text-align: left;
+            height: auto;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .email-option-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-color: currentColor;
+        }
+
+        .email-option-btn i {
+            font-size: 1.5rem;
+            min-width: 24px;
+        }
+
+        .email-option-btn div {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .email-option-btn strong {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .email-option-btn small {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            font-weight: normal;
+        }
+
+        .email-preview {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .email-preview-content {
+            font-family: monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .email-field {
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .email-field strong {
+            color: #666;
+            display: inline-block;
+            min-width: 60px;
+        }
+
+        .email-body-preview {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 12px;
+            margin-top: 8px;
+            white-space: pre-wrap;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 768px) {
+            .email-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .email-option-btn {
+                padding: 12px !important;
+            }
+        }
+
+        .modal-footer .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-footer .btn-secondary {
+            background: #6c757d;
+            color: white;
+            border: none;
+        }
+
+        .modal-footer .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .modal-footer .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+        }
+
+        .modal-footer .btn-success:hover {
+            background: linear-gradient(135deg, #218838 0%, #1da589 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .table-header {
+                flex-direction: column;
+                gap: 16px;
+                align-items: stretch;
+            }
+
+            .table-actions {
+                justify-content: space-between;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+        
+        .notification-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        
+        .notification-title {
+            font-weight: 600;
+            font-size: 16px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .notification-close {
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        
+        .notification-close:hover {
+            background: #f5f5f5;
+            color: #666;
+        }
+        
+        .notification-message {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 0;
+        }
+        
+        .notification-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: #4caf50;
+            width: 100%;
+            animation: notification-progress 5s linear forwards;
+        }
+        
+        .notification.error .notification-progress {
+            background: #f44336;
+        }
+        
+        .notification.warning .notification-progress {
+            background: #ff9800;
+        }
+        
+        .notification.info .notification-progress {
+            background: #2196f3;
+        }
+        
+        @keyframes notification-progress {
+            from { width: 100%; }
+            to { width: 0%; }
+        }
+        
+        .notification-icon {
+            font-size: 18px;
+        }
+        
+        .notification.success .notification-icon {
+            color: #4caf50;
+        }
+        
+        .notification.error .notification-icon {
+            color: #f44336;
+        }
+        
+        .notification.warning .notification-icon {
+            color: #ff9800;
+        }
+        
+        .notification.info .notification-icon {
+            color: #2196f3;
+        }
+        
+        /* Mobile responsive notifications */
+        @media (max-width: 768px) {
+            .notification-container {
+                right: 10px;
+                left: 10px;
+                max-width: none;
+            }
+            
+            .notification {
+                padding: 16px;
+                margin-bottom: 12px;
+            }
+            
+            .notification-title {
+                font-size: 14px;
+            }
+            
+            .notification-message {
+                font-size: 13px;
+            }
+        }
+
+        /* Products Sorting Section */
+        .products-sorting-section {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .sorting-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .sorting-controls .form-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0;
+        }
+
+        .sorting-controls label {
+            font-weight: 600;
+            color: #333;
+            white-space: nowrap;
+            margin: 0;
+        }
+
+        .sorting-controls label i {
+            color: #007bff;
+            margin-right: 5px;
+        }
+
+        .sorting-controls select {
+            min-width: 200px;
+        }
+
+        .sorting-info {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .sorting-info span {
+            background: #f8f9fa;
+            padding: 5px 12px;
+            border-radius: 15px;
+            border: 1px solid #dee2e6;
+        }
+
+        .sorting-help {
+            margin-left: 10px;
+            color: #6c757d;
+            cursor: help;
+            background: transparent !important;
+            border: none !important;
+            padding: 0 !important;
+        }
+
+        .sorting-help:hover {
+            color: #007bff;
+        }
+
+        @media (max-width: 768px) {
+            .sorting-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .sorting-controls .form-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .sorting-controls select {
+                min-width: unset;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Professional Notification Container -->
+    <div class="notification-container" id="notificationContainer"></div>
+    
+    <!-- Admin Authentication Check -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Professional Notification System
+            function showNotification(type, title, message, duration = 5000) {
+                const container = document.getElementById('notificationContainer');
+                const notification = document.createElement('div');
+                const icon = getNotificationIcon(type);
+                
+                notification.className = `notification ${type}`;
+                notification.innerHTML = `
+                    <div class="notification-header">
+                        <div class="notification-title">
+                            <i class="fas ${icon} notification-icon"></i>
+                            ${title}
+                        </div>
+                        <button class="notification-close" onclick="this.parentElement.parentElement.remove()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="notification-message">${message}</div>
+                    <div class="notification-progress"></div>
+                `;
+                
+                container.appendChild(notification);
+                
+                // Trigger animation
+                setTimeout(() => notification.classList.add('show'), 100);
+                
+                // Auto-remove after duration
+                if (duration > 0) {
+                    setTimeout(() => {
+                        if (notification.parentElement) {
+                            notification.classList.remove('show');
+                            setTimeout(() => notification.remove(), 300);
+                        }
+                    }, duration);
+                }
+            }
+            
+            function getNotificationIcon(type) {
+                const icons = {
+                    success: 'fa-check-circle',
+                    error: 'fa-exclamation-circle',
+                    warning: 'fa-exclamation-triangle',
+                    info: 'fa-info-circle'
+                };
+                return icons[type] || 'fa-info-circle';
+            }
+            
+            // Check if user is logged in and is admin
+            function checkAdminAuth() {
+                const currentUser = localStorage.getItem('currentUser');
+                if (!currentUser) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+                
+                const user = JSON.parse(currentUser);
+                if (user.email !== 'bubere908@gmail.com' || user.role !== 'admin') {
+                    showNotification('error', 'Access Denied', 'Admin privileges required.', 5000);
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 5000);
+                    return;
+                }
+            }
+            
+            // Run auth check immediately
+            checkAdminAuth();
+            
+            // Test if loadOrders function exists
+            console.log('🔍 Checking if loadOrders function exists...');
+            console.log('📋 loadOrders function type:', typeof window.loadOrders);
+            console.log('📋 loadOrders function:', window.loadOrders);
+            
+            // Test if orders-table element exists
+            console.log('🏷️ orders-table element:', document.getElementById('orders-table'));
+            
+            // Test API_BASE_URL
+            console.log('🔧 API_BASE_URL:', typeof window.API_BASE_URL !== 'undefined' ? window.API_BASE_URL : 'NOT DEFINED');
+        });
+    </script>
+
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-store"></i> Urban Nucleus</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-section="dashboard">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="#" class="nav-item" data-section="products">
+                    <i class="fas fa-box"></i> Products
+                </a>
+                <a href="#" class="nav-item" data-section="orders">
+                    <i class="fas fa-shopping-cart"></i> Orders
+                </a>
+                <a href="#" class="nav-item" data-section="customers">
+                    <i class="fas fa-users"></i> Customers
+                </a>
+                <a href="#" class="nav-item" data-section="categories">
+                    <i class="fas fa-tags"></i> Categories
+                </a>
+                <a href="#" class="nav-item" data-section="category-images">
+                    <i class="fas fa-images"></i> Category Images
+                </a>
+                <a href="#" class="nav-item" data-section="analytics">
+                    <i class="fas fa-chart-bar"></i> Analytics
+                </a>
+                <a href="#" class="nav-item" data-section="hero-slides">
+                    <i class="fas fa-images"></i> Hero Slides
+                </a>
+                <a href="#" class="nav-item" data-section="limited-drops">
+                    <i class="fas fa-fire"></i> Limited Drops
+                </a>
+                <a href="#" class="nav-item" data-section="announcement">
+                    <i class="fas fa-bullhorn"></i> Announcement Bar
+                </a>
+                <a href="#" class="nav-item" data-section="newsletter">
+                    <i class="fas fa-envelope"></i> Newsletter Subscribers
+                </a>
+                <a href="#" class="nav-item" data-section="contact-forms">
+                    <i class="fas fa-paper-plane"></i> Contact Forms
+                </a>
+                <a href="#" class="nav-item" data-section="settings">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <header class="admin-header">
+                <div class="header-content">
+                    <h1 id="section-title">Dashboard</h1>
+                    <div class="header-actions">
+                        <span class="admin-info">
+                            <i class="fas fa-user"></i>
+                            Admin
+                        </span>
+                        <button class="btn-secondary" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="content-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="total-products">0</h3>
+                            <p>Total Products</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="total-orders">0</h3>
+                            <p>Total Orders</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="total-customers">0</h3>
+                            <p>Total Customers</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="total-revenue">$0</h3>
+                            <p>Total Revenue</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Section -->
+            <div id="products" class="content-section">
+                <div class="section-header">
+                    <h2>Products</h2>
+                    <div class="section-actions">
+                        <button class="btn-secondary" onclick="loadProducts()" title="Refresh Products">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                        <button class="btn-primary" onclick="openAddProductModal()">
+                            <i class="fas fa-plus"></i> Add Product
+                        </button>
+                    </div>
+                </div>
+                <div class="section-info">
+                    <p><i class="fas fa-info-circle"></i> <strong>Note:</strong> The system currently displays up to 100 products per page due to backend optimization. If you have more than 100 products, only the first 100 will be shown.</p>
+                </div>
+                
+                <!-- Bulk Operations Section -->
+                <div class="bulk-operations-section">
+                    <h3>Bulk Operations</h3>
+                    <div class="bulk-controls">
+                        <button class="btn-secondary" onclick="selectAllProducts()">
+                            <i class="fas fa-check-square"></i> Select All
+                        </button>
+                        <button class="btn-secondary" onclick="deselectAllProducts()">
+                            <i class="fas fa-square"></i> Deselect All
+                        </button>
+                        <button class="btn-danger" onclick="bulkDeleteProducts()" id="bulkDeleteBtn" disabled>
+                            <i class="fas fa-trash"></i> Delete Selected (<span id="selectedCount">0</span>)
+                        </button>
+                    </div>
+                    <div id="bulk-status" class="bulk-status"></div>
+                </div>
+
+                <!-- Products Sorting Section -->
+                <div class="products-sorting-section">
+                    <div class="sorting-controls">
+                        <div class="form-group">
+                            <label for="productSort"><i class="fas fa-sort"></i> Sort Products</label>
+                            <select id="productSort" class="form-control" onchange="sortProducts()">
+                                <option value="name_asc">Name (A-Z)</option>
+                                <option value="name_desc">Name (Z-A)</option>
+                                <option value="created_desc" selected>Newest First</option>
+                                <option value="created_asc">Oldest First</option>
+                                <option value="price_asc">Price (Low to High)</option>
+                                <option value="price_desc">Price (High to Low)</option>
+                                <option value="status_asc">Status (Active First)</option>
+                                <option value="inventory_desc">Inventory (High to Low)</option>
+                                <option value="inventory_asc">Inventory (Low to High)</option>
+                            </select>
+                        </div>
+                        <div class="sorting-info">
+                            <span id="products-count">0 products</span>
+                            <span class="sorting-help" title="Products are sorted globally first, then divided into pages">
+                                <i class="fas fa-info-circle"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="products-grid" id="products-grid">
+                    <!-- Products will be loaded here -->
+                </div>
+                
+                <!-- Pagination Controls -->
+                <div class="pagination-container" id="pagination-container" style="display: none;">
+                    <div class="pagination-info">
+                        <span id="pagination-info">Showing 1-50 of 0 products</span>
+                    </div>
+                    <div class="pagination-controls">
+                        <button class="btn-secondary pagination-btn" id="prev-page-btn" onclick="goToPreviousPage()" disabled>
+                            <i class="fas fa-chevron-left"></i> Previous
+                        </button>
+                        <div class="page-numbers" id="page-numbers">
+                            <!-- Page numbers will be generated here -->
+                        </div>
+                        <button class="btn-secondary pagination-btn" id="next-page-btn" onclick="goToNextPage()" disabled>
+                            Next <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="pagination-settings">
+                        <label for="items-per-page">Items per page:</label>
+                        <select id="items-per-page" onchange="changeItemsPerPage()">
+                            <option value="25">25</option>
+                            <option value="50" selected>50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orders Section -->
+            <div id="orders" class="content-section">
+                <div class="section-header">
+                    <h2>Orders Management</h2>
+                    <p>Manage all customer orders, track status, and process fulfillment</p>
+                </div>
+                
+                <!-- Orders Filters and Search -->
+                <div class="orders-controls">
+                    <div class="filters-row">
+                        <div class="filter-group">
+                            <label>Status Filter:</label>
+                            <select id="status-filter">
+                                <option value="">All Statuses</option>
+                                <option value="pending">Pending</option>
+                                <option value="processing">Processing</option>
+                                <option value="shipped">Shipped</option>
+                                <option value="delivered">Delivered</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label>Payment Method:</label>
+                            <select id="payment-filter">
+                                <option value="">All Payment Methods</option>
+                                <option value="upi">UPI (Prepaid)</option>
+                                <option value="cod">Cash on Delivery</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label>Date Range:</label>
+                            <select id="date-filter">
+                                <option value="">All Time</option>
+                                <option value="today">Today</option>
+                                <option value="week">This Week</option>
+                                <option value="month">This Month</option>
+                                <option value="quarter">This Quarter</option>
+                                <option value="year">This Year</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label>Sort By:</label>
+                            <select id="sort-filter">
+                                <option value="newest">Newest First</option>
+                                <option value="oldest">Oldest First</option>
+                                <option value="amount-high">Amount (High to Low)</option>
+                                <option value="amount-low">Amount (Low to High)</option>
+                                <option value="status">Status</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="search-row">
+                        <div class="search-group">
+                            <input type="text" id="orders-search" placeholder="Search orders by ID, customer name, email, or phone...">
+                            <button class="btn-secondary" onclick="searchOrders()">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                        </div>
+                        
+                        <div class="bulk-actions-group">
+                            <button class="btn-secondary" onclick="refreshOrders()" title="Refresh Orders">
+                                <i class="fas fa-sync-alt"></i> Refresh
+                            </button>
+                            <button class="btn-secondary" onclick="selectAllOrders()">
+                                <i class="fas fa-check-square"></i> Select All
+                            </button>
+                            <button class="btn-secondary" onclick="deselectAllOrders()">
+                                <i class="fas fa-square"></i> Deselect All
+                            </button>
+                            <button class="btn-primary" onclick="bulkUpdateStatus()" id="bulkStatusBtn" disabled>
+                                <i class="fas fa-edit"></i> Update Status (<span id="selectedOrdersCount">0</span>)
+                            </button>
+                            <button class="btn-danger" onclick="deleteSelectedOrders()" id="ordersBulkDeleteBtn" disabled>
+                                <i class="fas fa-trash"></i> Delete Selected (<span id="selectedOrdersCount">0</span>)
+                            </button>
+                            
+
+                            <button class="btn-secondary" onclick="exportOrders()">
+                                <i class="fas fa-download"></i> Export
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Orders Statistics -->
+                <div class="orders-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon pending">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="pendingOrders">0</h3>
+                            <p>Pending</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon processing">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="processingOrders">0</h3>
+                            <p>Processing</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon shipped">
+                            <i class="fas fa-shipping-fast"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="shippedOrders">0</h3>
+                            <p>Shipped</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon delivered">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="deliveredOrders">0</h3>
+                            <p>Delivered</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon revenue">
+                            <i class="fas fa-rupee-sign"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalRevenue">₹0</h3>
+                            <p>Total Revenue</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Orders Table -->
+                <div class="orders-table-container">
+                    <div class="orders-table" id="orders-table">
+                        <!-- Orders will be loaded here -->
+                        <div class="loading-state">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <p>Loading orders...</p>
+                        </div>
+                    </div>
+                    
+
+                </div>
+                
+                <!-- Pagination -->
+                <div class="pagination" id="ordersPagination">
+                    <!-- Pagination will be generated here -->
+                </div>
+            </div>
+
+            <!-- Customers Section -->
+            <div id="customers" class="content-section">
+                <div class="section-header">
+                    <h2>Customers</h2>
+                    <p>Manage your customer database and view customer details</p>
+                </div>
+                
+                <div class="customers-stats">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <i class="fas fa-users"></i>
+                            <span>Total Customers</span>
+                        </div>
+                        <div class="stat-value" id="total-customers">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <i class="fas fa-user-plus"></i>
+                            <span>New This Month</span>
+                        </div>
+                        <div class="stat-value" id="new-customers-month">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <i class="fas fa-user-check"></i>
+                            <span>Active Customers</span>
+                        </div>
+                        <div class="stat-value" id="active-customers">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <i class="fas fa-envelope-open"></i>
+                            <span>Verified Emails</span>
+                        </div>
+                        <div class="stat-value" id="verified-emails">-</div>
+                    </div>
+                </div>
+                
+                <div class="customers-controls">
+                    <div class="search-box">
+                        <input type="text" id="customer-search" placeholder="Search customers by name, email, or phone..." onkeyup="filterCustomers()">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="customers-actions">
+                        <button class="btn btn-secondary" onclick="refreshCustomers()">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+
+                        <button class="btn btn-primary" onclick="exportCustomers()">
+                            <i class="fas fa-download"></i> Export CSV
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="customers-table-container">
+                    <table class="customers-table" id="customers-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Joined Date</th>
+                                <th>Total Orders</th>
+                                <th>Total Spent</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customers-table-body">
+                            <!-- Customers will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="loading" id="customers-loading" style="display: none;">
+                    <i class="fas fa-spinner fa-spin"></i> Loading customers...
+                </div>
+            </div>
+
+            <!-- Categories Section -->
+            <div id="categories" class="content-section">
+                <div class="section-header">
+                    <h2>Category Management</h2>
+                    <p>Manage your product categories and subcategories</p>
+                </div>
+                
+                <div class="categories-container">
+                    <div class="categories-header">
+                        <h3>Categories Management</h3>
+                        <div class="categories-actions">
+                            <button class="btn-primary" onclick="openCategoryModal()">
+                                <i class="fas fa-plus"></i> Add Category
+                            </button>
+                            <button class="btn-secondary" onclick="forceRefreshCategories()">
+                                <i class="fas fa-sync"></i> Force Refresh Categories
+                            </button>
+                            <button class="btn-primary" onclick="location.reload(true)">
+                                <i class="fas fa-redo"></i> Hard Refresh Page
+                            </button>
+                        </div>
+                    </div>
+                    
+
+                                        <!-- Bulk Product Operations -->
+                    <div class="bulk-operations-section">
+                        <h4>Bulk Product Operations</h4>
+                        <div class="bulk-controls">
+                            <div class="form-group">
+                                <label>Select Target Category</label>
+                                <select id="bulkTargetCategorySelector" class="form-control">
+                                    <option value="">Choose target category...</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Select Target Subcategory</label>
+                                <select id="bulkTargetSubcategorySelector" class="form-control">
+                                    <option value="">Choose target subcategory...</option>
+                                </select>
+                            </div>
+                            <div class="bulk-actions">
+                                <button class="btn-secondary" onclick="loadAllProductsForBulk()">
+                                    <i class="fas fa-list"></i> Load All Products
+                                </button>
+                                <button class="btn-primary" onclick="loadCategoryProducts()">
+                                    <i class="fas fa-filter"></i> Load Filtered Products
+                                </button>
+                                <button class="btn-secondary" onclick="selectAllBulkProducts()">
+                                    <i class="fas fa-check-square"></i> Select All
+                                </button>
+                                <button class="btn-secondary" onclick="deselectAllBulkProducts()">
+                                    <i class="fas fa-square"></i> Deselect All
+                                </button>
+                                <button class="btn-primary" onclick="addSelectedProductsToCategory()" id="bulkAddBtn" disabled>
+                                    <i class="fas fa-plus"></i> Add Selected (<span id="bulkSelectedCount">0</span>)
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Product Search and Filter -->
+                        <div class="bulk-product-filters">
+                            <div class="form-group">
+                                <label>Search Products</label>
+                                <input type="text" id="bulkProductSearch" class="form-control" placeholder="Search by product name..." onkeyup="filterBulkProducts()">
+                            </div>
+                            <div class="form-group">
+                                <label>Filter by Current Category</label>
+                                <select id="bulkCategoryFilter" class="form-control" onchange="filterBulkProducts()">
+                                    <option value="">All Categories</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="bulk-products-grid" id="bulkProductsGrid">
+                            <!-- All products will be loaded here -->
+                        </div>
+                    </div>
+                <div class="categories-grid" id="categoriesGrid">
+                    <!-- Categories will be loaded here -->
+                </div>
+                    
+                    <div class="add-category-section">
+                        <button class="btn-primary" onclick="openCategoryModal()">
+                            <i class="fas fa-plus"></i> Add New Category
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category Images Section -->
+            <div id="category-images" class="content-section">
+                <div class="section-header">
+                    <h2>Category Images Management</h2>
+                    <p>Upload, manage, and replace images for your product categories</p>
+                </div>
+                
+                <div class="category-images-container">
+                    <div class="category-images-header">
+                        <h3>Category Images</h3>
+                        <div class="category-images-actions">
+                            <button class="btn-primary" onclick="openCategoryImageUploadModal()">
+                                <i class="fas fa-upload"></i> Upload New Image
+                            </button>
+                            <button class="btn-secondary" onclick="loadCategoryImages()">
+                                <i class="fas fa-sync"></i> Refresh
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="category-images-grid" id="categoryImagesGrid">
+                        <!-- Category images will be loaded here -->
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div id="analytics" class="content-section">
+                <div class="section-header">
+                    <h2>Analytics</h2>
+                </div>
+                <div class="analytics-content" id="analytics-content">
+                    <!-- Analytics will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Hero Slides Section -->
+            <div id="hero-slides" class="content-section">
+                <div class="section-header">
+                    <h2>Hero Slideshow Management</h2>
+                    <div class="section-actions">
+                        <button class="btn-secondary" onclick="loadHeroSlides()" title="Refresh Slides">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                        <button class="btn-primary" onclick="openHeroSlideModal()">
+                            <i class="fas fa-plus"></i> Add New Slide
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="hero-slides-container">
+                    <div class="slides-grid" id="slides-grid">
+                        <!-- Hero slides will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Limited Drops Section -->
+            <div id="limited-drops" class="content-section">
+                <div class="section-header">
+                    <h2>Limited Edition Drops</h2>
+                    <div class="section-actions">
+                        <button class="btn-secondary" onclick="loadLimitedDrops()" title="Refresh Drops">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                        <button class="btn-primary" onclick="openLimitedDropModal()">
+                            <i class="fas fa-plus"></i> Create New Drop
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="limited-drops-container">
+                    <div class="active-drops" id="active-drops">
+                        <h3>Active Drops</h3>
+                        <div class="drops-grid" id="drops-grid">
+                            <!-- Active drops will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <div class="drop-products-section">
+                        <h3>Drop Products Management</h3>
+                        <div class="drop-products-controls">
+                            <div class="form-group">
+                                <label>Select Drop</label>
+                                <select id="dropSelector" class="form-control" onchange="loadDropProducts()">
+                                    <option value="">Choose a drop...</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Add Products</label>
+                                <div class="product-selector-container">
+                                    <!-- Search and Filter Controls -->
+                                    <div class="product-search-controls">
+                                        <div class="search-row">
+                                            <div class="search-input-group">
+                                                <input type="text" id="productSearch" class="form-control" placeholder="Search products by name..." onkeyup="filterProducts()">
+                                                <i class="fas fa-search search-icon"></i>
+                                            </div>
+                                            <select id="categoryFilter" class="form-control" onchange="console.log('Category changed!'); onCategoryChange();">
+                                                <option value="">All Categories</option>
+                                                <!-- Categories will be loaded here -->
+                                            </select>
+                                            <select id="subcategoryFilter" class="form-control" onchange="console.log('Subcategory changed!'); onSubcategoryChange();">
+                                                <option value="">All Subcategories</option>
+                                                <!-- Subcategories will be loaded here -->
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Product List with Images -->
+                                    <div class="product-grid-container">
+                                        <div class="product-grid" id="productGrid">
+                                            <!-- Products will be loaded here as cards -->
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="product-selector-info">
+                                        <small>Click on products to select/deselect them</small>
+                                        <span id="selected-count">0 products selected</span>
+                                    </div>
+                                    <button class="btn-secondary" onclick="addProductsToDrop()" id="addProductsBtn" disabled>
+                                        <i class="fas fa-plus"></i> Add to Drop
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="drop-products-list" id="drop-products-list">
+                            <!-- Drop products will be displayed here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Announcement Bar Section -->
+            <div id="announcement" class="content-section">
+                <div class="section-header">
+                    <h2>Announcement Bar Management</h2>
+                    <p>Manage the announcement bar text that appears at the top of your website</p>
+                </div>
+                
+                <div class="announcement-management">
+                    <div class="form-section">
+                        <h3>Current Announcement Messages</h3>
+                        <div class="announcement-messages" id="announcement-messages">
+                            <!-- Messages will be loaded here -->
+                        </div>
+                        
+                        <div class="add-message-section">
+                            <h4>Add New Message</h4>
+                            <div class="form-group">
+                                <label for="new-announcement-text">Message Text</label>
+                                <textarea id="new-announcement-text" placeholder="Enter announcement message (e.g., 🚚 FREE DELIVERY on prepaid orders)" maxlength="100" rows="3"></textarea>
+                            </div>
+                            <button class="btn-primary" onclick="addAnnouncementMessage()">
+                                <i class="fas fa-plus"></i> Add Message
+                            </button>
+                        </div>
+                        
+                        <div class="announcement-controls">
+                            <h4>Announcement Bar Controls</h4>
+                            <div class="control-buttons">
+                                <button class="btn-secondary" onclick="toggleAnnouncementBar()" id="toggle-btn">
+                                    <i class="fas fa-eye"></i> <span id="toggle-text">Hide Announcement Bar</span>
+                                </button>
+                                <button class="btn-info" onclick="loadAnnouncementMessages()">
+                                    <i class="fas fa-sync-alt"></i> Refresh Messages
+                                </button>
+                                <button class="btn-warning" onclick="clearAllAnnouncements()">
+                                    <i class="fas fa-trash"></i> Clear All Messages
+                                </button>
+                                <button class="btn-success" onclick="saveAnnouncementSettings()">
+                                    <i class="fas fa-save"></i> Save Settings
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="announcement-preview">
+                            <h4>Preview</h4>
+                            <div class="preview-bar" id="announcement-preview">
+                                <!-- Preview will be shown here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Newsletter Subscribers Section -->
+            <div id="newsletter" class="content-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-envelope"></i> Newsletter Subscribers</h2>
+                    <p>Manage your newsletter subscribers and view subscription analytics</p>
+                </div>
+                
+                <div class="newsletter-management">
+                    <!-- Stats Cards -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="total-subscribers">0</h3>
+                                <p>Total Subscribers</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="active-subscribers">0</h3>
+                                <p>Active Subscribers</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-calendar-day"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="today-subscribers">0</h3>
+                                <p>Today's Signups</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-calendar-week"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="week-subscribers">0</h3>
+                                <p>This Week</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Subscribers Table -->
+                    <div class="table-section">
+                        <div class="table-header">
+                            <h3>All Subscribers</h3>
+                            <div class="table-actions">
+                                <button class="btn btn-secondary" onclick="exportSubscribers()">
+                                    <i class="fas fa-download"></i> Export CSV
+                                </button>
+                                <button class="btn btn-primary" onclick="refreshSubscribers()">
+                                    <i class="fas fa-sync-alt"></i> Refresh
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="table-container">
+                            <table class="data-table" id="subscribers-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Email</th>
+                                        <th>Status</th>
+                                        <th>Source</th>
+                                        <th>Subscribed At</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="subscribers-tbody">
+                                    <tr>
+                                        <td colspan="6" class="loading-row">
+                                            <i class="fas fa-spinner fa-spin"></i> Loading subscribers...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Forms Section -->
+            <div id="contact-forms" class="content-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-paper-plane"></i> Contact Form Submissions</h2>
+                    <p>View and manage contact form submissions from your website</p>
+                </div>
+                
+                <div class="contact-management">
+                    <!-- Stats Cards -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="total-contacts">0</h3>
+                                <p>Total Messages</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-inbox"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="new-contacts">0</h3>
+                                <p>New Messages</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-reply"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="replied-contacts">0</h3>
+                                <p>Replied</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-calendar-day"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="today-contacts">0</h3>
+                                <p>Today</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Forms Table -->
+                    <div class="table-section">
+                        <div class="table-header">
+                            <h3>All Contact Submissions</h3>
+                            <div class="table-actions">
+                                <select id="status-filter" onchange="filterContactsByStatus()">
+                                    <option value="">All Status</option>
+                                    <option value="new">New</option>
+                                    <option value="read">Read</option>
+                                    <option value="replied">Replied</option>
+                                    <option value="closed">Closed</option>
+                                </select>
+                                <button class="btn btn-secondary" onclick="exportContacts()">
+                                    <i class="fas fa-download"></i> Export CSV
+                                </button>
+                                <button class="btn btn-primary" onclick="refreshContacts()">
+                                    <i class="fas fa-sync-alt"></i> Refresh
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="table-container">
+                            <table class="data-table" id="contacts-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Subject</th>
+                                        <th>Status</th>
+                                        <th>Submitted At</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="contacts-tbody">
+                                    <tr>
+                                        <td colspan="7" class="loading-row">
+                                            <i class="fas fa-spinner fa-spin"></i> Loading contact forms...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div id="settings" class="content-section">
+                <div class="section-header">
+                    <h2>Settings</h2>
+                </div>
+                <div class="settings-content">
+                    <div class="setting-group">
+                        <h3>Store Information</h3>
+                        <div class="form-group">
+                            <label>Store Name</label>
+                            <input type="text" value="Urban Nucleus" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Store Email</label>
+                            <input type="email" value="urban.nucleus@gmail.com" class="form-control">
+                        </div>
+                    </div>
+                    
+                    <div class="setting-group">
+                        <h3>File Management</h3>
+                        <div class="form-group">
+                            <label>Orphaned Files Cleanup</label>
+                            <p class="setting-description">
+                                Remove files that exist on disk but are not linked to any products in the database.
+                                This helps free up disk space and maintain a clean file system.
+                            </p>
+                            <button class="btn-warning" onclick="cleanupOrphanedFiles()">
+                                <i class="fas fa-broom"></i> Cleanup Orphaned Files
+                            </button>
+                            <button class="btn-warning" onclick="cleanupOrphanedImages()" style="margin-left: 10px;">
+                                <i class="fas fa-images"></i> Cleanup Orphaned Images
+                            </button>
+                            <button class="btn-danger" onclick="fixBrokenImages()" style="margin-left: 10px;">
+                                <i class="fas fa-wrench"></i> Fix Broken Images (CSV Import)
+                            </button>
+                            <button class="btn-danger" onclick="forceCleanupImages()" style="margin-left: 10px;">
+                                <i class="fas fa-broom"></i> Force Cleanup All Images
+                            </button>
+                            <div id="cleanup-status" class="cleanup-status"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-group">
+                        <h3>Product Import</h3>
+                        <div class="form-group">
+                            <label>Import Products from CSV</label>
+                            <p class="setting-description">
+                                Import products from a Shopify CSV export file. This will create products, categories, 
+                                variants, and images automatically. Supports standard Shopify export format.
+                            </p>
+                            <div class="csv-upload-area">
+                                <input type="file" id="csvFileInput" accept=".csv" style="display: none;">
+                                <button class="btn-primary" onclick="document.getElementById('csvFileInput').click()">
+                                    <i class="fas fa-upload"></i> Choose CSV File
+                                </button>
+                                <span id="selectedFileName" class="selected-file-name"></span>
+                            </div>
+                            <button id="importCsvBtn" class="btn-success" onclick="importCSV()" disabled>
+                                <i class="fas fa-download"></i> Start Import
+                            </button>
+                            <div id="import-status" class="import-status"></div>
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <h3>Bulk Operations</h3>
+                        <div class="form-group">
+                            <label>Bulk Product Deletion</label>
+                            <p class="setting-description">
+                                Delete multiple products at once. This will remove products, variants, images, and associated files.
+                                <strong>⚠️ This action cannot be undone!</strong>
+                            </p>
+                            <div class="bulk-controls">
+                                <button class="btn-secondary" onclick="selectAllProducts()">
+                                    <i class="fas fa-check-square"></i> Select All
+                                </button>
+                                <button class="btn-secondary" onclick="deselectAllProducts()">
+                                    <i class="fas fa-square"></i> Deselect All
+                                </button>
+                                <button class="btn-danger" onclick="bulkDeleteProducts()" id="bulkDeleteBtn" disabled>
+                                    <i class="fas fa-trash"></i> Delete Selected (<span id="selectedCount">0</span>)
+                                </button>
+                            </div>
+                            <div id="bulk-status" class="bulk-status"></div>
+                            <p class="setting-note">
+                                <i class="fas fa-info-circle"></i> 
+                                <strong>Note:</strong> Go to the Products tab to see and select products for bulk deletion.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Product Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content large-modal">
+            <div class="modal-header">
+                <h2 id="modal-title">Add New Product</h2>
+                <span class="close" onclick="closeProductModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="productForm" enctype="multipart/form-data">
+                    <div class="form-tabs">
+                        <button type="button" class="tab-btn active" data-tab="basic">Basic Info</button>
+                        <button type="button" class="tab-btn" data-tab="media">Media</button>
+                        <button type="button" class="tab-btn" data-tab="variants">Variants</button>
+                        <button type="button" class="tab-btn" data-tab="seo">SEO</button>
+                    </div>
+
+                    <!-- Basic Info Tab -->
+                    <div id="basic" class="tab-content active">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Product Title *</label>
+                                <input type="text" name="name" required class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Product Type</label>
+                                <input type="text" name="product_type" class="form-control" placeholder="e.g., T-Shirt, Jeans">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Price *</label>
+                                <input type="number" name="price" step="0.01" required class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Compare at Price</label>
+                                <input type="number" name="compare_at_price" step="0.01" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Category</label>
+                                <div class="category-selector">
+                                    <select name="category_id" id="categorySelect" class="form-control">
+                                        <option value="">Select Category</option>
+                                    </select>
+                                    <button type="button" class="btn-secondary" onclick="openCategoryModal()">
+                                        <i class="fas fa-plus"></i> New Category
+                                    </button>
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Subcategory</label>
+                                <div class="subcategory-selector">
+                                    <select name="subcategory_id" id="subcategorySelect" class="form-control">
+                                        <option value="">Select Subcategory</option>
+                                    </select>
+                                    <button type="button" class="btn-secondary" onclick="openSubcategoryModal()">
+                                        <i class="fas fa-plus"></i> New Subcategory
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea name="description" rows="4" class="form-control"></textarea>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Vendor</label>
+                                <input type="text" name="vendor" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>SKU</label>
+                                <input type="text" name="sku" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Inventory Quantity</label>
+                                <input type="number" name="inventory" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Status</label>
+                                <select name="status" class="form-control">
+                                    <option value="active">Active</option>
+                                    <option value="draft">Draft</option>
+                                    <option value="archived">Archived</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Media Tab -->
+                    <div id="media" class="tab-content">
+                        <div class="media-section">
+                            <h3>Product Images</h3>
+                            <div class="media-upload-area">
+                                <div class="upload-options">
+                                    <div class="upload-option">
+                                        <h4>Upload Images</h4>
+                                        <input type="file" id="imageFiles" multiple accept="image/*" class="file-input">
+                                        <label for="imageFiles" class="file-label">
+                                            <i class="fas fa-cloud-upload-alt"></i>
+                                            <span>Choose files or drag here</span>
+                                        </label>
+                                    </div>
+                                    <div class="upload-option">
+                                        <h4>Add Image URLs</h4>
+                                        <div class="url-inputs" id="imageUrlInputs">
+                                            <div class="url-input-group">
+                                                <input type="url" placeholder="Image URL" class="form-control">
+                                                <button type="button" class="btn-secondary" onclick="addImageUrlInput()">
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="media-preview" id="imagePreview">
+                                    <!-- Image previews will be shown here -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="media-section">
+                            <h3>Product Videos</h3>
+                            <div class="media-upload-area">
+                                <div class="upload-options">
+                                    <div class="upload-option">
+                                        <h4>Upload Videos</h4>
+                                        <input type="file" id="videoFiles" multiple accept="video/*" class="file-input">
+                                        <label for="videoFiles" class="file-label">
+                                            <i class="fas fa-cloud-upload-alt"></i>
+                                            <span>Choose files or drag here</span>
+                                        </label>
+                                    </div>
+                                    <div class="upload-option">
+                                        <h4>Add Video URLs</h4>
+                                        <div class="url-inputs" id="videoUrlInputs">
+                                            <div class="url-input-group">
+                                                <input type="url" placeholder="Video URL" class="form-control">
+                                                <button type="button" class="btn-secondary" onclick="addVideoUrlInput()">
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="media-preview" id="videoPreview">
+                                    <!-- Video previews will be shown here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Variants Tab -->
+                    <div id="variants" class="tab-content">
+                        <div class="variants-section">
+                            <h3>Product Variants</h3>
+                            
+                            <!-- Size Type Selection -->
+                            <div class="form-group">
+                                <label>Size Type</label>
+                                <select id="sizeTypeSelect" class="form-control" onchange="updateSizeOptions()">
+                                    <option value="">Select Size Type</option>
+                                    <option value="clothing">Clothing Sizes (S, M, L, XL)</option>
+                                    <option value="shoes">Shoe Sizes (US, EU, UK)</option>
+                                    <option value="numeric">Numeric Sizes (1, 2, 3, 4)</option>
+                                    <option value="custom">Custom Sizes</option>
+                                </select>
+                            </div>
+
+                            <!-- Clothing Sizes -->
+                            <div id="clothingSizes" class="size-options" style="display: none;">
+                                <h4>Clothing Sizes</h4>
+                                <div class="size-grid">
+                                    <label class="size-checkbox">
+                                        <input type="checkbox" value="XS"> XS
+                                    </label>
+                                    <label class="size-checkbox">
+                                        <input type="checkbox" value="S"> S
+                                    </label>
+                                    <label class="size-checkbox">
+                                        <input type="checkbox" value="M"> M
+                                    </label>
+                                    <label class="size-checkbox">
+                                        <input type="checkbox" value="L"> L
+                                    </label>
+                                    <label class="size-checkbox">
+                                        <input type="checkbox" value="XL"> XL
+                                    </label>
+                                    <label class="size-checkbox">
+                                        <input type="checkbox" value="XXL"> XXL
+                                    </label>
+                                    <label class="size-checkbox">
+                                        <input type="checkbox" value="XXXL"> XXXL
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Shoe Sizes -->
+                            <div id="shoeSizes" class="size-options" style="display: none;">
+                                <h4>Shoe Sizes</h4>
+                                <div class="size-tabs">
+                                    <button type="button" class="size-tab-btn active" data-size-system="us">US</button>
+                                    <button type="button" class="size-tab-btn" data-size-system="eu">EU</button>
+                                    <button type="button" class="size-tab-btn" data-size-system="uk">UK</button>
+                                </div>
+                                
+                                <!-- US Sizes -->
+                                <div id="usSizes" class="size-system">
+                                    <div class="size-grid">
+                                        <label class="size-checkbox"><input type="checkbox" value="US-5"> 5</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="US-5.5"> 5.5</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="US-6"> 6</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="US-6.5"> 6.5</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="US-7"> 7</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="US-7.5"> 7.5</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="US-8"> 8</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="US-8.5"> 8.5</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="US-9"> 9</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="US-9.5"> 9.5</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="US-10"> 10</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="US-10.5"> 10.5</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="US-11"> 11</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="US-11.5"> 11.5</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="US-12"> 12</label>
+                                    </div>
+                                </div>
+
+                                <!-- EU Sizes -->
+                                <div id="euSizes" class="size-system" style="display: none;">
+                                    <div class="size-grid">
+                                        <label class="size-checkbox"><input type="checkbox" value="EU-36"> 36</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="EU-37"> 37</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="EU-38"> 38</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="EU-39"> 39</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="EU-40"> 40</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="EU-41"> 41</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="EU-42"> 42</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="EU-43"> 43</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="EU-44"> 44</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="EU-45"> 45</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="EU-46"> 46</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="EU-47"> 47</label>
+                                    </div>
+                                </div>
+
+                                <!-- UK Sizes -->
+                                <div id="ukSizes" class="size-system" style="display: none;">
+                                    <div class="size-grid">
+                                        <label class="size-checkbox"><input type="checkbox" value="UK-3"> 3</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="UK-3.5"> 3.5</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="UK-4"> 4</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="UK-4.5"> 4.5</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="UK-5"> 5</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="UK-5.5"> 5.5</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="UK-6"> 6</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="UK-6.5"> 6.5</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="UK-7"> 7</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="UK-7.5"> 7.5</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="UK-8"> 8</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="UK-8.5"> 8.5</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="UK-9"> 9</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="UK-9.5"> 9.5</label>
+                                        <label class="size-checkbox"><input type="checkbox" value="UK-10"> 10</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Numeric Sizes -->
+                            <div id="numericSizes" class="size-options" style="display: none;">
+                                <h4>Numeric Sizes</h4>
+                                <div class="size-grid">
+                                    <label class="size-checkbox"><input type="checkbox" value="1"> 1</label>
+                                    <label class="size-checkbox"><input type="checkbox" value="2"> 2</label>
+                                    <label class="size-checkbox"><input type="checkbox" value="3"> 3</label>
+                                    <label class="size-checkbox"><input type="checkbox" value="4"> 4</label>
+                                    <label class="size-checkbox"><input type="checkbox" value="5"> 5</label>
+                                    <label class="size-checkbox"><input type="checkbox" value="6"> 6</label>
+                                    <label class="size-checkbox"><input type="checkbox" value="7"> 7</label>
+                                    <label class="size-checkbox"><input type="checkbox" value="8"> 8</label>
+                                    <label class="size-checkbox"><input type="checkbox" value="9"> 9</label>
+                                    <label class="size-checkbox"><input type="checkbox" value="10"> 10</label>
+                                    <label class="size-checkbox"><input type="checkbox" value="11"> 11</label>
+                                    <label class="size-checkbox"><input type="checkbox" value="12"> 12</label>
+                                </div>
+                            </div>
+
+                            <!-- Custom Sizes -->
+                            <div id="customSizes" class="size-options" style="display: none;">
+                                <h4>Custom Sizes</h4>
+                                <div class="custom-size-inputs" id="customSizeInputs">
+                                    <div class="custom-size-group">
+                                        <input type="text" placeholder="Custom size (e.g., One Size, Small, Large)" class="form-control">
+                                        <button type="button" class="btn-secondary" onclick="addCustomSizeInput()">
+                                            <i class="fas fa-plus"></i> Add More
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Selected Sizes Display -->
+                            <div id="selectedSizesDisplay" class="selected-sizes" style="display: none;">
+                                <h4>Selected Sizes</h4>
+                                <div id="selectedSizesList" class="selected-sizes-list">
+                                    <!-- Selected sizes will be displayed here -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="variants-section">
+                            <h3>Collections & Tags</h3>
+                            <div class="form-group">
+                                <label>Collections</label>
+                                <input type="text" name="collections" class="form-control" placeholder="Comma separated">
+                            </div>
+                            <div class="form-group">
+                                <label>Tags</label>
+                                <input type="text" name="tags" class="form-control" placeholder="Comma separated">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SEO Tab -->
+                    <div id="seo" class="tab-content">
+                        <div class="form-group">
+                            <label>SEO Title</label>
+                            <input type="text" name="seo_title" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>SEO Meta Description</label>
+                            <textarea name="seo_meta_description" rows="3" class="form-control"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>SEO URL Handle</label>
+                            <input type="text" name="seo_url_handle" class="form-control">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeProductModal()">Cancel</button>
+                <button type="button" class="btn-primary" onclick="saveProduct()">Save Product</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Modal -->
+    <div id="categoryModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="categoryModalTitle">Add New Category</h2>
+                <span class="close" onclick="closeCategoryModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Category Name</label>
+                    <input type="text" id="newCategoryName" class="form-control" placeholder="Enter category name">
+                </div>
+                <div class="form-group">
+                    <label>Category Description</label>
+                    <textarea id="newCategoryDescription" class="form-control" rows="3" placeholder="Enter category description (optional)"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeCategoryModal()">Cancel</button>
+                <button type="button" class="btn-primary" onclick="saveCategory()" id="saveCategoryBtn">Save Category</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subcategory Modal -->
+    <div id="subcategoryModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Subcategory</h2>
+                <span class="close" onclick="closeSubcategoryModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Subcategory Name</label>
+                    <input type="text" id="newSubcategoryName" class="form-control">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeSubcategoryModal()">Cancel</button>
+                <button type="button" class="btn-primary" onclick="saveSubcategory()">Save Subcategory</button>
+            </div>
+        </div>
+    </div>
+
+        <!-- Limited Drop Modal -->
+    <div id="limitedDropModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="limitedDropModalTitle">Create New Limited Edition Drop</h2>
+                <span class="close" onclick="closeLimitedDropModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="limitedDropForm">
+                    <div class="form-group">
+                        <label>Drop Title *</label>
+                        <input type="text" id="dropTitle" class="form-control" placeholder="e.g., Summer 2024 Limited Collection" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="dropDescription" class="form-control" rows="3" placeholder="Describe this limited edition drop..."></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Start Date & Time *</label>
+                            <input type="datetime-local" id="dropStartDate" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>End Date & Time *</label>
+                            <input type="datetime-local" id="dropEndDate" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="dropStatus" class="form-control">
+                            <option value="1">Active</option>
+                            <option value="0">Inactive</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeLimitedDropModal()">Cancel</button>
+                <button type="button" class="btn-primary" onclick="saveLimitedDrop()">Create Drop</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Image Upload Modal -->
+    <div id="categoryImageUploadModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Upload Category Image</h2>
+                <span class="close" onclick="closeCategoryImageUploadModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="categoryImageUploadForm">
+                    <div class="form-group">
+                        <label>Select Category *</label>
+                        <select id="uploadCategorySelect" class="form-control" required>
+                            <option value="">Choose a category...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Image File *</label>
+                        <input type="file" id="categoryImageFile" class="form-control" accept="image/*" required>
+                        <small class="form-help">Recommended: 300x200px, JPG/PNG format</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Position</label>
+                        <input type="number" id="imagePosition" class="form-control" value="0" min="0">
+                        <small class="form-help">Lower numbers appear first</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Set as Main Image</label>
+                        <input type="checkbox" id="setAsMainImage" checked>
+                        <small class="form-help">This image will be displayed on the collections page</small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeCategoryImageUploadModal()">Cancel</button>
+                <button type="button" class="btn-primary" onclick="uploadCategoryImage()">Upload Image</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Collection Modal -->
+    <div id="collectionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="collection-modal-title">Add New Collection</h2>
+                <span class="close" onclick="closeCollectionModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="collectionForm">
+                    <div class="form-group">
+                        <label>Collection Type</label>
+                        <select id="collectionType" class="form-control" onchange="updateCollectionForm()">
+                            <option value="">Select Type</option>
+                            <option value="category">Category Collection</option>
+                            <option value="subcategory">Subcategory Collection</option>
+                            <option value="manual">Manual Collection</option>
+                        </select>
+                    </div>
+
+                    <!-- Category Collection -->
+                    <div id="categoryCollectionForm" class="collection-form" style="display: none;">
+                        <div class="form-group">
+                            <label>Category Name</label>
+                            <input type="text" id="categoryName" class="form-control" placeholder="e.g., Clothing, Electronics">
+                        </div>
+                            <div class="form-group">
+                                <label>Category Description</label>
+                                <textarea id="categoryDescription" class="form-control" rows="3" placeholder="Describe this category..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Page URL Handle</label>
+                                <input type="text" id="categoryUrlHandle" class="form-control" placeholder="e.g., clothing, electronics">
+                            </div>
+                        </div>
+
+                    <!-- Subcategory Collection -->
+                    <div id="subcategoryCollectionForm" class="collection-form" style="display: none;">
+                        <div class="form-group">
+                            <label>Parent Category</label>
+                            <select id="parentCategorySelect" class="form-control" onchange="loadParentSubcategories()">
+                                <option value="">Select Parent Category</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Subcategory Name</label>
+                            <input type="text" id="subcategoryName" class="form-control" placeholder="e.g., T-Shirts, Jeans">
+                        </div>
+                        <div class="form-group">
+                            <label>Subcategory Description</label>
+                            <textarea id="subcategoryDescription" class="form-control" rows="3" placeholder="Describe this subcategory..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Page URL Handle</label>
+                            <input type="text" id="subcategoryUrlHandle" class="form-control" placeholder="e.g., t-shirts, jeans">
+                        </div>
+                    </div>
+
+                    <!-- Manual Collection -->
+                    <div id="manualCollectionForm" class="collection-form" style="display: none;">
+                        <div class="form-group">
+                            <label>Collection Name</label>
+                            <input type="text" id="manualCollectionName" class="form-control" placeholder="e.g., Summer Sale, New Arrivals">
+                        </div>
+                        <div class="form-group">
+                            <label>Collection Description</label>
+                            <textarea id="manualCollectionDescription" class="form-control" rows="3" placeholder="Describe this collection..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Page URL Handle</label>
+                            <input type="text" id="manualCollectionUrlHandle" class="form-control" placeholder="e.g., summer-sale, new-arrivals">
+                        </div>
+                        <div class="form-group">
+                            <label>Collection Image URL</label>
+                            <input type="url" id="manualCollectionImage" class="form-control" placeholder="https://example.com/image.jpg">
+                        </div>
+                    </div>
+
+                    <!-- SEO Settings -->
+                    <div class="form-group">
+                        <label>SEO Title</label>
+                        <input type="text" id="collectionSeoTitle" class="form-control" placeholder="SEO title for the collection page">
+                    </div>
+                    <div class="form-group">
+                        <label>SEO Description</label>
+                        <textarea id="collectionSeoDescription" class="form-control" rows="2" placeholder="SEO meta description"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeCollectionModal()">Cancel</button>
+                <button type="button" class="btn-primary" onclick="saveCollection()">Create Collection</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Slide Modal -->
+    <div id="heroSlideModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="hero-slide-modal-title">Add New Hero Slide</h2>
+                <span class="close" onclick="closeHeroSlideModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="heroSlideForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Slide Title *</label>
+                            <input type="text" id="slideTitle" class="form-control" placeholder="e.g., Summer Collection 2024" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Subtitle</label>
+                            <input type="text" id="slideSubtitle" class="form-control" placeholder="e.g., New Arrivals">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="slideDescription" class="form-control" rows="3" placeholder="Describe this slide..."></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Media Type</label>
+                            <select id="mediaType" class="form-control" onchange="toggleMediaUpload()">
+                                <option value="image">Image</option>
+                                <option value="video">Video</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Position</label>
+                            <input type="number" id="slidePosition" class="form-control" placeholder="0" min="0" value="0">
+                        </div>
+                    </div>
+                    
+                    <!-- Media Upload Section -->
+                    <div class="media-upload-section">
+                        <div class="form-group">
+                            <label id="mediaLabel">Upload Image</label>
+                            <div class="file-upload-container">
+                                <input type="file" id="mediaFile" class="file-input" accept="image/*,video/*">
+                                <div class="file-upload-area" id="fileUploadArea">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p>Click to upload or drag & drop</p>
+                                    <small>Max size: 10MB for images, 50MB for videos</small>
+                                </div>
+                            </div>
+                            <div id="mediaPreview" class="media-preview"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Button Configuration -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Button 1 Text</label>
+                            <input type="text" id="button1Text" class="form-control" placeholder="e.g., Shop Now">
+                        </div>
+                        <div class="form-group">
+                            <label>Button 1 URL</label>
+                            <input type="text" id="button1Url" class="form-control" placeholder="e.g., collections.html">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Button 2 Text</label>
+                            <input type="text" id="button2Text" class="form-control" placeholder="e.g., Learn More">
+                        </div>
+                        <div class="form-group">
+                            <label>Button 2 URL</label>
+                            <input type="text" id="button2Url" class="form-control" placeholder="e.g., about.html">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="slideActive" checked>
+                            <span class="checkmark"></span>
+                            Active (visible on homepage)
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeHeroSlideModal()">Cancel</button>
+                <button type="button" class="btn-primary" onclick="saveHeroSlide()">Save Slide</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="notification-system.js"></script>
+    <script>
+        // Force complete cache clear and reload
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                for(let registration of registrations) {
+                    registration.unregister();
+                }
+            });
+        }
+        
+        // Clear only cache-related storage, preserve login data
+        if (typeof(Storage) !== "undefined") {
+            // Don't clear login tokens or admin session data
+            const keysToKeep = ['currentUser', 'adminToken', 'isAdminLoggedIn', 'adminUsername'];
+            const savedData = {};
+            keysToKeep.forEach(key => {
+                if (localStorage.getItem(key)) {
+                    savedData[key] = localStorage.getItem(key);
+                }
+            });
+            
+            localStorage.clear();
+            sessionStorage.clear();
+            
+            // Restore login data
+            Object.keys(savedData).forEach(key => {
+                localStorage.setItem(key, savedData[key]);
+            });
+        }
+        
+        // Backup function to prevent 'not defined' errors
+        if (typeof window.loadCategoryProducts === 'undefined') {
+            window.loadCategoryProducts = function() {
+                console.log('⚠️ Using backup loadCategoryProducts function');
+                alert('Please refresh the page to load the latest admin scripts.');
+            };
+        }
+        
+        // Add manual refresh function for categories
+        window.forceRefreshCategories = function() {
+            console.log('🔄 Force refreshing categories...');
+            if (typeof window.loadCategoriesManagement === 'function') {
+                window.loadCategoriesManagement();
+            } else {
+                alert('Category management not loaded yet. Please refresh the page first.');
+            }
+        };
+
+        // ==================== NEWSLETTER SUBSCRIBERS FUNCTIONALITY ====================
+
+        // Load newsletter subscribers data
+        async function loadNewsletterSubscribers() {
+            try {
+                console.log('📧 Loading newsletter subscribers...');
+                const response = await fetch('http://localhost:3000/admin/newsletter-subscribers');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const subscribers = await response.json();
+                console.log('📧 Loaded subscribers:', subscribers);
+                
+                // Update stats
+                updateNewsletterStats(subscribers);
+                
+                // Update table
+                updateSubscribersTable(subscribers);
+                
+            } catch (error) {
+                console.error('❌ Error loading newsletter subscribers:', error);
+                showNotification('error', 'Error', 'Failed to load newsletter subscribers');
+                
+                // Show error in table
+                document.getElementById('subscribers-tbody').innerHTML = `
+                    <tr>
+                        <td colspan="6" class="error-row">
+                            <i class="fas fa-exclamation-triangle"></i> 
+                            Error loading subscribers: ${error.message}
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Update newsletter stats
+        function updateNewsletterStats(subscribers) {
+            const total = subscribers.length;
+            const active = subscribers.filter(s => s.status === 'active').length;
+            
+            const today = new Date().toISOString().split('T')[0];
+            const todaySubscribers = subscribers.filter(s => 
+                s.subscribed_at && s.subscribed_at.startsWith(today)
+            ).length;
+            
+            const weekAgo = new Date();
+            weekAgo.setDate(weekAgo.getDate() - 7);
+            const weekSubscribers = subscribers.filter(s => 
+                new Date(s.subscribed_at) >= weekAgo
+            ).length;
+            
+            document.getElementById('total-subscribers').textContent = total;
+            document.getElementById('active-subscribers').textContent = active;
+            document.getElementById('today-subscribers').textContent = todaySubscribers;
+            document.getElementById('week-subscribers').textContent = weekSubscribers;
+        }
+
+        // Update subscribers table
+        function updateSubscribersTable(subscribers) {
+            const tbody = document.getElementById('subscribers-tbody');
+            
+            if (subscribers.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-row">
+                            <i class="fas fa-inbox"></i> No newsletter subscribers yet
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = subscribers.map(subscriber => `
+                <tr>
+                    <td>${subscriber.id}</td>
+                    <td>${subscriber.email}</td>
+                    <td>
+                        <span class="status-badge status-${subscriber.status}">
+                            ${subscriber.status}
+                        </span>
+                    </td>
+                    <td>${subscriber.source || 'website'}</td>
+                    <td>${formatDate(subscriber.subscribed_at)}</td>
+                    <td>
+                        <div class="action-buttons">
+                            ${subscriber.status === 'active' ? 
+                                `<button class="btn btn-sm btn-warning" onclick="unsubscribeUser(${subscriber.id})">
+                                    <i class="fas fa-ban"></i> Unsubscribe
+                                </button>` : 
+                                `<button class="btn btn-sm btn-success" onclick="resubscribeUser(${subscriber.id})">
+                                    <i class="fas fa-check"></i> Reactivate
+                                </button>`
+                            }
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Refresh subscribers
+        function refreshSubscribers() {
+            loadNewsletterSubscribers();
+        }
+
+        // Export subscribers to CSV
+        function exportSubscribers() {
+            try {
+                fetch('http://localhost:3000/admin/newsletter-subscribers')
+                    .then(response => response.json())
+                    .then(subscribers => {
+                        const csv = convertToCSV(subscribers, [
+                            'id', 'email', 'status', 'source', 'subscribed_at'
+                        ]);
+                        downloadCSV(csv, 'newsletter-subscribers.csv');
+                        showNotification('success', 'Export Complete', 'Newsletter subscribers exported successfully');
+                    });
+            } catch (error) {
+                showNotification('error', 'Export Failed', 'Failed to export subscribers');
+            }
+        }
+
+        // ==================== CONTACT FORMS FUNCTIONALITY ====================
+
+        // Load contact form submissions
+        async function loadContactForms() {
+            try {
+                console.log('📞 Loading contact forms...');
+                const response = await fetch('http://localhost:3000/admin/contact-submissions');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const contacts = await response.json();
+                console.log('📞 Loaded contact forms:', contacts);
+                
+                // Update stats
+                updateContactStats(contacts);
+                
+                // Update table
+                updateContactsTable(contacts);
+                
+                // Store globally for filtering
+                window.allContacts = contacts;
+                
+            } catch (error) {
+                console.error('❌ Error loading contact forms:', error);
+                showNotification('error', 'Error', 'Failed to load contact forms');
+                
+                // Show error in table
+                document.getElementById('contacts-tbody').innerHTML = `
+                    <tr>
+                        <td colspan="7" class="error-row">
+                            <i class="fas fa-exclamation-triangle"></i> 
+                            Error loading contact forms: ${error.message}
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Update contact stats
+        function updateContactStats(contacts) {
+            const total = contacts.length;
+            const newMessages = contacts.filter(c => c.status === 'new').length;
+            const replied = contacts.filter(c => c.status === 'replied').length;
+            
+            const today = new Date().toISOString().split('T')[0];
+            const todayContacts = contacts.filter(c => 
+                c.submitted_at && c.submitted_at.startsWith(today)
+            ).length;
+            
+            document.getElementById('total-contacts').textContent = total;
+            document.getElementById('new-contacts').textContent = newMessages;
+            document.getElementById('replied-contacts').textContent = replied;
+            document.getElementById('today-contacts').textContent = todayContacts;
+        }
+
+        // Update contacts table
+        function updateContactsTable(contacts) {
+            const tbody = document.getElementById('contacts-tbody');
+            
+            if (contacts.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="empty-row">
+                            <i class="fas fa-inbox"></i> No contact form submissions yet
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = contacts.map(contact => `
+                <tr class="contact-row" data-status="${contact.status}">
+                    <td>${contact.id}</td>
+                    <td>${contact.name}</td>
+                    <td>${contact.email}</td>
+                    <td class="subject-cell" title="${contact.subject}">
+                        ${contact.subject.length > 30 ? contact.subject.substring(0, 30) + '...' : contact.subject}
+                    </td>
+                    <td>
+                        <span class="status-badge status-${contact.status}">
+                            ${contact.status}
+                        </span>
+                    </td>
+                    <td>${formatDate(contact.submitted_at)}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-sm btn-primary" onclick="viewContactDetails(${contact.id})">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button class="btn btn-sm btn-success" onclick="replyToContact('${contact.email}', '${contact.subject}'); markAsReplied(${contact.id})">
+                                <i class="fas fa-reply"></i> Reply
+                            </button>
+                            <div class="status-dropdown">
+                                <select onchange="updateContactStatus(${contact.id}, this.value)" class="status-select">
+                                    <option value="new" ${contact.status === 'new' ? 'selected' : ''}>New</option>
+                                    <option value="read" ${contact.status === 'read' ? 'selected' : ''}>Read</option>
+                                    <option value="replied" ${contact.status === 'replied' ? 'selected' : ''}>Replied</option>
+                                    <option value="closed" ${contact.status === 'closed' ? 'selected' : ''}>Closed</option>
+                                </select>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Filter contacts by status
+        function filterContactsByStatus() {
+            const selectedStatus = document.getElementById('status-filter').value;
+            const filteredContacts = selectedStatus ? 
+                window.allContacts.filter(c => c.status === selectedStatus) : 
+                window.allContacts;
+            
+            updateContactsTable(filteredContacts);
+        }
+
+        // View contact details in modal
+        function viewContactDetails(contactId) {
+            const contact = window.allContacts.find(c => c.id === contactId);
+            if (!contact) return;
+            
+            // Automatically mark as "read" if it's currently "new"
+            if (contact.status === 'new') {
+                updateContactStatus(contactId, 'read');
+            }
+            
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Contact Details #${contact.id}</h3>
+                        <button class="modal-close" onclick="this.closest('.modal-overlay').remove()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="contact-details">
+                            <div class="detail-row">
+                                <strong data-field="name">Name:</strong>
+                                <div class="detail-value">${contact.name}</div>
+                            </div>
+                            <div class="detail-row">
+                                <strong data-field="email">Email:</strong>
+                                <div class="detail-value">${contact.email}</div>
+                            </div>
+                            <div class="detail-row">
+                                <strong data-field="phone">Phone:</strong>
+                                <div class="detail-value">${contact.phone || 'Not provided'}</div>
+                            </div>
+                            <div class="detail-row">
+                                <strong data-field="subject">Subject:</strong>
+                                <div class="detail-value">${contact.subject}</div>
+                            </div>
+                            <div class="detail-row">
+                                <strong data-field="status">Status:</strong>
+                                <div class="detail-value">
+                                    <span class="status-badge status-${contact.status}">${contact.status.toUpperCase()}</span>
+                                </div>
+                            </div>
+                            <div class="detail-row">
+                                <strong data-field="date">Submitted:</strong>
+                                <div class="detail-value">${formatDate(contact.submitted_at)}</div>
+                            </div>
+                            <div class="detail-row message-row">
+                                <strong>📝 Message:</strong>
+                                <div class="message-content">${contact.message}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="modal-status-update">
+                            <label for="modal-status-${contact.id}">Update Status:</label>
+                            <select id="modal-status-${contact.id}" onchange="updateContactStatus(${contact.id}, this.value)" class="status-select">
+                                <option value="new" ${contact.status === 'new' ? 'selected' : ''}>New</option>
+                                <option value="read" ${contact.status === 'read' ? 'selected' : ''}>Read</option>
+                                <option value="replied" ${contact.status === 'replied' ? 'selected' : ''}>Replied</option>
+                                <option value="closed" ${contact.status === 'closed' ? 'selected' : ''}>Closed</option>
+                            </select>
+                        </div>
+                        <div class="modal-buttons">
+                            <button class="btn btn-secondary" onclick="this.closest('.modal-overlay').remove()">
+                                <i class="fas fa-times"></i> Close
+                            </button>
+                            <button class="btn btn-success" onclick="replyToContact('${contact.email}', '${contact.subject}'); markAsReplied(${contact.id})">
+                                <i class="fas fa-reply"></i> Reply via Email
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Add click outside to close functionality
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+            
+            // Add keyboard escape to close
+            const handleKeyPress = function(e) {
+                if (e.key === 'Escape') {
+                    modal.remove();
+                    document.removeEventListener('keydown', handleKeyPress);
+                }
+            };
+            document.addEventListener('keydown', handleKeyPress);
+            
+            // Clean up event listener when modal is removed
+            const originalRemove = modal.remove;
+            modal.remove = function() {
+                document.removeEventListener('keydown', handleKeyPress);
+                originalRemove.call(this);
+            };
+            
+            document.body.appendChild(modal);
+            
+            // Focus the modal for accessibility
+            setTimeout(() => {
+                const closeBtn = modal.querySelector('.modal-close');
+                if (closeBtn) closeBtn.focus();
+            }, 100);
+        }
+
+        // Reply to contact via email
+        function replyToContact(email, subject) {
+            const cleanSubject = `Re: ${subject}`;
+            const emailBody = `Hello,
+
+Thank you for contacting Urban Nucleus. We received your message regarding "${subject}".
+
+[Your response here]
+
+Best regards,
+Urban Nucleus Team
+urban.nucleus@gmail.com`;
+            
+            // Show options modal instead of trying to auto-open
+            showEmailOptionsModal(email, cleanSubject, emailBody);
+        }
+
+        // Email options modal - let user choose how to reply
+        function showEmailOptionsModal(email, subject, emailBody) {
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 700px;">
+                    <div class="modal-header">
+                        <h3>📧 Reply to ${email}</h3>
+                        <button class="modal-close" onclick="this.closest('.modal-overlay').remove()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div style="margin-bottom: 24px;">
+                            <h4 style="margin-bottom: 12px; color: #333;">Choose how to reply:</h4>
+                            <p style="margin-bottom: 16px; color: #666; font-size: 0.9rem;">
+                                <i class="fas fa-info-circle"></i> Since no email client is configured, use web-based options below:
+                            </p>
+                            <div class="email-options">
+                                <button class="btn btn-success email-option-btn" onclick="openGmail('${email}', '${encodeURIComponent(subject)}', '${encodeURIComponent(emailBody)}')">
+                                    <i class="fab fa-google"></i>
+                                    <div>
+                                        <strong>Open Gmail</strong>
+                                        <small>Compose in Gmail web interface</small>
+                                    </div>
+                                </button>
+                                
+                                <button class="btn btn-info email-option-btn" onclick="openOutlook('${email}', '${encodeURIComponent(subject)}', '${encodeURIComponent(emailBody)}')">
+                                    <i class="fab fa-microsoft"></i>
+                                    <div>
+                                        <strong>Open Outlook</strong>
+                                        <small>Compose in Outlook web interface</small>
+                                    </div>
+                                </button>
+                                
+                                <button class="btn btn-warning email-option-btn" onclick="openYahooMail('${email}', '${encodeURIComponent(subject)}', '${encodeURIComponent(emailBody)}')">
+                                    <i class="fab fa-yahoo"></i>
+                                    <div>
+                                        <strong>Open Yahoo Mail</strong>
+                                        <small>Compose in Yahoo web interface</small>
+                                    </div>
+                                </button>
+                                
+                                <button class="btn btn-primary email-option-btn" onclick="showEmailDetails('${email}', '${subject}', \`${emailBody}\`)">
+                                    <i class="fas fa-copy"></i>
+                                    <div>
+                                        <strong>Copy Email Details</strong>
+                                        <small>Copy and paste into any email app</small>
+                                    </div>
+                                </button>
+                            </div>
+                            
+                            <div class="email-client-help">
+                                <details style="margin-top: 16px;">
+                                    <summary style="cursor: pointer; color: #666; font-size: 0.9rem;">
+                                        <i class="fas fa-question-circle"></i> Don't have an email client? Click here for options
+                                    </summary>
+                                    <div style="margin-top: 12px; padding: 12px; background: #f0f8ff; border-radius: 6px; font-size: 0.85rem;">
+                                        <p><strong>Recommended free email services:</strong></p>
+                                        <ul style="margin: 8px 0; padding-left: 20px;">
+                                            <li><strong>Gmail:</strong> <a href="https://mail.google.com" target="_blank">mail.google.com</a> - Most popular</li>
+                                            <li><strong>Outlook:</strong> <a href="https://outlook.live.com" target="_blank">outlook.live.com</a> - Microsoft's service</li>
+                                            <li><strong>Yahoo Mail:</strong> <a href="https://mail.yahoo.com" target="_blank">mail.yahoo.com</a> - Classic option</li>
+                                        </ul>
+                                        <p style="margin-top: 8px;"><strong>Tip:</strong> Use the "Copy Email Details" button above and paste into any email service!</p>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+                        
+                        <div class="email-preview">
+                            <h5 style="margin-bottom: 8px; color: #666;">Email Preview:</h5>
+                            <div class="email-preview-content">
+                                <div class="email-field"><strong>To:</strong> ${email}</div>
+                                <div class="email-field"><strong>Subject:</strong> ${subject}</div>
+                                <div class="email-field"><strong>Message:</strong></div>
+                                <div class="email-body-preview">${emailBody.replace(/\n/g, '<br>')}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" onclick="this.closest('.modal-overlay').remove()">
+                            <i class="fas fa-times"></i> Close
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            // Add click outside to close
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) modal.remove();
+            });
+
+            document.body.appendChild(modal);
+        }
+
+        // Try different mailto methods
+        function tryMailtoMethod(email, encodedSubject, encodedBody) {
+            const mailtoLink = `mailto:${email}?subject=${encodedSubject}&body=${encodedBody}`;
+            
+            // Try multiple methods
+            console.log('📧 Trying mailto link:', mailtoLink);
+            
+            // Method 1: Create hidden link and click it
+            const link = document.createElement('a');
+            link.href = mailtoLink;
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Method 2: Try window.location after a small delay
+            setTimeout(() => {
+                try {
+                    window.location.href = mailtoLink;
+                } catch (e) {
+                    console.log('Location.href method failed:', e);
+                }
+            }, 100);
+            
+            // Method 3: Try window.open as fallback
+            setTimeout(() => {
+                try {
+                    window.open(mailtoLink, '_blank');
+                } catch (e) {
+                    console.log('Window.open method failed:', e);
+                }
+            }, 200);
+            
+            showNotification('info', 'Email Client', 'Attempting to open your default email client...');
+            
+            // Close the modal after a short delay
+            setTimeout(() => {
+                const modal = document.querySelector('.modal-overlay');
+                if (modal) modal.remove();
+            }, 1000);
+        }
+
+        // Open Gmail web interface
+        function openGmail(email, encodedSubject, encodedBody) {
+            const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodedSubject}&body=${encodedBody}`;
+            window.open(gmailUrl, '_blank');
+            showNotification('success', 'Gmail Opened', 'Opening Gmail in a new tab...');
+            
+            // Close modal
+            setTimeout(() => {
+                const modal = document.querySelector('.modal-overlay');
+                if (modal) modal.remove();
+            }, 500);
+        }
+
+        // Open Outlook web interface
+        function openOutlook(email, encodedSubject, encodedBody) {
+            const outlookUrl = `https://outlook.live.com/mail/0/deeplink/compose?to=${encodeURIComponent(email)}&subject=${encodedSubject}&body=${encodedBody}`;
+            window.open(outlookUrl, '_blank');
+            showNotification('success', 'Outlook Opened', 'Opening Outlook in a new tab...');
+            
+            // Close modal
+            setTimeout(() => {
+                const modal = document.querySelector('.modal-overlay');
+                if (modal) modal.remove();
+            }, 500);
+        }
+
+        // Open Yahoo Mail web interface
+        function openYahooMail(email, encodedSubject, encodedBody) {
+            const yahooUrl = `https://compose.mail.yahoo.com/?to=${encodeURIComponent(email)}&subject=${encodedSubject}&body=${encodedBody}`;
+            window.open(yahooUrl, '_blank');
+            showNotification('success', 'Yahoo Mail Opened', 'Opening Yahoo Mail in a new tab...');
+            
+            // Close modal
+            setTimeout(() => {
+                const modal = document.querySelector('.modal-overlay');
+                if (modal) modal.remove();
+            }, 500);
+        }
+
+        // Show copyable email details
+        function showEmailDetails(email, subject, emailBody) {
+            const emailDetails = `To: ${email}\nSubject: ${subject}\n\n${emailBody}`;
+            
+            // Remove current modal
+            const currentModal = document.querySelector('.modal-overlay');
+            if (currentModal) currentModal.remove();
+            
+            // Show details modal
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 600px;">
+                    <div class="modal-header">
+                        <h3>📧 Email Details</h3>
+                        <button class="modal-close" onclick="this.closest('.modal-overlay').remove()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p style="margin-bottom: 16px; color: #666;">
+                            Copy the email details below and paste into any email service (Gmail, Outlook, Yahoo, etc.):
+                        </p>
+                        <div style="margin-bottom: 16px; padding: 12px; background: #e8f4ff; border-radius: 6px; border-left: 4px solid #2196F3;">
+                            <p style="margin: 0; font-size: 0.9rem; color: #1976D2;">
+                                <i class="fas fa-lightbulb"></i> <strong>Quick Tip:</strong> After copying, go to 
+                                <a href="https://mail.google.com" target="_blank" style="color: #1976D2; font-weight: 600;">Gmail</a>, 
+                                <a href="https://outlook.live.com" target="_blank" style="color: #1976D2; font-weight: 600;">Outlook</a>, or 
+                                <a href="https://mail.yahoo.com" target="_blank" style="color: #1976D2; font-weight: 600;">Yahoo Mail</a> 
+                                and paste into a new email.
+                            </p>
+                        </div>
+                        <textarea id="emailDetailsText" style="width: 100%; height: 250px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: monospace; resize: vertical; line-height: 1.5;" readonly>${emailDetails}</textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" onclick="this.closest('.modal-overlay').remove()">
+                            Close
+                        </button>
+                        <button class="btn btn-primary" onclick="copyEmailDetailsToClipboard()">
+                            <i class="fas fa-copy"></i> Copy to Clipboard
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            // Add click outside to close
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) modal.remove();
+            });
+
+            document.body.appendChild(modal);
+        }
+
+        // Copy email details to clipboard
+        function copyEmailDetailsToClipboard() {
+            const textarea = document.getElementById('emailDetailsText');
+            textarea.select();
+            textarea.setSelectionRange(0, 99999); // For mobile devices
+            
+            try {
+                // Try modern clipboard API first
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(textarea.value).then(() => {
+                        showNotification('success', 'Copied!', 'Email details copied to clipboard.');
+                    }).catch(() => {
+                        // Fallback to execCommand
+                        document.execCommand('copy');
+                        showNotification('success', 'Copied!', 'Email details copied to clipboard.');
+                    });
+                } else {
+                    // Fallback to execCommand
+                    document.execCommand('copy');
+                    showNotification('success', 'Copied!', 'Email details copied to clipboard.');
+                }
+            } catch (err) {
+                showNotification('warning', 'Copy Failed', 'Please manually select and copy the text.');
+                console.error('Copy failed:', err);
+            }
+        }
+
+        // Update contact submission status
+        async function updateContactStatus(contactId, newStatus) {
+            try {
+                console.log('📝 Updating contact status:', { contactId, newStatus });
+                
+                const response = await fetch(`http://localhost:3000/admin/contact-submissions/${contactId}/status`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status: newStatus })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('✅ Status updated successfully:', result);
+                
+                showNotification('success', 'Status Updated', `Contact marked as ${newStatus.toUpperCase()}`);
+                
+                // Update the local data and refresh the table
+                if (window.allContacts) {
+                    const contact = window.allContacts.find(c => c.id === contactId);
+                    if (contact) {
+                        contact.status = newStatus;
+                    }
+                }
+                
+                // Refresh stats and table
+                updateContactStats(window.allContacts);
+                
+            } catch (error) {
+                console.error('❌ Error updating contact status:', error);
+                showNotification('error', 'Update Failed', 'Failed to update contact status');
+                
+                // Revert the dropdown selection
+                const dropdown = document.querySelector(`select[onchange*="${contactId}"]`);
+                if (dropdown) {
+                    const contact = window.allContacts.find(c => c.id === contactId);
+                    if (contact) {
+                        dropdown.value = contact.status;
+                    }
+                }
+            }
+        }
+
+        // Mark contact as replied when reply button is clicked
+        function markAsReplied(contactId) {
+            setTimeout(() => {
+                updateContactStatus(contactId, 'replied');
+            }, 1000); // Delay to allow email client to open first
+        }
+
+        // Update newsletter subscriber status
+        async function updateSubscriberStatus(subscriberId, newStatus) {
+            try {
+                console.log('📧 Updating subscriber status:', { subscriberId, newStatus });
+                
+                const response = await fetch(`http://localhost:3000/admin/newsletter-subscribers/${subscriberId}/status`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status: newStatus })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('✅ Subscriber status updated successfully:', result);
+                
+                showNotification('success', 'Status Updated', `Subscriber marked as ${newStatus.toUpperCase()}`);
+                
+                // Refresh the subscribers list
+                loadNewsletterSubscribers();
+                
+            } catch (error) {
+                console.error('❌ Error updating subscriber status:', error);
+                showNotification('error', 'Update Failed', 'Failed to update subscriber status');
+            }
+        }
+
+        // Unsubscribe user function
+        function unsubscribeUser(subscriberId) {
+            if (confirm('Are you sure you want to unsubscribe this user?')) {
+                updateSubscriberStatus(subscriberId, 'unsubscribed');
+            }
+        }
+
+        // Resubscribe user function
+        function resubscribeUser(subscriberId) {
+            if (confirm('Are you sure you want to reactivate this subscriber?')) {
+                updateSubscriberStatus(subscriberId, 'active');
+            }
+        }
+
+        // Refresh contacts
+        function refreshContacts() {
+            loadContactForms();
+        }
+
+        // Customer Management Functions
+        let allCustomers = [];
+        
+        // Debug: Add immediate test when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔧 DOM loaded, setting up customer management...');
+            
+            // Test if section exists
+            const customersSection = document.getElementById('customers');
+            console.log('🔍 Customers section found:', !!customersSection);
+            
+            // Make functions globally available immediately
+            window.loadCustomers = loadCustomers;
+            window.viewCustomerDetails = viewCustomerDetails;
+            
+            console.log('✅ Customer functions made global');
+            
+            // Test if we can reach the backend
+            fetch('http://localhost:3000/users')
+                .then(response => {
+                    console.log('🌐 Backend connectivity test:', response.status);
+                    if (response.ok) {
+                        console.log('✅ Backend is reachable');
+                    } else {
+                        console.log('❌ Backend returned error:', response.status);
+                    }
+                })
+                .catch(error => {
+                    console.log('❌ Backend connectivity failed:', error);
+                });
+            
+
+        });
+
+        // Load all customers
+        async function loadCustomers() {
+            console.log('🚀 loadCustomers function called');
+            try {
+                console.log('📥 Loading customers...');
+                const loadingElement = document.getElementById('customers-loading');
+                console.log('🔍 Loading element found:', !!loadingElement);
+                
+                if (loadingElement) {
+                    loadingElement.style.display = 'block';
+                    console.log('📍 Loading indicator shown');
+                }
+                
+                console.log('🌐 Making fetch request to:', 'http://localhost:3000/users');
+                const response = await fetch('http://localhost:3000/users');
+                console.log('📡 Response received:', response.status, response.ok);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                console.log('📦 Parsing JSON...');
+                const customers = await response.json();
+                console.log('✅ Customers loaded:', customers.length, customers);
+                
+                // Store customers globally
+                window.allCustomers = customers;
+                allCustomers = customers;
+                
+                // Update stats
+                updateCustomerStats(customers);
+                
+                // Update table
+                updateCustomersTable(customers);
+                
+                if (loadingElement) {
+                    loadingElement.style.display = 'none';
+                }
+                
+                // Make functions globally available for debugging
+                window.loadCustomers = loadCustomers;
+                window.updateCustomersTable = updateCustomersTable;
+                window.allCustomers = customers;
+                
+                showNotification('success', 'Customers Loaded', `${customers.length} customers loaded successfully`);
+                
+            } catch (error) {
+                console.error('❌ Error loading customers:', error);
+                console.error('❌ Error details:', error.message, error.stack);
+                
+                const loadingElement = document.getElementById('customers-loading');
+                if (loadingElement) {
+                    loadingElement.style.display = 'none';
+                }
+                
+                // Show detailed error
+                alert(`Customer loading failed: ${error.message}`);
+                showNotification('error', 'Load Failed', 'Failed to load customers: ' + error.message);
+            }
+            console.log('🏁 loadCustomers function completed');
+        }
+
+        // Update customer statistics
+        function updateCustomerStats(customers) {
+            const totalCustomers = customers.length;
+            
+            // Calculate new customers this month
+            const now = new Date();
+            const thisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+            const newThisMonth = customers.filter(customer => 
+                new Date(customer.created_at) >= thisMonth
+            ).length;
+            
+            // Calculate active customers (customers with at least one order - for now just total)
+            const activeCustomers = customers.filter(customer => 
+                customer.email && customer.email.includes('@')
+            ).length;
+            
+            // Calculate verified emails (basic email validation)
+            const verifiedEmails = customers.filter(customer => 
+                customer.email && customer.email.includes('@') && !customer.email.includes('test')
+            ).length;
+            
+            document.getElementById('total-customers').textContent = totalCustomers;
+            document.getElementById('new-customers-month').textContent = newThisMonth;
+            document.getElementById('active-customers').textContent = activeCustomers;
+            document.getElementById('verified-emails').textContent = verifiedEmails;
+        }
+
+        // Update customers table
+        function updateCustomersTable(customers) {
+            const tbody = document.getElementById('customers-table-body');
+            
+            if (customers.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" style="text-align: center; padding: 40px; color: #666;">
+                            <i class="fas fa-users" style="font-size: 3rem; margin-bottom: 16px; opacity: 0.5;"></i><br>
+                            No customers found
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = customers.map(customer => `
+                <tr>
+                    <td>${customer.id}</td>
+                    <td>
+                        <div class="customer-info">
+                            <div class="customer-name">${customer.username || 'N/A'}</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="customer-email">
+                            ${customer.email || 'N/A'}
+                            ${customer.email && customer.email.includes('@gmail.com') ? '<i class="fab fa-google" style="color: #ea4335; margin-left: 4px;"></i>' : ''}
+                        </div>
+                    </td>
+                    <td>${customer.phone || 'Not provided'}</td>
+                    <td>${formatDate(customer.created_at)}</td>
+                    <td>
+                        <span class="loading-text" id="orders-${customer.id}">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="loading-text" id="spent-${customer.id}">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-sm btn-primary" onclick="console.log('Button clicked for customer ${customer.id}'); viewCustomerDetails(${customer.id});" title="View Details">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-info" onclick="viewCustomerOrders(${customer.id})" title="View Orders">
+                                <i class="fas fa-shopping-cart"></i>
+                            </button>
+                            <button class="btn btn-sm btn-success" onclick="emailCustomer('${customer.email}', '${customer.username}')" title="Send Email">
+                                <i class="fas fa-envelope"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+            
+            // Load order statistics for each customer
+            customers.forEach(customer => {
+                loadCustomerOrderStats(customer.id);
+            });
+        }
+
+        // Load order statistics for a specific customer
+        async function loadCustomerOrderStats(customerId) {
+            try {
+                const response = await fetch(`http://localhost:3000/users/${customerId}/orders`);
+                if (response.ok) {
+                    const orders = await response.json();
+                    const totalOrders = orders.length;
+                    const totalSpent = orders.reduce((sum, order) => sum + parseFloat(order.total || 0), 0);
+                    
+                    document.getElementById(`orders-${customerId}`).textContent = totalOrders;
+                    document.getElementById(`spent-${customerId}`).textContent = `₹${totalSpent.toFixed(2)}`;
+                } else {
+                    document.getElementById(`orders-${customerId}`).textContent = '0';
+                    document.getElementById(`spent-${customerId}`).textContent = '₹0.00';
+                }
+            } catch (error) {
+                document.getElementById(`orders-${customerId}`).textContent = 'Error';
+                document.getElementById(`spent-${customerId}`).textContent = 'Error';
+            }
+        }
+
+        // Filter customers
+        function filterCustomers() {
+            const searchTerm = document.getElementById('customer-search').value.toLowerCase();
+            
+            if (!searchTerm) {
+                updateCustomersTable(allCustomers);
+                return;
+            }
+            
+            const filteredCustomers = allCustomers.filter(customer => 
+                (customer.username && customer.username.toLowerCase().includes(searchTerm)) ||
+                (customer.email && customer.email.toLowerCase().includes(searchTerm)) ||
+                (customer.phone && customer.phone.includes(searchTerm))
+            );
+            
+            updateCustomersTable(filteredCustomers);
+        }
+
+        // View customer details in modal
+        async function viewCustomerDetails(customerId) {
+            console.log('🔍 Opening customer details for ID:', customerId);
+            
+            try {
+                showNotification('info', 'Loading...', 'Fetching customer details...');
+                
+                const response = await fetch(`http://localhost:3000/users/${customerId}`);
+                if (!response.ok) {
+                    throw new Error('Customer not found');
+                }
+                
+                const customer = await response.json();
+                console.log('✅ Customer data loaded:', customer);
+                
+                // Get customer orders
+                const ordersResponse = await fetch(`http://localhost:3000/users/${customerId}/orders`);
+                const orders = ordersResponse.ok ? await ordersResponse.json() : [];
+                console.log('✅ Customer orders loaded:', orders.length);
+                
+                const totalSpent = orders.reduce((sum, order) => sum + parseFloat(order.total || 0), 0);
+                
+                const modal = document.createElement('div');
+                modal.className = 'modal-overlay';
+                modal.innerHTML = `
+                    <div class="modal-content" style="max-width: 800px;">
+                        <div class="modal-header">
+                            <h3>👤 Customer Details - ${customer.username}</h3>
+                            <button class="modal-close" onclick="this.closest('.modal-overlay').remove()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="customer-details">
+                                <div class="customer-summary">
+                                    <div class="customer-avatar">
+                                        <i class="fas fa-user-circle"></i>
+                                    </div>
+                                    <div class="customer-basic-info">
+                                        <h4>${customer.username}</h4>
+                                        <p>${customer.email}</p>
+                                        <span class="customer-badge">Customer #${customer.id}</span>
+                                    </div>
+                                    <div class="customer-stats-mini">
+                                        <div class="stat-mini">
+                                            <strong>${orders.length}</strong>
+                                            <span>Orders</span>
+                                        </div>
+                                        <div class="stat-mini">
+                                            <strong>₹${totalSpent.toFixed(2)}</strong>
+                                            <span>Total Spent</span>
+                                        </div>
+                                        <div class="stat-mini">
+                                            <strong>${formatDate(customer.created_at)}</strong>
+                                            <span>Member Since</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="customer-tabs">
+                                    <div class="tab-buttons">
+                                        <button class="tab-btn active" onclick="showCustomerTab(event, 'info')">Contact Info</button>
+                                        <button class="tab-btn" onclick="showCustomerTab(event, 'orders')">Order History</button>
+                                        <button class="tab-btn" onclick="showCustomerTab(event, 'activity')">Activity</button>
+                                    </div>
+                                    
+                                    <div id="info" class="tab-content active">
+                                        <div class="info-grid">
+                                            <div class="info-item">
+                                                <label><i class="fas fa-user"></i> Username</label>
+                                                <value>${customer.username || 'Not provided'}</value>
+                                            </div>
+                                            <div class="info-item">
+                                                <label><i class="fas fa-envelope"></i> Email</label>
+                                                <value>${customer.email || 'Not provided'}</value>
+                                            </div>
+                                            <div class="info-item">
+                                                <label><i class="fas fa-phone"></i> Phone</label>
+                                                <value>${customer.phone || 'Not provided'}</value>
+                                            </div>
+                                            <div class="info-item">
+                                                <label><i class="fas fa-map-marker-alt"></i> Address</label>
+                                                <value>${customer.address || 'Not provided'}</value>
+                                            </div>
+                                            <div class="info-item">
+                                                <label><i class="fas fa-calendar-alt"></i> Registration Date</label>
+                                                <value>${formatDate(customer.created_at)}</value>
+                                            </div>
+                                            <div class="info-item">
+                                                <label><i class="fas fa-id-badge"></i> Customer ID</label>
+                                                <value>#${customer.id}</value>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div id="orders" class="tab-content">
+                                        <div class="orders-summary">
+                                            <h5>Recent Orders</h5>
+                                            ${orders.length === 0 ? 
+                                                '<p style="color: #666; text-align: center; padding: 20px;">No orders found</p>' :
+                                                `<div class="orders-list">
+                                                    ${orders.slice(0, 5).map(order => `
+                                                        <div class="order-item">
+                                                            <div class="order-info">
+                                                                <strong>Order #${order.id}</strong>
+                                                                <span class="order-date">${formatDate(order.created_at)}</span>
+                                                            </div>
+                                                            <div class="order-details">
+                                                                <span class="order-status status-${order.status}">${order.status}</span>
+                                                                <span class="order-total">₹${parseFloat(order.total || 0).toFixed(2)}</span>
+                                                            </div>
+                                                        </div>
+                                                    `).join('')}
+                                                </div>`
+                                            }
+                                            ${orders.length > 5 ? `<p style="text-align: center; margin-top: 16px;"><button class="btn btn-sm btn-secondary" onclick="viewCustomerOrders(${customer.id})">View All ${orders.length} Orders</button></p>` : ''}
+                                        </div>
+                                    </div>
+                                    
+                                    <div id="activity" class="tab-content">
+                                        <div class="activity-timeline">
+                                            <div class="activity-item">
+                                                <i class="fas fa-user-plus"></i>
+                                                <div class="activity-content">
+                                                    <strong>Customer registered</strong>
+                                                    <span>${formatDate(customer.created_at)}</span>
+                                                </div>
+                                            </div>
+                                            ${orders.length > 0 ? `
+                                                <div class="activity-item">
+                                                    <i class="fas fa-shopping-cart"></i>
+                                                    <div class="activity-content">
+                                                        <strong>First order placed</strong>
+                                                        <span>${formatDate(orders[orders.length - 1].created_at)}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="activity-item">
+                                                    <i class="fas fa-star"></i>
+                                                    <div class="activity-content">
+                                                        <strong>Latest order</strong>
+                                                        <span>${formatDate(orders[0].created_at)}</span>
+                                                    </div>
+                                                </div>
+                                            ` : ''}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" onclick="this.closest('.modal-overlay').remove()">
+                                <i class="fas fa-times"></i> Close
+                            </button>
+                            <button class="btn btn-info" onclick="viewCustomerOrders(${customer.id})">
+                                <i class="fas fa-shopping-cart"></i> View Orders
+                            </button>
+                            <button class="btn btn-success" onclick="emailCustomer('${customer.email}', '${customer.username}')">
+                                <i class="fas fa-envelope"></i> Send Email
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                // Add click outside to close
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) modal.remove();
+                });
+                
+                // Add ESC key listener
+                const escapeHandler = function(e) {
+                    if (e.key === 'Escape') {
+                        modal.remove();
+                        document.removeEventListener('keydown', escapeHandler);
+                    }
+                };
+                document.addEventListener('keydown', escapeHandler);
+                
+                // Ensure modal is added to body
+                document.body.appendChild(modal);
+                console.log('✅ Customer modal created and added to DOM');
+                
+                // Focus management
+                setTimeout(() => {
+                    const closeBtn = modal.querySelector('.modal-close');
+                    if (closeBtn) closeBtn.focus();
+                }, 100);
+                
+            } catch (error) {
+                console.error('❌ Error loading customer details:', error);
+                showNotification('error', 'Load Failed', 'Failed to load customer details: ' + error.message);
+            }
+        }
+
+        // Make function globally available for debugging
+        window.viewCustomerDetails = viewCustomerDetails;
+
+        // Show customer tab
+        function showCustomerTab(event, tabName) {
+            console.log('🔄 Switching to tab:', tabName);
+            
+            // Remove active class from all tabs within the modal
+            const modal = event.target.closest('.modal-content');
+            if (modal) {
+                modal.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                modal.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                event.target.classList.add('active');
+                const targetTab = modal.querySelector(`#${tabName}`);
+                if (targetTab) {
+                    targetTab.classList.add('active');
+                    console.log('✅ Tab switched to:', tabName);
+                } else {
+                    console.error('❌ Tab not found:', tabName);
+                }
+            } else {
+                console.error('❌ Modal not found for tab switching');
+            }
+        }
+        
+        // Make function globally available
+        window.showCustomerTab = showCustomerTab;
+
+
+
+        // View customer orders
+        function viewCustomerOrders(customerId) {
+            // Close any existing modal
+            const existingModal = document.querySelector('.modal-overlay');
+            if (existingModal) existingModal.remove();
+            
+            // Switch to orders section and filter by customer
+            showSection('orders');
+            
+            // Add customer filter (if you want to implement customer filtering in orders)
+            console.log('📋 Viewing orders for customer:', customerId);
+            showNotification('info', 'Viewing Orders', `Showing orders section. Customer ID: ${customerId}`);
+        }
+
+        // Email customer
+        function emailCustomer(email, username) {
+            if (!email) {
+                showNotification('warning', 'No Email', 'This customer has no email address on file.');
+                return;
+            }
+            
+            const subject = `Hello from Urban Nucleus`;
+            const emailBody = `Hello ${username || 'Valued Customer'},
+
+Thank you for being a loyal customer of Urban Nucleus.
+
+[Your message here]
+
+Best regards,
+Urban Nucleus Team
+urban.nucleus@gmail.com`;
+            
+            showEmailOptionsModal(email, subject, emailBody);
+        }
+
+        // Refresh customers
+        function refreshCustomers() {
+            loadCustomers();
+        }
+
+        // Export customers to CSV
+        function exportCustomers() {
+            if (!allCustomers || allCustomers.length === 0) {
+                showNotification('warning', 'No Data', 'No customers to export');
+                return;
+            }
+            
+            const csvData = allCustomers.map(customer => ({
+                'Customer ID': customer.id,
+                'Username': customer.username || '',
+                'Email': customer.email || '',
+                'Phone': customer.phone || '',
+                'Address': customer.address || '',
+                'Registration Date': formatDate(customer.created_at)
+            }));
+            
+            const csv = convertToCSV(csvData);
+            downloadCSV(csv, `customers_${new Date().toISOString().split('T')[0]}.csv`);
+            
+            showNotification('success', 'Export Complete', `${allCustomers.length} customers exported successfully`);
+        }
+
+        // Export contacts to CSV
+        function exportContacts() {
+            try {
+                fetch('http://localhost:3000/admin/contact-submissions')
+                    .then(response => response.json())
+                    .then(contacts => {
+                        const csv = convertToCSV(contacts, [
+                            'id', 'name', 'email', 'phone', 'subject', 'message', 'status', 'submitted_at'
+                        ]);
+                        downloadCSV(csv, 'contact-submissions.csv');
+                        showNotification('success', 'Export Complete', 'Contact submissions exported successfully');
+                    });
+            } catch (error) {
+                showNotification('error', 'Export Failed', 'Failed to export contact submissions');
+            }
+        }
+
+        // ==================== UTILITY FUNCTIONS ====================
+
+        // Format date for display
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+        }
+
+        // Convert data to CSV
+        function convertToCSV(data, columns) {
+            const header = columns.join(',');
+            const rows = data.map(item => 
+                columns.map(col => {
+                    let value = item[col] || '';
+                    // Escape quotes and wrap in quotes if contains comma
+                    value = String(value).replace(/"/g, '""');
+                    if (value.includes(',') || value.includes('"') || value.includes('\n')) {
+                        value = `"${value}"`;
+                    }
+                    return value;
+                }).join(',')
+            );
+            return [header, ...rows].join('\n');
+        }
+
+        // Download CSV file
+        function downloadCSV(csv, filename) {
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Initialize newsletter and contact sections when they become active
+        document.addEventListener('DOMContentLoaded', function() {
+            // Listen for section changes
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                        const target = mutation.target;
+                        if (target.classList.contains('content-section') && target.style.display !== 'none') {
+                            if (target.id === 'newsletter') {
+                                loadNewsletterSubscribers();
+                            } else if (target.id === 'contact-forms') {
+                                loadContactForms();
+                            } else if (target.id === 'customers') {
+                                console.log('🔍 Customers section became visible, loading...');
+                                loadCustomers();
+                            }
+                        }
+                    }
+                });
+            });
+
+            // Observe all content sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                observer.observe(section, { attributes: true });
+            });
+        });
+
+    </script>
+    <script src="admin.js?v=2.2.0"></script>
+    <a class="floating-whatsapp" href="https://wa.me/918806600982" target="_blank" rel="noopener" aria-label="Chat on WhatsApp" title="Contact Us">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+</body>
+</html>

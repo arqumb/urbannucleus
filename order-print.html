@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Print - Urban Nucleus</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: white;
+            padding: 20px;
+        }
+        
+        .print-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 20px;
+        }
+        
+        .company-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .company-tagline {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .order-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .order-details, .customer-details {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #555;
+        }
+        
+        .info-value {
+            color: #333;
+        }
+        
+        .order-items {
+            margin-bottom: 30px;
+        }
+        
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .items-table th {
+            background: #333;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .items-table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .items-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        
+        .total-section {
+            text-align: right;
+            margin-top: 20px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .grand-total {
+            font-size: 20px;
+            font-weight: bold;
+            border-top: 2px solid #333;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+        
+        .print-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #008060;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .print-button:hover {
+            background: #006b4f;
+        }
+        
+        @media print {
+            .print-button {
+                display: none;
+            }
+            
+            body {
+                padding: 0;
+            }
+            
+            .print-header {
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="print-button" onclick="window.print()">
+        🖨️ Print Order
+    </button>
+    
+    <div class="print-header">
+        <div class="company-name">Urban Nucleus</div>
+        <div class="company-tagline">Premium Fashion & Lifestyle</div>
+    </div>
+    
+    <div class="order-info">
+        <div class="order-details">
+            <div class="section-title">Order Information</div>
+            <div class="info-row">
+                <span class="info-label">Order ID:</span>
+                <span class="info-value" id="order-id">#</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Order Date:</span>
+                <span class="info-value" id="order-date">-</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Status:</span>
+                <span class="info-value" id="order-status">-</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Payment Method:</span>
+                <span class="info-value" id="payment-method">-</span>
+            </div>
+        </div>
+        
+        <div class="customer-details">
+            <div class="section-title">Customer Information</div>
+            <div class="info-row">
+                <span class="info-label">Name:</span>
+                <span class="info-value" id="customer-name">-</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Email:</span>
+                <span class="info-value" id="customer-email">-</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Phone:</span>
+                <span class="info-value" id="customer-phone">-</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Address:</span>
+                <span class="info-value" id="customer-address">-</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="order-items">
+        <div class="section-title">Order Items</div>
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Size</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody id="items-tbody">
+                <!-- Order items will be populated here -->
+            </tbody>
+        </table>
+        
+        <div class="total-section">
+            <div class="total-row">
+                <span>Subtotal:</span>
+                <span id="subtotal">₹0.00</span>
+            </div>
+            <div class="total-row">
+                <span>Shipping:</span>
+                <span id="shipping">₹0.00</span>
+            </div>
+            <div class="total-row grand-total">
+                <span>Total:</span>
+                <span id="grand-total">₹0.00</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Thank you for your order!</p>
+        <p>Urban Nucleus - Premium Fashion & Lifestyle</p>
+        <p>For support, contact: urban.nucleus@gmail.com</p>
+    </div>
+    
+    <script>
+        // Get order ID from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderId = urlParams.get('id');
+        
+        if (!orderId) {
+            document.body.innerHTML = '<div style="text-align: center; padding: 50px;"><h2>Error: No Order ID provided</h2></div>';
+        } else {
+            // Load order details
+            loadOrderDetails(orderId);
+        }
+        
+        async function loadOrderDetails(orderId) {
+            try {
+                const response = await fetch(`http://localhost:3000/orders/${orderId}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch order details');
+                }
+                
+                const data = await response.json();
+                const order = data.order;
+                const items = data.items;
+                
+                // Populate order information
+                document.getElementById('order-id').textContent = `#${order.id}`;
+                document.getElementById('order-date').textContent = new Date(order.created_at).toLocaleDateString('en-IN');
+                document.getElementById('order-status').textContent = order.status.toUpperCase();
+                document.getElementById('payment-method').textContent = order.payment_method.toUpperCase() === 'UPI' ? 'UPI (PREPAID)' : order.payment_method.toUpperCase();
+                
+                // Populate customer information
+                document.getElementById('customer-name').textContent = order.username || 'Guest';
+                document.getElementById('customer-email').textContent = order.email || 'N/A';
+                document.getElementById('customer-phone').textContent = order.phone || 'N/A';
+                document.getElementById('customer-address').textContent = order.shipping_address || 'N/A';
+                
+                // Populate order items
+                const tbody = document.getElementById('items-tbody');
+                tbody.innerHTML = items.map(item => `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>${item.size || 'N/A'}</td>
+                        <td>${item.quantity}</td>
+                        <td>₹${parseFloat(item.price).toFixed(2)}</td>
+                        <td>₹${(parseFloat(item.price) * item.quantity).toFixed(2)}</td>
+                    </tr>
+                `).join('');
+                
+                // Calculate totals
+                const subtotal = items.reduce((sum, item) => sum + (parseFloat(item.price) * item.quantity), 0);
+                const shipping = order.payment_method === 'cod' ? 200 : 0;
+                const grandTotal = subtotal + shipping;
+                
+                document.getElementById('subtotal').textContent = `₹${subtotal.toFixed(2)}`;
+                document.getElementById('shipping').textContent = order.payment_method === 'cod' ? '₹200.00' : 'Free Delivery';
+                document.getElementById('grand-total').textContent = `₹${grandTotal.toFixed(2)}`;
+                
+                // Update page title
+                document.title = `Order #${order.id} - Urban Nucleus`;
+                
+            } catch (error) {
+                console.error('Error loading order details:', error);
+                document.body.innerHTML = `
+                    <div style="text-align: center; padding: 50px;">
+                        <h2>Error Loading Order</h2>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

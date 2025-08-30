@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OAuth Test - Urban Nucleus</title>
+    <link rel="stylesheet" href="auth.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- OAuth Configuration -->
+    <script src="oauth-config.js"></script>
+    <!-- Google OAuth -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <!-- Facebook OAuth -->
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+    <style>
+        .test-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .test-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 16px;
+        }
+        .test-button:hover {
+            background: #5a6fd8;
+        }
+        .test-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .status.success { background: #d4edda; color: #155724; }
+        .status.error { background: #f8d7da; color: #721c24; }
+        .status.info { background: #d1ecf1; color: #0c5460; }
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+            border-left: 4px solid #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🔐 OAuth Integration Test</h1>
+        
+        <div class="warning">
+            <strong>⚠️ Facebook OAuth Restriction:</strong> Facebook OAuth requires HTTPS since 2018, even for localhost development. This is a Facebook security policy that cannot be bypassed. See <a href="https-setup.md" target="_blank">https-setup.md</a> for HTTPS setup instructions.
+        </div>
+        
+        <div class="test-section">
+            <h3>🔍 Backend Connection Test</h3>
+            <button class="test-button" onclick="testBackendConnection()">Test Backend</button>
+            <div id="backendStatus" class="status"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🌐 Google OAuth Test</h3>
+            <button class="test-button" onclick="testGoogleOAuth()">Test Google OAuth</button>
+            <div id="googleStatus" class="status"></div>
+            <p><small>Status: <span id="googleOAuthStatus">Not initialized</span></small></p>
+        </div>
+        
+        <div class="test-section">
+            <h3>📘 Facebook OAuth Test</h3>
+            <button class="test-button" onclick="testFacebookOAuth()">Test Facebook OAuth</button>
+            <div id="facebookStatus" class="status"></div>
+            <p><small>Status: <span id="facebookOAuthStatus">Not initialized</span></small></p>
+        </div>
+        
+        <div class="test-section">
+            <h3>📊 OAuth Configuration</h3>
+            <div id="configStatus" class="status"></div>
+            <button class="test-button" onclick="checkOAuthConfig()">Check Configuration</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>🧪 Manual OAuth Test</h3>
+            <p>Try the actual login/signup pages:</p>
+            <a href="login.html" class="test-button" style="text-decoration: none; display: inline-block;">Test Login Page</a>
+            <a href="signup.html" class="test-button" style="text-decoration: none; display: inline-block;">Test Signup Page</a>
+        </div>
+    </div>
+
+    <script>
+        // Initialize OAuth services
+        function initializeOAuth() {
+            // Initialize Google OAuth
+            if (typeof google !== 'undefined') {
+                google.accounts.id.initialize({
+                    client_id: OAUTH_CONFIG.GOOGLE.CLIENT_ID,
+                    callback: handleGoogleTest,
+                    auto_select: false,
+                    cancel_on_tap_outside: true
+                });
+                document.getElementById('googleOAuthStatus').textContent = 'Initialized';
+                document.getElementById('googleOAuthStatus').style.color = 'green';
+            } else {
+                document.getElementById('googleOAuthStatus').textContent = 'SDK not loaded';
+                document.getElementById('googleOAuthStatus').style.color = 'red';
+            }
+            
+            // Initialize Facebook OAuth
+            if (typeof FB !== 'undefined') {
+                FB.init({
+                    appId: OAUTH_CONFIG.FACEBOOK.APP_ID,
+                    cookie: true,
+                    xfbml: true,
+                    version: 'v18.0'
+                });
+                document.getElementById('facebookOAuthStatus').textContent = 'Initialized';
+                document.getElementById('facebookOAuthStatus').style.color = 'green';
+            } else {
+                document.getElementById('facebookOAuthStatus').textContent = 'SDK not loaded';
+                document.getElementById('facebookOAuthStatus').style.color = 'red';
+            }
+        }
+        
+        // Test backend connection
+        async function testBackendConnection() {
+            const statusDiv = document.getElementById('backendStatus');
+            statusDiv.textContent = 'Testing backend connection...';
+            statusDiv.className = 'status info';
+            
+            try {
+                const response = await fetch('http://localhost:3000/health');
+                if (response.ok) {
+                    const data = await response.json();
+                    statusDiv.textContent = `✅ Backend connected! Status: ${data.status}, Database: ${data.database}`;
+                    statusDiv.className = 'status success';
+                } else {
+                    statusDiv.textContent = `❌ Backend responded with status: ${response.status}`;
+                    statusDiv.className = 'status error';
+                }
+            } catch (error) {
+                statusDiv.textContent = `❌ Backend connection failed: ${error.message}`;
+                statusDiv.className = 'status error';
+            }
+        }
+        
+        // Test Google OAuth
+        function testGoogleOAuth() {
+            const statusDiv = document.getElementById('googleStatus');
+            
+            if (typeof google === 'undefined') {
+                statusDiv.textContent = '❌ Google OAuth SDK not loaded';
+                statusDiv.className = 'status error';
+                return;
+            }
+            
+            if (OAUTH_CONFIG.GOOGLE.CLIENT_ID === 'YOUR_GOOGLE_CLIENT_ID') {
+                statusDiv.textContent = '⚠️ Google OAuth not configured. Update oauth-config.js with your Client ID';
+                statusDiv.className = 'status error';
+                return;
+            }
+            
+            statusDiv.textContent = '✅ Google OAuth ready! Click the button to test login';
+            statusDiv.className = 'status success';
+            
+            // Trigger Google OAuth
+            google.accounts.id.prompt();
+        }
+        
+        // Test Facebook OAuth
+        function testFacebookOAuth() {
+            const statusDiv = document.getElementById('facebookStatus');
+            
+            // Check if we're on HTTPS (Facebook requirement)
+            if (window.location.protocol === 'http:') {
+                statusDiv.textContent = '❌ Facebook OAuth requires HTTPS. Facebook blocked HTTP pages from using FB.login() since 2018. Set up local HTTPS development to test Facebook OAuth.';
+                statusDiv.className = 'status error';
+                return;
+            }
+            
+            if (typeof FB === 'undefined') {
+                statusDiv.textContent = '❌ Facebook OAuth SDK not loaded';
+                statusDiv.className = 'status error';
+                return;
+            }
+            
+            if (OAUTH_CONFIG.FACEBOOK.APP_ID === 'YOUR_FACEBOOK_APP_ID') {
+                statusDiv.textContent = '⚠️ Facebook OAuth not configured. Update oauth-config.js with your App ID';
+                statusDiv.className = 'status error';
+                return;
+            }
+            
+            statusDiv.textContent = '✅ Facebook OAuth ready! Click the button to test login';
+            statusDiv.className = 'status success';
+            
+            // Test Facebook login
+            FB.login(function(response) {
+                if (response.authResponse) {
+                    statusDiv.textContent = '✅ Facebook login successful! Access token received.';
+                    statusDiv.className = 'status success';
+                } else {
+                    statusDiv.textContent = '❌ Facebook login was cancelled or failed';
+                    statusDiv.className = 'status error';
+                }
+            }, { scope: 'email,public_profile' });
+        }
+        
+        // Check OAuth configuration
+        function checkOAuthConfig() {
+            const statusDiv = document.getElementById('configStatus');
+            let configStatus = '';
+            
+            // Check Google config
+            if (OAUTH_CONFIG.GOOGLE.CLIENT_ID === 'YOUR_GOOGLE_CLIENT_ID') {
+                configStatus += '❌ Google OAuth not configured\n';
+            } else {
+                configStatus += '✅ Google OAuth configured\n';
+            }
+            
+            // Check Facebook config
+            if (OAUTH_CONFIG.FACEBOOK.APP_ID === 'YOUR_FACEBOOK_APP_ID') {
+                configStatus += '❌ Facebook OAuth not configured\n';
+            } else {
+                configStatus += '✅ Facebook OAuth configured\n';
+            }
+            
+            // Check redirect URIs
+            configStatus += `📍 Google Redirect URI: ${OAUTH_CONFIG.GOOGLE.REDIRECT_URI}\n`;
+            configStatus += `📍 Facebook Redirect URI: ${OAUTH_CONFIG.FACEBOOK.REDIRECT_URI}\n`;
+            configStatus += `🌐 Current Protocol: ${window.location.protocol}\n`;
+            configStatus += `🏠 Hostname: ${window.location.hostname}\n`;
+            
+            // Add protocol-specific information
+            if (window.location.protocol === 'https:') {
+                configStatus += `✅ HTTPS detected - Both Google and Facebook OAuth will work\n`;
+            } else {
+                configStatus += `⚠️ HTTP detected - Only Google OAuth will work\n`;
+                configStatus += `❌ Facebook OAuth requires HTTPS (Facebook policy since 2018)\n`;
+            }
+            
+            statusDiv.textContent = configStatus;
+            statusDiv.className = 'status info';
+        }
+        
+        // Handle Google OAuth test
+        function handleGoogleTest(response) {
+            const statusDiv = document.getElementById('googleStatus');
+            statusDiv.textContent = '✅ Google OAuth token received! Testing backend...';
+            statusDiv.className = 'status success';
+            
+            // Test the backend endpoint
+            fetch('http://localhost:3000/auth/google', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ token: response.credential })
+            })
+            .then(result => result.json())
+            .then(data => {
+                if (data.user) {
+                    statusDiv.textContent = `✅ Google OAuth complete! User: ${data.user.email}`;
+                    statusDiv.className = 'status success';
+                } else {
+                    statusDiv.textContent = `❌ Google OAuth failed: ${data.error}`;
+                    statusDiv.className = 'status error';
+                }
+            })
+            .catch(error => {
+                statusDiv.textContent = `❌ Google OAuth error: ${error.message}`;
+                statusDiv.className = 'status error';
+            });
+        }
+        
+        // Initialize when page loads
+        window.addEventListener('load', function() {
+            // Wait a bit for OAuth SDKs to load
+            setTimeout(initializeOAuth, 1000);
+            
+            // Auto-check configuration
+            checkOAuthConfig();
+        });
+    </script>
+</body>
+</html>

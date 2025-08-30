@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Subcategory Cart - URBAN NUCLEUS</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .test-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        .test-result {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+        .product-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            background: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Test Subcategory Cart Functionality</h1>
+        <p>This page tests the cart functionality from subcategory pages. Make sure you're logged in first.</p>
+        
+        <div class="test-section">
+            <h3>Navigation</h3>
+            <a href="subcategory.html" class="test-button">Go to Subcategory Page</a>
+            <a href="category.html" class="test-button">Go to Category Page</a>
+            <a href="cart.html" class="test-button">Go to Cart</a>
+            <a href="index.html" class="test-button">Back to Home</a>
+        </div>
+
+        <div class="test-section">
+            <h3>Test User Authentication</h3>
+            <button onclick="checkAuth()" class="test-button">Check Login Status</button>
+            <div id="authTestResult" class="test-result">Click the button to test...</div>
+        </div>
+
+        <div class="test-section">
+            <h3>Test Cart API</h3>
+            <button onclick="testCartAPI()" class="test-button">Test Cart Endpoint</button>
+            <div id="cartTestResult" class="test-result">Click the button to test...</div>
+        </div>
+
+        <div class="test-section">
+            <h3>Test Add to Cart from Subcategory</h3>
+            <div class="product-card">
+                <h4>Test Product (ID: 13)</h4>
+                <p>This simulates a product card from subcategory page</p>
+                <button onclick="testAddToCart(13)" class="test-button">Add to Cart</button>
+                <div id="addToCartResult" class="test-result">Click the button to test...</div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>Test Cart Endpoint with Different Parameters</h3>
+            <button onclick="testCartAddEndpoint()" class="test-button">Test Cart Add Endpoint</button>
+            <div id="cartAddTestResult" class="test-result">Click the button to test...</div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:3000';
+        
+        function checkAuth() {
+            const result = document.getElementById('authTestResult');
+            const currentUser = localStorage.getItem('currentUser');
+            
+            if (currentUser) {
+                const user = JSON.parse(currentUser);
+                result.innerHTML = `
+                    ✅ Logged in as: ${user.name || user.email || 'User'}<br>
+                    🆔 User ID: ${user.id}<br>
+                    📧 Email: ${user.email || 'Not provided'}
+                `;
+            } else {
+                result.innerHTML = `
+                    ❌ Not logged in<br>
+                    🔗 <a href="login.html">Go to Login</a>
+                `;
+            }
+        }
+        
+        async function testCartAPI() {
+            const result = document.getElementById('cartTestResult');
+            result.innerHTML = 'Testing cart API...';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/cart/1`);
+                if (response.ok) {
+                    const cartData = await response.json();
+                    result.innerHTML = `
+                        ✅ Cart API working!<br>
+                        📦 Found ${cartData.length} items<br>
+                        ${cartData.length > 0 ? `📸 First item image: ${cartData[0].image_url ? '✅ Available' : '❌ Missing'}<br>` : ''}
+                        💰 First item price: ${cartData.length > 0 ? cartData[0].price : 'N/A'}<br>
+                        🔢 First item quantity: ${cartData.length > 0 ? cartData[0].quantity : 'N/A'}
+                    `;
+                } else {
+                    result.innerHTML = `❌ Cart API error: ${response.status} ${response.statusText}`;
+                }
+            } catch (error) {
+                result.innerHTML = `❌ Cart API error: ${error.message}`;
+            }
+        }
+        
+        async function testAddToCart(productId) {
+            const result = document.getElementById('addToCartResult');
+            result.innerHTML = 'Testing add to cart...';
+            
+            try {
+                // Check if user is logged in
+                const currentUser = localStorage.getItem('currentUser');
+                if (!currentUser) {
+                    result.innerHTML = `
+                        ❌ Not logged in<br>
+                        🔗 <a href="login.html">Please login first</a>
+                    `;
+                    return;
+                }
+
+                const user = JSON.parse(currentUser);
+                
+                const response = await fetch(`${API_BASE_URL}/cart/add`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        userId: user.id,
+                        productId: productId,
+                        quantity: 1
+                    })
+                });
+                
+                if (response.ok) {
+                    const resultData = await response.json();
+                    result.innerHTML = `
+                        ✅ Product added to cart successfully!<br>
+                        📝 Response: ${JSON.stringify(resultData)}
+                    `;
+                } else {
+                    const errorData = await response.json().catch(() => ({}));
+                    result.innerHTML = `
+                        ❌ Failed to add product to cart<br>
+                        📝 Error: ${errorData.error || 'Unknown error'}<br>
+                        🔢 Status: ${response.status}
+                    `;
+                }
+            } catch (error) {
+                result.innerHTML = `❌ Error: ${error.message}`;
+            }
+        }
+        
+        async function testCartAddEndpoint() {
+            const result = document.getElementById('cartAddTestResult');
+            result.innerHTML = 'Testing cart add endpoint with different parameters...';
+            
+            const testCases = [
+                { userId: 1, productId: 13, quantity: 1, description: 'Valid parameters' },
+                { userId: 999, productId: 13, quantity: 1, description: 'Invalid user ID' },
+                { userId: 1, productId: 999, quantity: 1, description: 'Invalid product ID' },
+                { userId: 1, productId: 13, quantity: 0, description: 'Zero quantity' },
+                { userId: 1, productId: 13, quantity: -1, description: 'Negative quantity' }
+            ];
+            
+            let results = '';
+            
+            for (const testCase of testCases) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/cart/add`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(testCase)
+                    });
+                    
+                    const responseData = await response.json();
+                    const status = response.ok ? '✅' : '❌';
+                    results += `${status} ${testCase.description}: ${response.status} - ${JSON.stringify(responseData)}<br>`;
+                } catch (error) {
+                    results += `❌ ${testCase.description}: Error - ${error.message}<br>`;
+                }
+            }
+            
+            result.innerHTML = results;
+        }
+        
+        // Check auth status on page load
+        document.addEventListener('DOMContentLoaded', checkAuth);
+    </script>
+</body>
+</html>
+
+

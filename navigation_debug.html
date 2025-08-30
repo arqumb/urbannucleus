@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Debug Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ccc; }
+        button { margin: 5px; padding: 10px 20px; }
+        .result { margin: 10px 0; padding: 10px; background: #f0f0f0; }
+    </style>
+</head>
+<body>
+    <h1>Navigation Debug Test</h1>
+    
+    <div class="test-section">
+        <h2>Test Navigation Functions</h2>
+        <button onclick="testViewCategory()">Test viewCategory(1)</button>
+        <button onclick="testViewSubcategories()">Test viewSubcategories(1)</button>
+        <button onclick="testViewSubcategory()">Test viewSubcategory(1, 'Test')</button>
+        <div id="testResults" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test API Calls</h2>
+        <button onclick="testCategoriesAPI()">Test Categories API</button>
+        <button onclick="testSubcategoriesAPI()">Test Subcategories API</button>
+        <div id="apiResults" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test Page Navigation</h2>
+        <button onclick="navigateToCategory()">Navigate to category.html?id=1</button>
+        <button onclick="navigateToSubcategory()">Navigate to subcategory.html?id=1&name=Test</button>
+        <div id="navResults" class="result"></div>
+    </div>
+
+    <script>
+        // Import the navigation functions from collections.js
+        const API_BASE_URL = 'http://localhost:3000';
+        
+        // Test navigation functions
+        function testViewCategory() {
+            const result = document.getElementById('testResults');
+            try {
+                console.log('Testing viewCategory function...');
+                result.innerHTML = 'Testing viewCategory... Check console for details.';
+                
+                // Simulate the function call
+                const categoryId = 1;
+                const url = `category.html?id=${categoryId}`;
+                console.log('Would navigate to:', url);
+                result.innerHTML = `Success! Would navigate to: ${url}`;
+            } catch (error) {
+                console.error('Error in testViewCategory:', error);
+                result.innerHTML = `Error: ${error.message}`;
+            }
+        }
+        
+        function testViewSubcategories() {
+            const result = document.getElementById('testResults');
+            try {
+                console.log('Testing viewSubcategories function...');
+                result.innerHTML = 'Testing viewSubcategories... Check console for details.';
+                
+                const categoryId = 1;
+                const url = `category.html?id=${categoryId}&view=subcategories`;
+                console.log('Would navigate to:', url);
+                result.innerHTML = `Success! Would navigate to: ${url}`;
+            } catch (error) {
+                console.error('Error in testViewSubcategories:', error);
+                result.innerHTML = `Error: ${error.message}`;
+            }
+        }
+        
+        function testViewSubcategory() {
+            const result = document.getElementById('testResults');
+            try {
+                console.log('Testing viewSubcategory function...');
+                result.innerHTML = 'Testing viewSubcategory... Check console for details.';
+                
+                const subcategoryId = 1;
+                const subcategoryName = 'Test';
+                const url = `subcategory.html?id=${subcategoryId}&name=${encodeURIComponent(subcategoryName)}`;
+                console.log('Would navigate to:', url);
+                result.innerHTML = `Success! Would navigate to: ${url}`;
+            } catch (error) {
+                console.error('Error in testViewSubcategory:', error);
+                result.innerHTML = `Error: ${error.message}`;
+            }
+        }
+        
+        // Test API calls
+        async function testCategoriesAPI() {
+            const result = document.getElementById('apiResults');
+            try {
+                result.innerHTML = 'Testing Categories API...';
+                const response = await fetch(`${API_BASE_URL}/categories`);
+                if (response.ok) {
+                    const categories = await response.json();
+                    result.innerHTML = `Categories API Success! Found ${categories.length} categories.`;
+                    console.log('Categories:', categories);
+                } else {
+                    result.innerHTML = `Categories API Error: ${response.status}`;
+                }
+            } catch (error) {
+                result.innerHTML = `Categories API Error: ${error.message}`;
+                console.error('Categories API Error:', error);
+            }
+        }
+        
+        async function testSubcategoriesAPI() {
+            const result = document.getElementById('apiResults');
+            try {
+                result.innerHTML = 'Testing Subcategories API...';
+                const response = await fetch(`${API_BASE_URL}/categories/1/subcategories`);
+                if (response.ok) {
+                    const subcategories = await response.json();
+                    result.innerHTML = `Subcategories API Success! Found ${subcategories.length} subcategories.`;
+                    console.log('Subcategories:', subcategories);
+                } else {
+                    result.innerHTML = `Subcategories API Error: ${response.status}`;
+                }
+            } catch (error) {
+                result.innerHTML = `Subcategories API Error: ${error.message}`;
+                console.error('Subcategories API Error:', error);
+            }
+        }
+        
+        // Test actual navigation
+        function navigateToCategory() {
+            const result = document.getElementById('navResults');
+            try {
+                result.innerHTML = 'Navigating to category page...';
+                window.location.href = 'category.html?id=1';
+            } catch (error) {
+                result.innerHTML = `Navigation Error: ${error.message}`;
+                console.error('Navigation Error:', error);
+            }
+        }
+        
+        function navigateToSubcategory() {
+            const result = document.getElementById('navResults');
+            try {
+                result.innerHTML = 'Navigating to subcategory page...';
+                window.location.href = 'subcategory.html?id=1&name=Test';
+            } catch (error) {
+                result.innerHTML = `Navigation Error: ${error.message}`;
+                console.error('Navigation Error:', error);
+            }
+        }
+        
+        // Test if the page can access the collections.js functions
+        window.addEventListener('load', function() {
+            console.log('Page loaded, testing function availability...');
+            
+            // Check if we can access the functions from collections.js
+            if (typeof viewCategory === 'function') {
+                console.log('viewCategory function is available');
+            } else {
+                console.log('viewCategory function is NOT available');
+            }
+            
+            if (typeof viewSubcategories === 'function') {
+                console.log('viewSubcategories function is available');
+            } else {
+                console.log('viewSubcategories function is NOT available');
+            }
+            
+            if (typeof viewSubcategory === 'function') {
+                console.log('viewSubcategory function is available');
+            } else {
+                console.log('viewSubcategory function is NOT available');
+            }
+        });
+    </script>
+</body>
+</html>

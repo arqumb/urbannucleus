@@ -1,0 +1,44 @@
+{
+  "name": "Cloudflare Setup",
+  "steps": [
+    "1. Sign up for free Cloudflare account",
+    "2. Add your domain to Cloudflare",
+    "3. Update nameservers to Cloudflare",
+    "4. Enable Auto Minify for CSS, JS, HTML",
+    "5. Enable Brotli compression",
+    "6. Set up Page Rules for caching"
+  ],
+  "pageRules": [
+    {
+      "url": "*.css",
+      "settings": {
+        "Cache Level": "Cache Everything",
+        "Edge Cache TTL": "1 month",
+        "Browser Cache TTL": "1 month"
+      }
+    },
+    {
+      "url": "*.js",
+      "settings": {
+        "Cache Level": "Cache Everything",
+        "Edge Cache TTL": "1 month",
+        "Browser Cache TTL": "1 month"
+      }
+    },
+    {
+      "url": "uploads/images/*",
+      "settings": {
+        "Cache Level": "Cache Everything",
+        "Edge Cache TTL": "1 month",
+        "Browser Cache TTL": "1 month"
+      }
+    }
+  ],
+  "optimizations": [
+    "Auto Minify: ON",
+    "Brotli: ON",
+    "Mirage: ON (image optimization)",
+    "Polish: ON (image compression)",
+    "Rocket Loader: OFF (can break functionality)"
+  ]
+}

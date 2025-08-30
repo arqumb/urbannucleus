@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Onclick Handlers</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-button { margin: 10px; padding: 15px 30px; font-size: 16px; cursor: pointer; }
+        .result { margin: 20px 0; padding: 15px; background: #f0f0f0; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Test Onclick Handlers</h1>
+    
+    <div class="result" id="result">
+        <p>Click the buttons below to test the onclick handlers...</p>
+    </div>
+    
+    <button class="test-button" onclick="testViewSubcategories(1)">
+        Test viewSubcategories(1)
+    </button>
+    
+    <button class="test-button" onclick="testViewSubcategory(1, 'Test Category')">
+        Test viewSubcategory(1, 'Test Category')
+    </button>
+    
+    <button class="test-button" onclick="testViewCategory(1)">
+        Test viewCategory(1)
+    </button>
+    
+    <button class="test-button" onclick="testDirectNavigation()">
+        Test Direct Navigation
+    </button>
+
+    <script>
+        // Test functions
+        function testViewSubcategories(categoryId) {
+            const result = document.getElementById('result');
+            result.innerHTML = `<p>Testing viewSubcategories(${categoryId})...</p>`;
+            
+            try {
+                if (typeof viewSubcategories === 'function') {
+                    result.innerHTML += '<p>✓ viewSubcategories function exists</p>';
+                    result.innerHTML += '<p>Calling function...</p>';
+                    viewSubcategories(categoryId);
+                } else {
+                    result.innerHTML += '<p>✗ viewSubcategories function does not exist</p>';
+                    result.innerHTML += '<p>Available global functions: ' + Object.keys(window).filter(key => typeof window[key] === 'function' && key.includes('view')).join(', ') + '</p>';
+                }
+            } catch (error) {
+                result.innerHTML += `<p>✗ Error: ${error.message}</p>`;
+            }
+        }
+        
+        function testViewSubcategory(subcategoryId, subcategoryName) {
+            const result = document.getElementById('result');
+            result.innerHTML = `<p>Testing viewSubcategory(${subcategoryId}, '${subcategoryName}')...</p>`;
+            
+            try {
+                if (typeof viewSubcategory === 'function') {
+                    result.innerHTML += '<p>✓ viewSubcategory function exists</p>';
+                    result.innerHTML += '<p>Calling function...</p>';
+                    viewSubcategory(subcategoryId, subcategoryName);
+                } else {
+                    result.innerHTML += '<p>✗ viewSubcategory function does not exist</p>';
+                    result.innerHTML += '<p>Available global functions: ' + Object.keys(window).filter(key => typeof window[key] === 'function' && key.includes('view')).join(', ') + '</p>';
+                }
+            } catch (error) {
+                result.innerHTML += `<p>✗ Error: ${error.message}</p>`;
+            }
+        }
+        
+        function testViewCategory(categoryId) {
+            const result = document.getElementById('result');
+            result.innerHTML = `<p>Testing viewCategory(${categoryId})...</p>`;
+            
+            try {
+                if (typeof viewCategory === 'function') {
+                    result.innerHTML += '<p>✓ viewCategory function exists</p>';
+                    result.innerHTML += '<p>Calling function...</p>';
+                    viewCategory(categoryId);
+                } else {
+                    result.innerHTML += '<p>✗ viewCategory function does not exist</p>';
+                    result.innerHTML += '<p>Available global functions: ' + Object.keys(window).filter(key => typeof window[key] === 'function' && key.includes('view')).join(', ') + '</p>';
+                }
+            } catch (error) {
+                result.innerHTML += `<p>✗ Error: ${error.message}</p>`;
+            }
+        }
+        
+        function testDirectNavigation() {
+            const result = document.getElementById('result');
+            result.innerHTML = '<p>Testing direct navigation...</p>';
+            
+            try {
+                result.innerHTML += '<p>Attempting to navigate to category.html?id=1...</p>';
+                window.location.href = 'category.html?id=1';
+            } catch (error) {
+                result.innerHTML += `<p>✗ Navigation Error: ${error.message}</p>`;
+            }
+        }
+        
+        // Check function availability on page load
+        window.addEventListener('load', function() {
+            const result = document.getElementById('result');
+            result.innerHTML += '<h3>Function Availability Check:</h3>';
+            
+            const functions = ['viewCategory', 'viewSubcategories', 'viewSubcategory'];
+            functions.forEach(funcName => {
+                if (typeof window[funcName] === 'function') {
+                    result.innerHTML += `<p>✓ ${funcName} is available</p>`;
+                } else {
+                    result.innerHTML += `<p>✗ ${funcName} is NOT available</p>`;
+                }
+            });
+            
+            result.innerHTML += '<h3>Global Functions:</h3>';
+            const globalFunctions = Object.keys(window).filter(key => typeof window[key] === 'function' && key.includes('view'));
+            if (globalFunctions.length > 0) {
+                result.innerHTML += `<p>Found: ${globalFunctions.join(', ')}</p>`;
+            } else {
+                result.innerHTML += '<p>No view functions found in global scope</p>';
+            }
+        });
+    </script>
+</body>
+</html>

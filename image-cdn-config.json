@@ -1,0 +1,16 @@
+{
+  "provider": "Cloudinary",
+  "setup": {
+    "baseUrl": "https://res.cloudinary.com/your-cloud-name/image/upload",
+    "transformations": {
+      "product-thumbnails": "w_300,h_300,c_fill,f_auto,q_auto",
+      "product-details": "w_800,h_800,c_fill,f_auto,q_auto",
+      "hero-images": "w_1920,h_1080,c_fill,f_auto,q_auto",
+      "mobile-optimized": "w_400,h_400,c_fill,f_auto,q_auto,dpr_2.0"
+    }
+  },
+  "implementation": {
+    "Before": "uploads/images/product1.jpg",
+    "After": "https://res.cloudinary.com/your-cloud-name/image/upload/w_300,h_300,c_fill,f_auto,q_auto/product1"
+  }
+}

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy Now Example - URBAN NUCLEUS</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .example-section {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #000;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 5px;
+            transition: background 0.3s ease;
+        }
+        .btn:hover {
+            background: #333;
+        }
+        .btn-secondary {
+            background: #666;
+        }
+        .btn-secondary:hover {
+            background: #555;
+        }
+        .code-block {
+            background: #f1f1f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Buy Now Functionality Examples</h1>
+    
+    <div class="example-section">
+        <h2>Method 1: Using JSON Object (Recommended)</h2>
+        <p>This method passes all product data as a single JSON object:</p>
+        
+        <div class="code-block">
+            &lt;button onclick="buyNow({
+                id: '123',
+                name: 'AJ 1 Low x Travis Scott Fragment',
+                price: 10499,
+                image: 'uploads/images/product1.jpg',
+                size: '9',
+                quantity: 1
+            })"&gt;Buy Now&lt;/button&gt;
+        </div>
+        
+        <button onclick="buyNow({
+            id: '123',
+            name: 'AJ 1 Low x Travis Scott Fragment',
+            price: 10499,
+            image: 'uploads/images/1755099278465-46588799.jpg',
+            size: '9',
+            quantity: 1
+        })" class="btn">Buy Now - Fragment</button>
+        
+        <button onclick="buyNow({
+            id: '456',
+            name: 'AJ 1 Low x Travis Scott Reverse Mocha',
+            price: 9499,
+            image: 'uploads/images/1754805938293-451464119.png',
+            size: '10',
+            quantity: 1
+        })" class="btn">Buy Now - Reverse Mocha</button>
+    </div>
+    
+    <div class="example-section">
+        <h2>Method 2: Using Individual Parameters</h2>
+        <p>This method passes each parameter separately:</p>
+        
+        <div class="code-block">
+            &lt;button onclick="buyNowSimple('123', 'Product Name', 10499, 'image.jpg', '9', 1)"&gt;Buy Now&lt;/button&gt;
+        </div>
+        
+        <button onclick="buyNowSimple('789', 'Nike Air Max 90', 8999, 'uploads/images/1754636223677-118256129.png', '8', 1)" class="btn">Buy Now - Air Max 90</button>
+        
+        <button onclick="buyNowSimple('101', 'Adidas Ultraboost', 12999, 'uploads/images/1754801882851-563674824.png', '9.5', 2)" class="btn">Buy Now - Ultraboost (Qty: 2)</button>
+    </div>
+    
+    <div class="example-section">
+        <h2>How to Implement in Your Product Pages</h2>
+        
+        <h3>1. Add the buyNow function to your product page:</h3>
+        <div class="code-block">
+&lt;script&gt;
+function buyNow(productData) {
+    const encodedData = encodeURIComponent(JSON.stringify(productData));
+    window.location.href = `checkout.html?product=${encodedData}`;
+}
+
+function buyNowSimple(id, name, price, image, size, quantity) {
+    const params = new URLSearchParams({
+        id: id,
+        name: name,
+        price: price,
+        image: image || 'uploads/images/1754636223677-118256129.png',
+        size: size || 'Standard',
+        quantity: quantity || 1
+    });
+    window.location.href = `checkout.html?${params.toString()}`;
+}
+&lt;/script&gt;
+        </div>
+        
+        <h3>2. Use it in your product detail page:</h3>
+        <div class="code-block">
+&lt;button onclick="buyNow({
+    id: '${product.id}',
+    name: '${product.name}',
+    price: ${product.price},
+    image: '${product.image_url}',
+    size: selectedSize,
+    quantity: selectedQuantity
+})" class="btn btn-primary"&gt;Buy Now&lt;/button&gt;
+        </div>
+        
+        <h3>3. Or use the simple version:</h3>
+        <div class="code-block">
+&lt;button onclick="buyNowSimple('${product.id}', '${product.name}', ${product.price}, '${product.image_url}', selectedSize, selectedQuantity)" class="btn btn-primary"&gt;Buy Now&lt;/button&gt;
+        </div>
+    </div>
+    
+    <div class="example-section">
+        <h2>Features of the Updated Checkout Page</h2>
+        <ul>
+            <li>✅ <strong>Dynamic Product Loading</strong> - Automatically loads product details from URL parameters</li>
+                            <li>✅ <strong>Real-time Totals</strong> - Calculates subtotal and total automatically (prices inclusive of all taxes)</li>
+            <li>✅ <strong>Responsive Design</strong> - Works on all devices</li>
+            <li>✅ <strong>Loading States</strong> - Shows loading spinner while processing</li>
+            <li>✅ <strong>Empty State</strong> - Handles cases when no products are selected</li>
+            <li>✅ <strong>Error Handling</strong> - Gracefully handles invalid data</li>
+            <li>✅ <strong>Fallback Images</strong> - Uses default image if none provided</li>
+        </ul>
+    </div>
+    
+    <div class="example-section">
+        <h2>Test the Checkout Page</h2>
+        <p>Click any of the "Buy Now" buttons above to see the checkout page in action!</p>
+        <a href="checkout.html" class="btn btn-secondary">View Empty Checkout Page</a>
+    </div>
+
+    <script>
+        // Buy Now functions (same as in checkout.html)
+        function buyNow(productData) {
+            const encodedData = encodeURIComponent(JSON.stringify(productData));
+            window.location.href = `checkout.html?product=${encodedData}`;
+        }
+
+        function buyNowSimple(id, name, price, image, size, quantity) {
+            const params = new URLSearchParams({
+                id: id,
+                name: name,
+                price: price,
+                image: image || 'uploads/images/1754636223677-118256129.png',
+                size: size || 'Standard',
+                quantity: quantity || 1
+            });
+            window.location.href = `checkout.html?${params.toString()}`;
+        }
+    </script>
+</body>
+</html>
+
+

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URBAN NUCLEUS | Premium Fashion Brand - v2.0</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link rel="icon" type="image/png" href="images/luxury-sneakers.png">
+    <link rel="stylesheet" href="style.css?v=1.0.16">
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <script>
+        console.log('Clean script loaded');
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM ready');
+            
+            // Simple limited drops loader
+            fetch('http://localhost:3000/limited-drops/active/frontend')
+                .then(function(response) { return response.json(); })
+                .then(function(data) {
+                    if (data.active && data.drop) {
+                        var dropTitle = document.getElementById('dropTitle');
+                        if (dropTitle) dropTitle.textContent = data.drop.title;
+                        
+                        if (data.drop.end_date) {
+                            var endTime = new Date(data.drop.end_date).getTime();
+                            setInterval(function() {
+                                var now = new Date().getTime();
+                                var timeLeft = endTime - now;
+                                if (timeLeft > 0) {
+                                    var days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                                    var hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                                    var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                                    var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                                    
+                                    var daysEl = document.getElementById('days');
+                                    var hoursEl = document.getElementById('hours');
+                                    var minutesEl = document.getElementById('minutes');
+                                    var secondsEl = document.getElementById('seconds');
+                                    
+                                    if (daysEl) daysEl.textContent = days.toString().padStart(2, '0');
+                                    if (hoursEl) hoursEl.textContent = hours.toString().padStart(2, '0');
+                                    if (minutesEl) minutesEl.textContent = minutes.toString().padStart(2, '0');
+                                    if (secondsEl) secondsEl.textContent = seconds.toString().padStart(2, '0');
+                                }
+                            }, 1000);
+                        }
+                        
+                        var dropProducts = document.getElementById('dropProducts');
+                        if (dropProducts && data.products && data.products.length > 0) {
+                            dropProducts.innerHTML = '';
+                            data.products.forEach(function(product) {
+                                var imageUrl = 'images/placeholder.png';
+                                if (product.images && product.images[0] && product.images[0].image_url) {
+                                    imageUrl = product.images[0].image_url;
+                                }
+                                
+                                var productCard = document.createElement('div');
+                                productCard.className = 'drop-product-card clickable';
+                                productCard.innerHTML = '<div class="sale-badge">Limited</div>' +
+                                    '<div class="drop-product-image">' +
+                                    '<img src="' + imageUrl + '" alt="' + product.name + '" loading="lazy">' +
+                                    '</div>' +
+                                    '<div class="drop-product-info">' +
+                                    '<h3>' + product.name + '</h3>' +
+                                    '<div class="product-price-container">' +
+                                    '<span class="product-price current-price">$' + product.price + '</span>' +
+                                    '</div></div>';
+                                dropProducts.appendChild(productCard);
+                            });
+                        }
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Error:', error);
+                });
+        });
+    </script>
+
+</body>
+</html>
+
+
+
+
+
+
+

@@ -1,0 +1,23 @@
+{
+  "name": "urban-nucleus",
+  "version": "1.0.0",
+  "description": "Urban Nucleus - Premium Fashion E-commerce Platform",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "build": "cd backend && npm install",
+    "dev": "cd backend && node server.js"
+  },
+  "keywords": ["ecommerce", "fashion", "nodejs", "mysql", "razorpay"],
+  "author": "Urban Nucleus",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YOUR_GITHUB_USERNAME/urban-nucleus.git"
+  },
+  "homepage": "https://urbannucleus.in",
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  }
+}

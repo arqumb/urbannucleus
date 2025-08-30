@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Urban Nucleus</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="notification-system.js"></script>
+    <style>
+        .profile-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .profile-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 48px;
+        }
+        
+        .profile-name {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .profile-email {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .profile-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+        
+        .profile-sidebar {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 10px;
+        }
+        
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            color: #666;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .profile-main {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .profile-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .profile-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+        
+        .info-display {
+            padding: 12px 16px;
+            background: #f8f9fa;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            color: #333;
+            min-height: 20px;
+        }
+        
+        .info-display:empty::before {
+            content: 'Not provided';
+            color: #999;
+            font-style: italic;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #666;
+            border: 2px solid #e1e5e9;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+        }
+        
+        .btn-secondary:hover {
+            background: #e9ecef;
+            border-color: #adb5bd;
+        }
+        
+        .edit-mode {
+            display: none;
+        }
+        
+        .edit-mode.active {
+            display: block;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .form-actions {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .settings-content .form-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .settings-content .form-group label {
+            margin-bottom: 0;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        /* OTP Verification Styling */
+        .phone-input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .phone-input-group input {
+            flex: 1;
+        }
+        
+        .btn-otp {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .btn-otp:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+        
+        .btn-otp:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .otp-section {
+            margin-top: 15px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .otp-input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .otp-input-group input {
+            flex: 1;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+        
+        .btn-verify {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-verify:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+        }
+        
+        .otp-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .btn-resend {
+            background: none;
+            border: 2px solid #6c757d;
+            color: #6c757d;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-resend:hover:not(:disabled) {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-resend:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .otp-timer {
+            font-size: 12px;
+            color: #6c757d;
+            font-weight: 500;
+        }
+        
+        .otp-status {
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+        }
+        
+        .otp-status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .otp-status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .otp-status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        /* Hide old message system since we're using notifications now */
+        .message {
+            display: none !important;
+        }
+        
+        /* Order and wishlist item styling */
+        .order-item {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .order-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .order-id {
+            font-weight: 600;
+            color: #333;
+            font-size: 16px;
+        }
+        
+        .order-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-processing {
+            background: #cce5ff;
+            color: #004085;
+        }
+        
+        .status-shipped {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-delivered {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+        
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .order-details {
+            display: flex;
+            gap: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .order-history {
+            margin-top: 30px;
+        }
+        
+        .order-item {
+            border: 1px solid #e1e5e9;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .order-item:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .order-id {
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+        
+        .order-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-processing { background: #cce5ff; color: #004085; }
+        .status-shipped { background: #d1ecf1; color: #0c5460; }
+        .status-delivered { background: #d4edda; color: #155724; }
+        
+        .order-details {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .info-display {
+            padding: 12px 16px;
+            background: #f8f9fa;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            color: #1a1a1a;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .profile-info {
+            margin-bottom: 30px;
+        }
+        
+        .form-actions {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+        }
+        
+        .edit-mode {
+            display: none;
+        }
+        
+        .edit-mode.active {
+            display: block;
+        }
+        
+        .view-mode {
+            display: block;
+        }
+        
+        .view-mode.hidden {
+            display: none;
+        }
+        
+        .message {
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        @media (max-width: 768px) {
+            .profile-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-header {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Announcement Bar -->
+    <div id="announcement-bar" style="background: #000000; color: #ffffff; padding: 12px 0; position: fixed; top: 0; left: 0; right: 0; z-index: 10001; border-bottom: 2px solid #333; box-shadow: 0 2px 10px rgba(0,0,0,0.5); overflow: hidden; display: none;">
+        <div class="marquee-content" style="display: flex; animation: marquee 25s linear infinite; white-space: nowrap; font-size: 14px; font-weight: 600; font-family: 'Poppins', sans-serif; color: #ffffff;">
+            <!-- Content will be loaded dynamically from API -->
+        </div>
+    </div>
+
+    <style>
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        body { padding-top: 120px; }
+        .header { top: 50px; }
+    </style>
+
+    <!-- Professional Notification Container -->
+    <div class="notification-container" id="notificationContainer"></div>
+    
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                    <a href="index.html">
+                        <h1>URBAN NUCLEUS</h1>
+                    </a>
+                </div>
+
+                <nav class="nav left-nav">
+                    <ul class="nav-list">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="collections.html">Collections</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </nav>
+
+                <div class="header-icons">
+                    <a href="cart.html" class="cart-icon">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span class="cart-count">0</span>
+                    </a>
+                    <a href="index.html" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="profile-container">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="profile-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="profile-name" id="profileName">Loading...</div>
+            <div class="profile-email" id="profileEmail">Loading...</div>
+        </div>
+
+        <!-- Profile Content -->
+        <div class="profile-content">
+            <!-- Sidebar -->
+            <div class="profile-sidebar">
+                <ul class="sidebar-menu">
+                    <li><a href="#profile" class="active" data-section="profile">
+                        <i class="fas fa-user"></i> Profile
+                    </a></li>
+                    <li><a href="#orders" data-section="orders">
+                        <i class="fas fa-shopping-bag"></i> Orders
+                    </a></li>
+                    <li><a href="#wishlist" data-section="wishlist">
+                        <i class="fas fa-heart"></i> Wishlist
+                    </a></li>
+                    <li><a href="#addresses" data-section="addresses">
+                        <i class="fas fa-map-marker-alt"></i> Addresses
+                    </a></li>
+                    <li><a href="#settings" data-section="settings">
+                        <i class="fas fa-cog"></i> Settings
+                    </a></li>
+                </ul>
+            </div>
+
+            <!-- Main Content -->
+            <div class="profile-main">
+                <!-- Profile Section -->
+                <div id="profile" class="profile-section">
+                    <div class="section-title">Profile Information</div>
+                    
+                    <div id="message" class="message" style="display: none;"></div>
+                    
+                    <!-- View Mode -->
+                    <div id="viewMode" class="view-mode">
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-number" id="totalOrders">0</div>
+                                <div class="stat-label">Total Orders</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number" id="totalSpent">₹0</div>
+                                <div class="stat-label">Total Spent</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number" id="wishlistItems">0</div>
+                                <div class="stat-label">Wishlist Items</div>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-info">
+                            <div class="form-group">
+                                <label>Full Name</label>
+                                <div id="displayName" class="info-display">Loading...</div>
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <div id="displayEmail" class="info-display">Loading...</div>
+                            </div>
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <div id="displayPhone" class="info-display">Loading...</div>
+                            </div>
+                            <div class="form-group">
+                                <label>Member Since</label>
+                                <div id="displayDate" class="info-display">Loading...</div>
+                            </div>
+                        </div>
+                        
+                        <button class="btn-primary" onclick="enableEdit()">
+                            <i class="fas fa-edit"></i> Edit Profile
+                        </button>
+                    </div>
+                    
+                    <!-- Edit Mode -->
+                    <div id="editMode" class="edit-mode">
+                        <form id="profileForm">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="editFirstName">First Name</label>
+                                    <input type="text" id="editFirstName" name="firstName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editLastName">Last Name</label>
+                                    <input type="text" id="editLastName" name="lastName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editEmail">Email</label>
+                                    <input type="email" id="editEmail" name="email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editPhone">Phone Number</label>
+                                    <div class="phone-input-group">
+                                        <input type="tel" id="editPhone" name="phone" placeholder="Enter phone number">
+                                        <button type="button" class="btn-otp" onclick="requestOTP()">
+                                            <i class="fas fa-mobile-alt"></i> Send OTP
+                                        </button>
+                                    </div>
+                                    <div id="otpSection" class="otp-section" style="display: none;">
+                                        <div class="otp-input-group">
+                                            <input type="text" id="otpInput" placeholder="Enter 6-digit OTP" maxlength="6">
+                                            <button type="button" class="btn-verify" onclick="verifyOTP()">
+                                                <i class="fas fa-check"></i> Verify
+                                            </button>
+                                        </div>
+                                        <div class="otp-actions">
+                                            <button type="button" class="btn-resend" onclick="resendOTP()">
+                                                <i class="fas fa-redo"></i> Resend OTP
+                                            </button>
+                                            <span id="otpTimer" class="otp-timer"></span>
+                                        </div>
+                                        <div id="otpStatus" class="otp-status"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group full-width">
+                                    <label for="editAddress">Address</label>
+                                    <textarea id="editAddress" name="address" rows="3"></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary">
+                                    <i class="fas fa-save"></i> Save Changes
+                                </button>
+                                <button type="button" class="btn-secondary" onclick="cancelEdit()">
+                                    <i class="fas fa-times"></i> Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Orders Section -->
+                <div id="orders" class="profile-section" style="display: none;">
+                    <div class="section-title">Order History</div>
+                    <div id="ordersList">
+                        <p>Loading orders...</p>
+                    </div>
+                </div>
+
+                <!-- Wishlist Section -->
+                <div id="wishlist" class="profile-section" style="display: none;">
+                    <div class="section-title">My Wishlist</div>
+                    <div id="wishlistItems">
+                        <p>Loading wishlist...</p>
+                    </div>
+                </div>
+
+                <!-- Addresses Section -->
+                <div id="addresses" class="profile-section" style="display: none;">
+                    <div class="section-title">My Addresses</div>
+                    <div id="addressesList">
+                        <p>Loading addresses...</p>
+                    </div>
+                </div>
+
+                <!-- Settings Section -->
+                <div id="settings" class="profile-section" style="display: none;">
+                    <div class="section-title">Account Settings</div>
+                    <div class="settings-content">
+                        <div class="form-group">
+                            <label>Change Password</label>
+                            <button class="btn-secondary">Change Password</button>
+                        </div>
+                        <div class="form-group">
+                            <label>Notification Preferences</label>
+                            <button class="btn-secondary">Manage Notifications</button>
+                        </div>
+                        <div class="form-group">
+                            <label>Privacy Settings</label>
+                            <button class="btn-secondary">Privacy Settings</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Announcement Bar Functions
+        async function loadAnnouncementBarData() {
+            try {
+                const response = await fetch('http://localhost:3000/api/announcement');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.visible && data.messages && data.messages.length > 0) {
+                        updateAnnouncementBar(data.messages);
+                        showAnnouncementBar();
+                    } else {
+                        hideAnnouncementBar();
+                    }
+                } else {
+                    hideAnnouncementBar();
+                }
+            } catch (error) {
+                console.error('Error loading announcement bar:', error);
+                hideAnnouncementBar();
+            }
+        }
+
+        function showAnnouncementBar() {
+            const bar = document.getElementById('announcement-bar');
+            if (bar) {
+                bar.style.display = 'block';
+                bar.classList.remove('hidden');
+            }
+        }
+
+        function hideAnnouncementBar() {
+            const bar = document.getElementById('announcement-bar');
+            if (bar) {
+                bar.style.display = 'none';
+                bar.classList.add('hidden');
+            }
+        }
+
+        function updateAnnouncementBar(messages) {
+            const marqueeContent = document.querySelector('#announcement-bar .marquee-content');
+            if (marqueeContent && messages.length > 0) {
+                // Duplicate messages for seamless loop
+                const duplicatedMessages = [...messages, ...messages];
+                marqueeContent.innerHTML = duplicatedMessages.map(msg => 
+                    `<span style="margin-right: 50px;">${msg}</span>`
+                ).join('');
+            } else {
+                hideAnnouncementBar();
+            }
+        }
+
+        // Load announcement bar on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAnnouncementBarData();
+            // Refresh every 30 seconds
+            setInterval(loadAnnouncementBarData, 30000);
+        });
+
+        const API_BASE_URL = 'http://localhost:3000';
+        let currentUser = null;
+        let userProfile = null;
+
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            loadUserProfile();
+            setupNavigation();
+        });
+
+        function checkAuth() {
+            const savedUser = localStorage.getItem('currentUser');
+            if (!savedUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            currentUser = JSON.parse(savedUser);
+            updateProfileHeader();
+            showInfo('Welcome!', `Hello ${currentUser.username}, welcome to your profile page.`);
+        }
+
+        function updateProfileHeader() {
+            document.getElementById('profileName').textContent = currentUser.username;
+            document.getElementById('profileEmail').textContent = currentUser.email;
+        }
+
+        async function loadUserProfile() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/users/${currentUser.id}`);
+                if (response.ok) {
+                    userProfile = await response.json();
+                    displayProfileInfo();
+                    loadUserStats();
+                    showInfo('Welcome Back!', `Hello ${userProfile.username}, your profile has been loaded successfully.`);
+                } else {
+                    showError('Profile Load Failed', 'Failed to load profile data. Please try refreshing the page.');
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                showError('Connection Error', 'Error loading profile data. Please check your internet connection.');
+            }
+        }
+
+        function displayProfileInfo() {
+            if (!userProfile) {
+                // Show loading state
+                document.getElementById('displayName').textContent = 'Loading...';
+                document.getElementById('displayEmail').textContent = 'Loading...';
+                document.getElementById('displayPhone').textContent = 'Loading...';
+                document.getElementById('displayDate').textContent = 'Loading...';
+                return;
+            }
+            
+            // Split username into first and last name
+            const nameParts = userProfile.username.split(' ');
+            const firstName = nameParts[0] || '';
+            const lastName = nameParts.slice(1).join(' ') || '';
+            
+            document.getElementById('displayName').textContent = userProfile.username;
+            document.getElementById('displayEmail').textContent = userProfile.email;
+            document.getElementById('displayPhone').textContent = userProfile.phone || 'Not provided';
+            document.getElementById('displayDate').textContent = new Date(userProfile.created_at).toLocaleDateString();
+            
+            // Fill edit form
+            document.getElementById('editFirstName').value = firstName;
+            document.getElementById('editLastName').value = lastName;
+            document.getElementById('editEmail').value = userProfile.email;
+            document.getElementById('editPhone').value = userProfile.phone || '';
+            document.getElementById('editAddress').value = userProfile.address || '';
+        }
+
+        async function loadUserStats() {
+            try {
+                const [ordersResponse, wishlistResponse] = await Promise.all([
+                    fetch(`${API_BASE_URL}/orders?user_id=${currentUser.id}`),
+                    fetch(`${API_BASE_URL}/wishlist?user_id=${currentUser.id}`)
+                ]);
+                
+                const orders = ordersResponse.ok ? await ordersResponse.json() : [];
+                const wishlist = wishlistResponse.ok ? await wishlistResponse.json() : [];
+                
+                const totalSpent = orders.reduce((sum, order) => sum + parseFloat(order.total_amount || 0), 0);
+                
+                document.getElementById('totalOrders').textContent = orders.length;
+                document.getElementById('totalSpent').textContent = `₹${totalSpent.toFixed(2)}`;
+                document.getElementById('wishlistItems').textContent = wishlist.length;
+                
+                // Show success notification for stats loaded
+                if (orders.length > 0 || wishlist.length > 0) {
+                    showInfo('Stats Updated', `Found ${orders.length} orders and ${wishlist.length} wishlist items.`);
+                }
+            } catch (error) {
+                console.error('Error loading stats:', error);
+                showWarning('Stats Warning', 'Could not load complete statistics. Some data may be unavailable.');
+            }
+        }
+
+        function setupNavigation() {
+            const menuItems = document.querySelectorAll('.sidebar-menu a');
+            const sections = document.querySelectorAll('.profile-section');
+            
+            menuItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Update active menu item
+                    menuItems.forEach(mi => mi.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show corresponding section
+                    const targetSection = this.getAttribute('data-section');
+                    sections.forEach(section => {
+                        section.style.display = 'none';
+                    });
+                    document.getElementById(targetSection).style.display = 'block';
+                    
+                    // Load section data
+                    loadSectionData(targetSection);
+                });
+            });
+        }
+
+        function loadSectionData(section) {
+            switch(section) {
+                case 'orders':
+                    loadOrders();
+                    break;
+                case 'wishlist':
+                    loadWishlist();
+                    break;
+                case 'addresses':
+                    loadAddresses();
+                    break;
+            }
+        }
+
+        async function loadOrders() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/orders?user_id=${currentUser.id}`);
+                const orders = await response.json();
+                
+                const ordersList = document.getElementById('ordersList');
+                if (orders.length === 0) {
+                    ordersList.innerHTML = '<p>No orders found.</p>';
+                    showInfo('Orders', 'You haven\'t placed any orders yet.');
+                    return;
+                }
+                
+                ordersList.innerHTML = orders.map(order => `
+                    <div class="order-item">
+                        <div class="order-header">
+                            <div class="order-id">Order #${order.id}</div>
+                            <div class="order-status status-${order.status}">${order.status}</div>
+                        </div>
+                        <div class="order-details">
+                            <div>Total: ₹${parseFloat(order.total_amount).toFixed(2)}</div>
+                            <div>Date: ${new Date(order.created_at).toLocaleDateString()}</div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                showSuccess('Orders Loaded', `Successfully loaded ${orders.length} orders.`);
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                document.getElementById('ordersList').innerHTML = '<p>Error loading orders.</p>';
+                showError('Orders Error', 'Failed to load your order history. Please try again.');
+            }
+        }
+
+        async function loadWishlist() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/wishlist?user_id=${currentUser.id}`);
+                const wishlist = await response.json();
+                
+                const wishlistContainer = document.getElementById('wishlistItems');
+                if (wishlist.length === 0) {
+                    wishlistContainer.innerHTML = '<p>No wishlist items found.</p>';
+                    showInfo('Wishlist', 'Your wishlist is empty. Start adding products you love!');
+                    return;
+                }
+                
+                wishlistContainer.innerHTML = wishlist.map(item => `
+                    <div class="order-item">
+                        <div class="order-header">
+                            <div class="order-id">${item.name}</div>
+                            <div class="order-status">₹${item.price}</div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                showSuccess('Wishlist Loaded', `Successfully loaded ${wishlist.length} wishlist items.`);
+            } catch (error) {
+                console.error('Error loading wishlist:', error);
+                document.getElementById('wishlistItems').innerHTML = '<p>Error loading wishlist.</p>';
+                showError('Wishlist Error', 'Failed to load your wishlist. Please try again.');
+            }
+        }
+
+        function loadAddresses() {
+            document.getElementById('addressesList').innerHTML = '<p>Address management coming soon.</p>';
+        }
+
+        function enableEdit() {
+            document.getElementById('viewMode').classList.add('hidden');
+            document.getElementById('editMode').classList.add('active');
+        }
+
+        function cancelEdit() {
+            document.getElementById('viewMode').classList.remove('hidden');
+            document.getElementById('editMode').classList.remove('active');
+            displayProfileInfo(); // Reset form to original values
+        }
+
+        // Handle profile form submission
+        document.getElementById('profileForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const phone = formData.get('phone').trim();
+            
+            // Check if phone number has changed and needs verification
+            if (phone && phone !== (userProfile?.phone || '')) {
+                // Check if phone is verified (for now, we'll assume it's verified if it's in the form)
+                // In a real implementation, you'd check a phone_verified flag
+                showWarning('Phone Verification', 'Please verify your phone number with OTP before saving.');
+                return;
+            }
+            
+            const updateData = {
+                username: `${formData.get('firstName')} ${formData.get('lastName')}`.trim(),
+                email: formData.get('email'),
+                phone: phone,
+                address: formData.get('address')
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/users/${currentUser.id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updateData)
+                });
+                
+                if (response.ok) {
+                    showSuccess('Profile Updated!', 'Your profile has been updated successfully.');
+                    await loadUserProfile(); // Reload profile data
+                    cancelEdit(); // Switch back to view mode
+                } else {
+                    showError('Update Failed', 'Failed to update profile. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                showError('Update Error', 'Error updating profile. Please check your connection and try again.');
+            }
+        });
+
+        function showMessage(message, type) {
+            // Use the professional notification system
+            switch(type) {
+                case 'success':
+                    showSuccess('Success!', message);
+                    break;
+                case 'error':
+                    showError('Error!', message);
+                    break;
+                case 'warning':
+                    showWarning('Warning!', message);
+                    break;
+                case 'info':
+                    showInfo('Info', message);
+                    break;
+                default:
+                    showInfo('Message', message);
+            }
+        }
+
+        // ========== OTP VERIFICATION FUNCTIONS ==========
+        
+        let otpTimer = null;
+        let currentPhone = '';
+        
+        // Request OTP for phone verification
+        async function requestOTP() {
+            const phoneInput = document.getElementById('editPhone');
+            const phone = phoneInput.value.trim();
+            
+            if (!phone) {
+                showError('Phone Required', 'Please enter a phone number first.');
+                phoneInput.focus();
+                return;
+            }
+            
+            if (!/^[0-9]{10}$/.test(phone)) {
+                showError('Invalid Phone', 'Please enter a valid 10-digit phone number.');
+                phoneInput.focus();
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/request-otp`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        phone: phone,
+                        userId: currentUser.id
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    currentPhone = phone;
+                    showSuccess('OTP Sent!', `OTP has been sent to ${phone}. Check your phone for the 6-digit code.`);
+                    
+                    // Show OTP section
+                    document.getElementById('otpSection').style.display = 'block';
+                    document.getElementById('otpInput').focus();
+                    
+                    // Start timer
+                    startOTPTimer();
+                    
+                    // Disable send OTP button temporarily
+                    const sendOtpBtn = document.querySelector('.btn-otp');
+                    sendOtpBtn.disabled = true;
+                    sendOtpBtn.textContent = 'OTP Sent';
+                    
+                    // Re-enable after 60 seconds
+                    setTimeout(() => {
+                        sendOtpBtn.disabled = false;
+                        sendOtpBtn.innerHTML = '<i class="fas fa-mobile-alt"></i> Send OTP';
+                    }, 60000);
+                    
+                } else {
+                    showError('OTP Failed', result.error || 'Failed to send OTP. Please try again.');
+                }
+                
+            } catch (error) {
+                console.error('Error requesting OTP:', error);
+                showError('Connection Error', 'Failed to connect to server. Please check your internet connection.');
+            }
+        }
+        
+        // Verify OTP
+        async function verifyOTP() {
+            const otpInput = document.getElementById('editPhone');
+            const otp = document.getElementById('otpInput').value.trim();
+            
+            if (!otp || otp.length !== 6) {
+                showError('Invalid OTP', 'Please enter the 6-digit OTP code.');
+                document.getElementById('otpInput').focus();
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/verify-otp`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        phone: currentPhone,
+                        otp: otp,
+                        userId: currentUser.id
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showSuccess('Phone Verified!', 'Your phone number has been verified successfully!');
+                    
+                    // Update phone input with verified number
+                    document.getElementById('editPhone').value = currentPhone;
+                    
+                    // Hide OTP section
+                    document.getElementById('otpSection').style.display = 'none';
+                    
+                    // Clear OTP input
+                    document.getElementById('otpInput').value = '';
+                    
+                    // Stop timer
+                    if (otpTimer) {
+                        clearInterval(otpTimer);
+                        otpTimer = null;
+                    }
+                    
+                    // Update status
+                    updateOTPStatus('Phone number verified successfully!', 'success');
+                    
+                } else {
+                    showError('Verification Failed', result.error || 'OTP verification failed. Please try again.');
+                    updateOTPStatus(result.error, 'error');
+                }
+                
+            } catch (error) {
+                console.error('Error verifying OTP:', error);
+                showError('Connection Error', 'Failed to connect to server. Please check your internet connection.');
+            }
+        }
+        
+        // Resend OTP
+        async function resendOTP() {
+            if (!currentPhone) {
+                showError('No Phone', 'Please request OTP first.');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/resend-otp`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        phone: currentPhone,
+                        userId: currentUser.id
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showSuccess('OTP Resent!', 'New OTP has been sent to your phone.');
+                    
+                    // Clear previous OTP input
+                    document.getElementById('otpInput').value = '';
+                    document.getElementById('otpInput').focus();
+                    
+                    // Restart timer
+                    startOTPTimer();
+                    
+                    // Update status
+                    updateOTPStatus('New OTP sent successfully!', 'info');
+                    
+                } else {
+                    showError('Resend Failed', result.error || 'Failed to resend OTP. Please try again.');
+                    updateOTPStatus(result.error, 'error');
+                }
+                
+            } catch (error) {
+                console.error('Error resending OTP:', error);
+                showError('Connection Error', 'Failed to connect to server. Please check your internet connection.');
+            }
+        }
+        
+        // Start OTP timer
+        function startOTPTimer() {
+            let timeLeft = 600; // 10 minutes in seconds
+            
+            if (otpTimer) {
+                clearInterval(otpTimer);
+            }
+            
+            otpTimer = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                
+                document.getElementById('otpTimer').textContent = 
+                    `Expires in: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(otpTimer);
+                    otpTimer = null;
+                    document.getElementById('otpTimer').textContent = 'OTP Expired';
+                    updateOTPStatus('OTP has expired. Please request a new one.', 'error');
+                }
+                
+                timeLeft--;
+            }, 1000);
+        }
+        
+        // Update OTP status
+        function updateOTPStatus(message, type) {
+            const statusDiv = document.getElementById('otpStatus');
+            statusDiv.textContent = message;
+            statusDiv.className = `otp-status ${type}`;
+        }
+        
+        // Logout functionality
+        document.querySelector('.logout-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html> 

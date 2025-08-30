@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frequently Asked Questions - Urban Nucleus</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* Luxury UI Variables */
+        :root {
+            --primary-color: #000000;
+            --secondary-color: #ffffff;
+            --accent-gold: #D4AF37;
+            --accent-blue: #667eea;
+            --text-primary: #000000;
+            --text-secondary: #333333;
+            --text-light: #666666;
+            --text-white: #ffffff;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f8f8;
+            --bg-dark: #000000;
+            --bg-grey: #f5f5f5;
+            --border-color: #e0e0e0;
+            --border-dark: #333333;
+            --border-gold: #D4AF37;
+            --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.05);
+            --shadow-medium: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --shadow-heavy: 0 8px 40px rgba(0, 0, 0, 0.15);
+            --shadow-luxury: 0 10px 50px rgba(0, 0, 0, 0.2);
+            --shadow-gold: 0 4px 20px rgba(212, 175, 55, 0.3);
+            --border-radius: 8px;
+            --border-radius-sm: 4px;
+            --border-radius-lg: 12px;
+            --border-radius-xl: 16px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --transition-slow: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --font-primary: 'Playfair Display', serif;
+            --font-secondary: 'Poppins', sans-serif;
+        }
+
+        /* Basic Reset and Body Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-secondary);
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            opacity: 1;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Header Styles */
+        .header {
+            background: var(--bg-dark);
+            color: var(--text-white);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .header .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo h1 {
+            font-family: var(--font-primary);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-white);
+            text-decoration: none;
+        }
+
+        .logo a {
+            text-decoration: none;
+            color: var(--text-white);
+        }
+
+        .nav-list {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-list a {
+            color: var(--text-white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-list a:hover {
+            color: var(--accent-gold);
+        }
+
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-icons a {
+            color: var(--text-white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .header-icons a:hover {
+            color: var(--accent-gold);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            color: var(--text-white);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: var(--bg-dark);
+            color: var(--text-white);
+            padding: 3rem 0 1rem;
+        }
+
+        .section-padding {
+            padding: 4rem 0;
+        }
+
+        .footer .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-col h3, .footer-col h4 {
+            color: var(--text-white);
+            margin-bottom: 1rem;
+            font-family: var(--font-primary);
+        }
+
+        .footer-col p {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-col ul li a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-col ul li a:hover {
+            color: var(--accent-gold);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 1.2rem;
+        }
+
+        .social-links a:hover {
+            background: var(--text-white);
+            color: var(--bg-dark);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border-dark);
+            padding-top: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-bottom-left {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .footer-bottom-right {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .footer-bottom-right a {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-bottom-right a:hover {
+            color: var(--accent-gold);
+        }
+
+        .faq-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-top: 50px;
+            margin-bottom: 50px;
+        }
+        
+        .faq-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e74c3c;
+        }
+        
+        .faq-header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .faq-header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        
+        .faq-section {
+            margin-bottom: 40px;
+        }
+        
+        .faq-section h2 {
+            color: #e74c3c;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .faq-item {
+            background: #fff;
+            border: 2px solid #ecf0f1;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .faq-item:hover {
+            border-color: #e74c3c;
+        }
+        
+        .faq-question {
+            background: #f8f9fa;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s ease;
+        }
+        
+        .faq-question:hover {
+            background: #e8f5e8;
+        }
+        
+        .faq-question h3 {
+            color: #2c3e50;
+            font-size: 1.2rem;
+            margin: 0;
+            flex: 1;
+        }
+        
+        .faq-icon {
+            color: #e74c3c;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+        
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .faq-item.active .faq-answer {
+            padding: 20px;
+            max-height: 500px;
+        }
+        
+        .faq-answer p, .faq-answer li {
+            color: #34495e;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        
+        .faq-answer ul {
+            padding-left: 20px;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #e74c3c;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 20px;
+            transition: color 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: #c0392b;
+        }
+        
+        .highlight-box {
+            background: #f8f9fa;
+            border-left: 4px solid #e74c3c;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .highlight-box h4 {
+            color: #e74c3c;
+            margin-bottom: 10px;
+        }
+        
+        .contact-section {
+            background: #e8f5e8;
+            border: 2px solid #27ae60;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .contact-section h3 {
+            color: #27ae60;
+            margin-bottom: 15px;
+        }
+        
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #e74c3c;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 20px;
+            background: #fff;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .contact-link:hover {
+            background: #e74c3c;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .faq-container {
+                margin: 20px 10px;
+                padding: 20px 15px;
+            }
+            
+            .faq-header h1 {
+                font-size: 2rem;
+            }
+            
+            .faq-question h3 {
+                font-size: 1.1rem;
+            }
+            
+            .contact-links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Announcement Bar -->
+    <div id="announcement-bar" style="background: #000000; color: #ffffff; padding: 12px 0; position: fixed; top: 0; left: 0; right: 0; z-index: 10001; border-bottom: 2px solid #333; box-shadow: 0 2px 10px rgba(0,0,0,0.5); overflow: hidden; display: none;">
+        <div class="marquee-content" style="display: flex; animation: marquee 25s linear infinite; white-space: nowrap; font-size: 14px; font-weight: 600; font-family: 'Poppins', sans-serif; color: #ffffff;">
+            <!-- Content will be loaded dynamically from API -->
+        </div>
+    </div>
+
+    <style>
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        body { padding-top: 120px; }
+        .header { top: 50px; }
+    </style>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                    <a href="index.html">
+                        <h1>URBAN NUCLEUS</h1>
+                    </a>
+                </div>
+
+                <!-- Left Side Navigation -->
+                <nav class="nav left-nav">
+                    <ul class="nav-list">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="collections.html">Collections</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </nav>
+
+                <!-- Right Side Icons -->
+                <div class="header-icons">
+                    <a href="login.html"><i class="fas fa-user"></i> Login</a>
+                    <a href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+                    <a href="#"><i class="fas fa-search"></i></a>
+                    <a href="cart.html" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count">0</span></a>
+                </div>
+
+                <div class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="faq-container">
+        <a href="index.html" class="back-link">
+            <i class="fas fa-arrow-left"></i>
+            Back to Home
+        </a>
+        
+        <div class="faq-header">
+            <h1><i class="fas fa-question-circle"></i> Frequently Asked Questions</h1>
+            <p>Everything you need to know about Urban Nucleus, UA sneakers, luxury watches, and designer bags</p>
+        </div>
+
+        <div class="faq-section">
+            <h2><i class="fas fa-info-circle"></i> About Our Products</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>What are UA sneakers?</h3>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>UA (Unauthorized Authentic) sneakers are 100% genuine shoes made with the same materials and techniques as retail versions. They are produced by the same manufacturers but sold through alternative channels. They are NOT fake or counterfeit products.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Are UA sneakers fake or counterfeit?</h3>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>No, UA sneakers are NOT fake.</strong> They are authentic products made in the same factories with the same materials as retail versions. The only difference is they are distributed through non-official channels, making them "unauthorized" but still genuine.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>What brands do you carry?</h3>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>We carry UA products from major brands including:</p>
+                    <ul>
+                        <li><strong>Sneakers:</strong> Nike, Jordan, Adidas, Yeezy, New Balance, Puma, and more</li>
+                        <li><strong>Watches:</strong> Rolex, Omega, Cartier, Panerai, Hublot, Audemars Piguet, and more</li>
+                        <li><strong>Bags:</strong> Louis Vuitton, Chanel, Hermès, Gucci, Prada, Dior, and more</li>
+                    </ul>
+                    <p>Our inventory changes regularly, so check our Instagram or contact us for current availability.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How do I know the quality is good?</h3>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Our UA sneakers are made with the same materials and construction methods as retail versions. We carefully select our suppliers and inspect each pair before shipping. You can also check our Instagram for customer reviews and photos.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-section">
+            <h2><i class="fas fa-shopping-cart"></i> Ordering & Payment</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How do I place an order?</h3>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>To place an order:</p>
+                    <ol>
+                        <li>DM us on Instagram or WhatsApp with the product post/screenshot</li>
+                        <li>Provide your EUR/UK size</li>
+                        <li>We'll confirm availability</li>
+                        <li>Choose your payment method (UPI prepaid or COD)</li>
+                        <li>Confirm your order and shipping details</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>What payment methods do you accept?</h3>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>We accept:</p>
+                    <ul>
+                        <li><strong>UPI Payments:</strong> Full payment upfront with free delivery</li>
+                        <li><strong>Cash on Delivery (COD):</strong> ₹200 advance payment required, remaining amount paid on delivery</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Why do I need to provide EUR/UK size?</h3>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>EUR and UK sizes are more accurate for UA sneakers as they match the original manufacturing specifications. US sizes can vary between brands, so EUR/UK sizes ensure you get the correct fit. Check our size guide for conversion charts.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How do I know if an item is available?</h3>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>After you send us the product details and your size, we'll check our inventory and confirm availability within a few hours. We'll let you know if the item is in stock and ready to ship.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-section">
+            <h2><i class="fas fa-truck"></i> Shipping & Delivery</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How long does delivery take?</h3>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Delivery times:</p>
+                    <ul>
+                        <li><strong>Standard Delivery:</strong> 2-7 days</li>
+                        <li><strong>Express Delivery:</strong> 2-3 days (₹150 extra charge)</li>
+                        <li><strong>Remote Areas:</strong> May take longer than standard timeline</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Do you ship everywhere in India?</h3>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, we ship to all major cities and towns across India, including metro cities, tier 2 cities, and remote areas. Delivery times may vary based on location.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Is shipping free?</h3>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Shipping is free for all prepaid (UPI) orders. For COD orders, there's a ₹200 advance payment required, and additional delivery charges may apply for remote areas or failed delivery attempts.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How can I track my order?</h3>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Once your order is dispatched, you'll receive:</p>
+                    <ul>
+                        <li>SMS notification with tracking number</li>
+                        <li>Email confirmation with tracking details</li>
+                        <li>Real-time tracking updates</li>
+                        <li>Delivery confirmation notification</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-section">
+            <h2><i class="fas fa-undo"></i> Returns & Exchanges</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Can I return or exchange my order?</h3>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, but only under specific conditions:</p>
+                    <ul>
+                        <li>Wrong size sent due to our error</li>
+                        <li>Damaged products during shipping</li>
+                        <li>Wrong item received</li>
+                        <li><strong>MANDATORY:</strong> You must provide a 360° unboxing video</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Why do I need to make an unboxing video?</h3>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>The 360° unboxing video is required to:</p>
+                    <ul>
+                        <li>Verify the condition of items upon delivery</li>
+                        <li>Document any issues or damages</li>
+                        <li>Prevent fraudulent return claims</li>
+                        <li>Protect both you and us in case of disputes</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>What if I ordered the wrong size?</h3>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>If you provided the wrong size information, we cannot offer an exchange. Please use our size guide to ensure correct sizing before ordering. We are not responsible for size issues due to incorrect size selection by the customer.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How long do I have to request a return?</h3>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>You must:</p>
+                    <ul>
+                        <li>Contact us within 48 hours of delivery</li>
+                        <li>Submit the unboxing video within 72 hours</li>
+                        <li>Return the item within 7 days of approval</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-section">
+            <h2><i class="fas fa-clock"></i> Watches & Bags</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Do you carry luxury watches?</h3>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes! We carry a wide selection of luxury watches including Rolex, Omega, Cartier, Panerai, Hublot, and more. All our watches are UA (Unauthorized Authentic) - genuine products made with the same materials and craftsmanship as retail versions.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>What about designer bags?</h3>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Absolutely! We offer designer bags from top luxury brands including Louis Vuitton, Chanel, Hermès, Gucci, Prada, Dior, and more. Our bags are UA quality - authentic materials and construction at unbeatable prices.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How do I choose the right watch size?</h3>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Watch sizing depends on your wrist size and personal preference:</p>
+                    <ul>
+                        <li><strong>Small wrists (5.5-6.5"):</strong> 36-38mm case diameter</li>
+                        <li><strong>Medium wrists (6.5-7.5"):</strong> 39-41mm case diameter</li>
+                        <li><strong>Large wrists (7.5-8.5"):</strong> 42-44mm case diameter</li>
+                        <li><strong>Extra large wrists (8.5"+):</strong> 45mm+ case diameter</li>
+                    </ul>
+                    <p>Check our size guide for detailed measurements and examples.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>What bag sizes do you offer?</h3>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>We offer bags in various sizes to suit different needs:</p>
+                    <ul>
+                        <li><strong>Mini/Small:</strong> Perfect for evening events and essentials</li>
+                        <li><strong>Medium:</strong> Ideal for daily use and work</li>
+                        <li><strong>Large:</strong> Great for travel and shopping</li>
+                        <li><strong>Extra Large:</strong> Perfect for weekend trips and travel</li>
+                    </ul>
+                    <p>Check our size guide for specific dimensions and examples.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Do watches come with original boxes and papers?</h3>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Most of our watches come with high-quality boxes and documentation that match the retail experience. However, availability may vary by model. Please ask about specific items when placing your order.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Are the bags made with real leather?</h3>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes! Our designer bags are made with authentic materials including real leather, canvas, and hardware that matches the original specifications. The quality and craftsmanship are identical to retail versions.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-section">
+            <h2><i class="fas fa-ruler"></i> Sizing & Fit</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How do I find my correct size?</h3>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>To find your correct size:</p>
+                    <ol>
+                        <li>Measure your foot length and width</li>
+                        <li>Use our size conversion chart</li>
+                        <li>Consider the brand (some run small/large)</li>
+                        <li>Think about sock thickness</li>
+                        <li>When in doubt, contact us for help</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Do UA sneakers fit the same as retail?</h3>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, UA sneakers are made with the same sizing specifications as retail versions. They should fit exactly the same as the original products.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>What if I'm between sizes?</h3>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>If you're between sizes, we recommend going up half a size for comfort, especially if you plan to wear the sneakers for extended periods or with thicker socks.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-section">
+            <h2><i class="fas fa-headset"></i> Customer Support</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How can I contact you?</h3>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>You can reach us through:</p>
+                    <ul>
+                        <li><strong>WhatsApp:</strong> +91 88066 00982</li>
+                        <li><strong>Instagram:</strong> @urbannucleus</li>
+                        <li><strong>Email:</strong> urban.nucleus@gmail.com</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>What are your business hours?</h3>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>We're available:</p>
+                    <ul>
+                        <li><strong>Monday to Saturday:</strong> 10 AM - 8 PM</li>
+                        <li><strong>Sunday:</strong> 12 PM - 6 PM</li>
+                        <li>We respond to messages within a few hours during business hours</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Do you offer customer support in Hindi?</h3>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, we provide customer support in both English and Hindi. Feel free to communicate in whichever language you're most comfortable with.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-section">
+            <h3><i class="fas fa-comments"></i> Still Have Questions?</h3>
+            <p>If you couldn't find the answer you're looking for, don't hesitate to reach out to us!</p>
+            <div class="contact-links">
+                <a href="https://wa.me/918806600982" class="contact-link">
+                    <i class="fab fa-whatsapp"></i>
+                    WhatsApp
+                </a>
+                <a href="https://www.instagram.com/urbannucleus/" class="contact-link">
+                    <i class="fab fa-instagram"></i>
+                    Instagram
+                </a>
+                <a href="mailto:urban.nucleus@gmail.com" class="contact-link">
+                    <i class="fas fa-envelope"></i>
+                    Email
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer section-padding">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>URBAN NUCLEUS</h3>
+                    <p>Redefining luxury fashion with timeless pieces crafted for the modern individual.</p>
+                    <div class="social-links">
+                        <a href="https://instagram.com/urbannucleus" target="_blank" title="Follow us on Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://wa.me/918806600982" target="_blank" rel="noopener" title="Chat on WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="mailto:urban.nucleus@gmail.com" title="Email us"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Shop</h4>
+                    <ul>
+                        <li><a href="collections.html">All Collections</a></li>
+                        <li><a href="index.html#featured-products">New Arrivals</a></li>
+                        <li><a href="collections.html#best-sellers">Best Sellers</a></li>
+                        <li><a href="index.html#limitedDropSection">Sale</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>About</h4>
+                    <ul>
+                        <li><a href="about.html">Our Story</a></li>
+                        <li><a href="about.html#sustainability">Sustainability</a></li>
+                        <li><a href="about.html#craftsmanship">Craftsmanship</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Customer Care</h4>
+                    <ul>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="shipping-policy.html">Shipping & Returns</a></li>
+                        <li><a href="return-policy.html">Return Policy</a></li>
+                        <li><a href="size-guide.html">Size Guide</a></li>
+                        <li><a href="faq.html">FAQs</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-bottom-left">
+                    <p>&copy; 2024 URBAN NUCLEUS. All rights reserved.</p>
+                </div>
+                <div class="footer-bottom-right">
+                    <a href="privacy-policy.html">Privacy Policy</a>
+                    <a href="terms-of-service.html">Terms of Service</a>
+                    <a href="#">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/918806600982" class="floating-whatsapp" target="_blank" title="Contact Us">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script src="main.js"></script>
+    <script>
+        // Announcement Bar Functions
+        async function loadAnnouncementBarData() {
+            try {
+                const response = await fetch('http://localhost:3000/api/announcement');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.visible && data.messages && data.messages.length > 0) {
+                        updateAnnouncementBar(data.messages);
+                        showAnnouncementBar();
+                    } else {
+                        hideAnnouncementBar();
+                    }
+                } else {
+                    hideAnnouncementBar();
+                }
+            } catch (error) {
+                console.error('Error loading announcement bar:', error);
+                hideAnnouncementBar();
+            }
+        }
+
+        function showAnnouncementBar() {
+            const bar = document.getElementById('announcement-bar');
+            if (bar) {
+                bar.style.display = 'block';
+                bar.classList.remove('hidden');
+            }
+        }
+
+        function hideAnnouncementBar() {
+            const bar = document.getElementById('announcement-bar');
+            if (bar) {
+                bar.style.display = 'none';
+                bar.classList.add('hidden');
+            }
+        }
+
+        function updateAnnouncementBar(messages) {
+            const marqueeContent = document.querySelector('#announcement-bar .marquee-content');
+            if (marqueeContent && messages.length > 0) {
+                // Duplicate messages for seamless loop
+                const duplicatedMessages = [...messages, ...messages];
+                marqueeContent.innerHTML = duplicatedMessages.map(msg => 
+                    `<span style="margin-right: 50px;">${msg}</span>`
+                ).join('');
+            } else {
+                hideAnnouncementBar();
+            }
+        }
+
+        // Load announcement bar on page load
+        // Check login state and update header
+        function checkLoginState() {
+            const currentUser = localStorage.getItem('currentUser');
+            const headerIcons = document.querySelector('.header-icons');
+            
+            if (!headerIcons) return;
+            
+            if (currentUser) {
+                try {
+                    const user = JSON.parse(currentUser);
+                    headerIcons.innerHTML = `
+                        <a href="profile.html" class="user-info">
+                            <i class="fas fa-user"></i> 
+                            <span class="user-name">${user.username || user.email}</span>
+                        </a>
+                        <a href="#" onclick="logout()" class="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                        <a href="cart.html" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count">0</span></a>
+                    `;
+                    updateCartCountFromStorage();
+                } catch (error) {
+                    localStorage.removeItem('currentUser');
+                    checkLoginState();
+                }
+            } else {
+                headerIcons.innerHTML = `
+                    <a href="login.html"><i class="fas fa-user"></i> Login</a>
+                    <a href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+                    <a href="cart.html" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count">0</span></a>
+                `;
+                updateCartCountFromStorage();
+            }
+        }
+        
+        function updateCartCountFromStorage() {
+            try {
+                const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+                const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+                document.querySelectorAll('.cart-count').forEach(countElement => {
+                    countElement.textContent = totalItems;
+                });
+            } catch (error) {
+                document.querySelectorAll('.cart-count').forEach(countElement => {
+                    countElement.textContent = '0';
+                });
+            }
+        }
+        
+        function logout() {
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('authToken');
+            checkLoginState();
+            alert('Logged out successfully');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAnnouncementBarData();
+            setInterval(loadAnnouncementBarData, 30000);
+            checkLoginState();
+            
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) checkLoginState();
+            });
+            
+            window.addEventListener('focus', function() {
+                checkLoginState();
+            });
+        });
+
+        // FAQ Toggle Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                
+                question.addEventListener('click', () => {
+                    // Close all other FAQ items
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item) {
+                            otherItem.classList.remove('active');
+                        }
+                    });
+                    
+                    // Toggle current item
+                    item.classList.toggle('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

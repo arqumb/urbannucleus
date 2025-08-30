@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders Management | URBAN NUCLEUS</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar Navigation -->
+        <aside class="admin-sidebar">
+            <div class="admin-logo">
+                <h1>URBAN NUCLEUS</h1>
+                <p>Admin Dashboard</p>
+            </div>
+            <nav class="admin-nav">
+                <ul>
+                    <li>
+                        <a href="index.html">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="products.html">
+                            <i class="fas fa-tshirt"></i>
+                            <span>Products</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="orders.html">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span>Orders</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="customers.html">
+                            <i class="fas fa-users"></i>
+                            <span>Customers</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Analytics</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Top Navigation -->
+            <header class="admin-header">
+                <div class="header-left">
+                    <button class="sidebar-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h2>Orders Management</h2>
+                </div>
+                <div class="header-right">
+                    <div class="admin-search">
+                        <input type="text" placeholder="Search orders...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="admin-profile">
+                        <img src="../images/admin-profile.jpg" alt="Admin Profile">
+                        <span>Admin User</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Orders Content -->
+            <div class="admin-content">
+                <!-- Orders Header -->
+                <div class="orders-header">
+                    <div class="orders-filter">
+                        <select id="statusFilter">
+                            <option value="all">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="processing">Processing</option>
+                            <option value="shipped">Shipped</option>
+                            <option value="delivered">Delivered</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                        <input type="date" id="dateFilter" placeholder="Filter by date">
+                    </div>
+                    <button class="btn btn-outline">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                </div>
+
+                <!-- Orders Table -->
+                <div class="table-responsive">
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#UN-2458</td>
+                                <td>Priya Sharma</td>
+                                <td>12 May 2023</td>
+                                <td>₹12,999</td>
+                                <td>
+                                    <select class="status-select shipped">
+                                        <option value="pending">Pending</option>
+                                        <option value="processing">Processing</option>
+                                        <option value="shipped" selected>Shipped</option>
+                                        <option value="delivered">Delivered</option>
+                                        <option value="cancelled">Cancelled</option>
+                                    </select>
+                                </td>
+                                <td class="actions">
+                                    <button class="action-btn view"><i class="fas fa-eye"></i></button>
+                                    <button class="action-btn print"><i class="fas fa-print"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#UN-2457</td>
+                                <td>Rahul Kapoor</td>
+                                <td>11 May 2023</td>
+                                <td>₹9,999</td>
+                                <td>
+                                    <select class="status-select delivered">
+                                        <option value="pending">Pending</option>
+                                        <option value="processing">Processing</option>
+                                        <option value="shipped">Shipped</option>
+                                        <option value="delivered" selected>Delivered</option>
+                                        <option value="cancelled">Cancelled</option>
+                                    </select>
+                                </td>
+                                <td class="actions">
+                                    <button class="action-btn view"><i class="fas fa-eye"></i></button>
+                                    <button class="action-btn print"><i class="fas fa-print"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#UN-2456</td>
+                                <td>Ananya Patel</td>
+                                <td>10 May 2023</td>
+                                <td>₹15,999</td>
+                                <td>
+                                    <select class="status-select processing">
+                                        <option value="pending">Pending</option>
+                                        <option value="processing" selected>Processing</option>
+                                        <option value="shipped">Shipped</option>
+                                        <option value="delivered">Delivered</option>
+                                        <option value="cancelled">Cancelled</option>
+                                    </select>
+                                </td>
+                                <td class="actions">
+                                    <button class="action-btn view"><i class="fas fa-eye"></i></button>
+                                    <button class="action-btn print"><i class="fas fa-print"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#UN-2455</td>
+                                <td>Vikram Singh</td>
+                                <td>9 May 2023</td>
+                                <td>₹8,499</td>
+                                <td>
+                                    <select class="status-select pending">
+                                        <option value="pending" selected>Pending</option>
+                                        <option value="processing">Processing</option>
+                                        <option value="shipped">Shipped</option>
+                                        <option value="delivered">Delivered</option>
+                                        <option value="cancelled">Cancelled</option>
+                                    </select>
+                                </td>
+                                <td class="actions">
+                                    <button class="action-btn view"><i class="fas fa-eye"></i></button>
+                                    <button class="action-btn print"><i class="fas fa-print"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#UN-2454</td>
+                                <td>Meera Desai</td>
+                                <td>8 May 2023</td>
+                                <td>₹11,499</td>
+                                <td>
+                                    <select class="status-select cancelled">
+                                        <option value="pending">Pending</option>
+                                        <option value="processing">Processing</option>
+                                        <option value="shipped">Shipped</option>
+                                        <option value="delivered">Delivered</option>
+                                        <option value="cancelled" selected>Cancelled</option>
+                                    </select>
+                                </td>
+                                <td class="actions">
+                                    <button class="action-btn view"><i class="fas fa-eye"></i></button>
+                                    <button class="action-btn print"><i class="fas fa-print"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination">
+                    <button class="pagination-btn" disabled><i class="fas fa-chevron-left"></i></button>
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn">2</button>
+                    <button class="pagination-btn">3</button>
+                    <button class="pagination-btn"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Order Detail Modal -->
+    <div class="modal" id="orderModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content large">
+            <button class="modal-close"><i class="fas fa-times"></i></button>
+            <h3>Order Details <span class="order-id">#UN-2458</span></h3>
+            
+            <div class="order-detail-grid">
+                <!-- Order Summary -->
+                <div class="order-summary">
+                    <div class="summary-card">
+                        <h4>Order Information</h4>
+                        <div class="summary-row">
+                            <span>Order Date:</span>
+                            <span>12 May 2023, 14:30</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Order Status:</span>
+                            <span class="status shipped">Shipped</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Payment Method:</span>
+                            <span>Credit Card (VISA ****4242)</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Payment Status:</span>
+                            <span class="status paid">Paid</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Tracking Number:</span>
+                            <span>TN123456789IN</span>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-card">
+                        <h4>Customer Information</h4>
+                        <div class="summary-row">
+                            <span>Name:</span>
+                            <span>Priya Sharma</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Email:</span>
+                            <span>priya.sharma@example.com</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Phone:</span>
+                            <span>+91 88066 00982</span>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-card">
+                        <h4>Shipping Address</h4>
+                        <p>
+                            123 Luxury Apartments,<br>
+                            Linking Road, Bandra West,<br>
+                            Mumbai - 400050,<br>
+                            Maharashtra, India
+                        </p>
+                    </div>
+                    
+                    <div class="summary-card">
+                        <h4>Billing Address</h4>
+                        <p>
+                            Same as shipping address
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Order Items -->
+                <div class="order-items">
+                    <div class="items-card">
+                        <h4>Order Items</h4>
+                        <div class="order-item">
+                            <div class="item-image">
+                                <img src="../images/product-1.jpg" alt="Silk Evening Gown">
+                            </div>
+                            <div class="item-details">
+                                <h5>Silk Evening Gown</h5>
+                                <p>SKU: UN-SEG-BLK</p>
+                                <p>Size: M | Color: Black</p>
+                            </div>
+                            <div class="item-price">
+                                <p>₹12,999</p>
+                                <p>Qty: 1</p>
+                            </div>
+                        </div>
+                        
+                        <div class="order-totals">
+                            <div class="total-row">
+                                <span>Subtotal:</span>
+                                <span>₹12,999</span>
+                            </div>
+                            <div class="total-row">
+                                <span>Shipping:</span>
+                                <span>₹0 (Free)</span>
+                            </div>
+                            <div class="total-row">
+                                <span>Tax:</span>
+                                <span>₹1,950</span>
+                            </div>
+                            <div class="total-row grand-total">
+                                <span>Total:</span>
+                                <span>₹14,949</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="order-actions">
+                        <button class="btn btn-outline"><i class="fas fa-print"></i> Print Invoice</button>
+                        <button class="btn btn-primary"><i class="fas fa-truck"></i> Update Shipping</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="product.jsss"></script>
+    <script src="orders.js"></script>
+
+    <!-- Authentication State Management -->
+    <script>
+        // Check login state and update header
+        function checkLoginState() {
+            const currentUser = localStorage.getItem('currentUser');
+            const headerIcons = document.querySelector('.header-icons');
+            
+            if (!headerIcons) return;
+            
+            if (currentUser) {
+                try {
+                    const user = JSON.parse(currentUser);
+                    headerIcons.innerHTML = `
+                        <a href="profile.html" class="user-info">
+                            <i class="fas fa-user"></i> 
+                            <span class="user-name">${user.username || user.email}</span>
+                        </a>
+                        <a href="#" onclick="logout()" class="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                        <a href="cart.html" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count">0</span></a>
+                    `;
+                    updateCartCountFromStorage();
+                } catch (error) {
+                    localStorage.removeItem('currentUser');
+                    checkLoginState();
+                }
+            } else {
+                headerIcons.innerHTML = `
+                    <a href="login.html"><i class="fas fa-user"></i> Login</a>
+                    <a href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+                    <a href="cart.html" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count">0</span></a>
+                `;
+                updateCartCountFromStorage();
+            }
+        }
+        
+        function updateCartCountFromStorage() {
+            try {
+                const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+                const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+                document.querySelectorAll('.cart-count').forEach(countElement => {
+                    countElement.textContent = totalItems;
+                });
+            } catch (error) {
+                document.querySelectorAll('.cart-count').forEach(countElement => {
+                    countElement.textContent = '0';
+                });
+            }
+        }
+        
+        function logout() {
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('authToken');
+            checkLoginState();
+            alert('Logged out successfully');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLoginState();
+            
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) checkLoginState();
+            });
+            
+            window.addEventListener('focus', function() {
+                checkLoginState();
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+

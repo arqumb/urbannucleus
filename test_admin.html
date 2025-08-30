@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ccc; }
+        .success { color: green; }
+        .error { color: red; }
+        button { padding: 10px 20px; margin: 5px; }
+        input, select { padding: 8px; margin: 5px; width: 200px; }
+    </style>
+</head>
+<body>
+    <h1>Admin Functionality Test</h1>
+    
+    <div class="test-section">
+        <h2>Test Product Creation</h2>
+        <form id="testProductForm">
+            <div>
+                <label>Product Name:</label>
+                <input type="text" id="productName" value="Test Product" required>
+            </div>
+            <div>
+                <label>Price:</label>
+                <input type="number" id="productPrice" value="999.99" step="0.01" required>
+            </div>
+            <div>
+                <label>Description:</label>
+                <input type="text" id="productDescription" value="Test product description">
+            </div>
+            <div>
+                <label>Category:</label>
+                <select id="productCategory">
+                    <option value="">Select Category</option>
+                </select>
+            </div>
+            <div>
+                <label>Subcategory:</label>
+                <select id="productSubcategory">
+                    <option value="">Select Subcategory</option>
+                </select>
+            </div>
+            <div>
+                <label>Image URL:</label>
+                <input type="url" id="productImage" value="https://via.placeholder.com/300x300/000000/ffffff?text=Test+Product">
+            </div>
+            <button type="submit">Create Test Product</button>
+        </form>
+        <div id="testResult"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Product Retrieval</h2>
+        <button onclick="loadProducts()">Load Products</button>
+        <div id="productsList"></div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:3000';
+
+        // Load categories on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCategories();
+        });
+
+        async function loadCategories() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/categories`);
+                const categories = await response.json();
+                
+                const categorySelect = document.getElementById('productCategory');
+                categorySelect.innerHTML = '<option value="">Select Category</option>';
+                
+                Object.values(categories).forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.id;
+                    option.textContent = category.name;
+                    categorySelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading categories:', error);
+            }
+        }
+
+        async function loadSubcategories(categoryId) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/categories/${categoryId}/subcategories`);
+                const subcategories = await response.json();
+                
+                const subcategorySelect = document.getElementById('productSubcategory');
+                subcategorySelect.innerHTML = '<option value="">Select Subcategory</option>';
+                
+                subcategories.forEach(subcategory => {
+                    const option = document.createElement('option');
+                    option.value = subcategory.id;
+                    option.textContent = subcategory.name;
+                    subcategorySelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading subcategories:', error);
+            }
+        }
+
+        // Handle category change
+        document.getElementById('productCategory').addEventListener('change', function() {
+            const categoryId = this.value;
+            if (categoryId) {
+                loadSubcategories(categoryId);
+            } else {
+                document.getElementById('productSubcategory').innerHTML = '<option value="">Select Subcategory</option>';
+            }
+        });
+
+        // Handle form submission
+        document.getElementById('testProductForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const productData = {
+                name: document.getElementById('productName').value,
+                price: parseFloat(document.getElementById('productPrice').value),
+                description: document.getElementById('productDescription').value,
+                category_id: document.getElementById('productCategory').value || null,
+                subcategory_id: document.getElementById('productSubcategory').value || null,
+                images: [document.getElementById('productImage').value]
+            };
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/products`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(productData)
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('testResult').innerHTML = 
+                        `<div class="success">✅ Product created successfully! ID: ${result.id}</div>`;
+                } else {
+                    document.getElementById('testResult').innerHTML = 
+                        `<div class="error">❌ Error: ${result.error}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('testResult').innerHTML = 
+                    `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        });
+
+        async function loadProducts() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/products`);
+                const products = await response.json();
+                
+                const productsList = document.getElementById('productsList');
+                productsList.innerHTML = '<h3>Products:</h3>';
+                
+                products.forEach(product => {
+                    const imageUrl = (product.images && product.images.length > 0) 
+                        ? product.images[0].image_url 
+                        : (product.image_url || 'No image');
+                    
+                    productsList.innerHTML += `
+                        <div style="border: 1px solid #ddd; margin: 10px; padding: 10px;">
+                            <h4>${product.name}</h4>
+                            <p>Price: ₹${product.price}</p>
+                            <p>Category: ${product.category_name || product.subcategory_name || 'No Category'}</p>
+                            <p>Image: ${imageUrl}</p>
+                            <p>Description: ${product.description || 'No description'}</p>
+                        </div>
+                    `;
+                });
+            } catch (error) {
+                document.getElementById('productsList').innerHTML = 
+                    `<div class="error">❌ Error loading products: ${error.message}</div>`;
+            }
+        }
+    </script>
+</body>
+</html>
+

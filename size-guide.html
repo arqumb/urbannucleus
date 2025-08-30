@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Size Guide - Urban Nucleus</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* Luxury UI Variables */
+        :root {
+            --primary-color: #000000;
+            --secondary-color: #ffffff;
+            --accent-gold: #D4AF37;
+            --accent-blue: #667eea;
+            --text-primary: #000000;
+            --text-secondary: #333333;
+            --text-light: #666666;
+            --text-white: #ffffff;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f8f8;
+            --bg-dark: #000000;
+            --bg-grey: #f5f5f5;
+            --border-color: #e0e0e0;
+            --border-dark: #333333;
+            --border-gold: #D4AF37;
+            --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.05);
+            --shadow-medium: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --shadow-heavy: 0 8px 40px rgba(0, 0, 0, 0.15);
+            --shadow-luxury: 0 10px 50px rgba(0, 0, 0, 0.2);
+            --shadow-gold: 0 4px 20px rgba(212, 175, 55, 0.3);
+            --border-radius: 8px;
+            --border-radius-sm: 4px;
+            --border-radius-lg: 12px;
+            --border-radius-xl: 16px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --transition-slow: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --font-primary: 'Playfair Display', serif;
+            --font-secondary: 'Poppins', sans-serif;
+        }
+
+        /* Basic Reset and Body Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-secondary);
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            opacity: 1;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Header Styles */
+        .header {
+            background: var(--bg-dark);
+            color: var(--text-white);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .header .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo h1 {
+            font-family: var(--font-primary);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-white);
+            text-decoration: none;
+        }
+
+        .logo a {
+            text-decoration: none;
+            color: var(--text-white);
+        }
+
+        .nav-list {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-list a {
+            color: var(--text-white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-list a:hover {
+            color: var(--accent-gold);
+        }
+
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-icons a {
+            color: var(--text-white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .header-icons a:hover {
+            color: var(--accent-gold);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            color: var(--text-white);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: var(--bg-dark);
+            color: var(--text-white);
+            padding: 3rem 0 1rem;
+        }
+
+        .section-padding {
+            padding: 4rem 0;
+        }
+
+        .footer .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-col h3, .footer-col h4 {
+            color: var(--text-white);
+            margin-bottom: 1rem;
+            font-family: var(--font-primary);
+        }
+
+        .footer-col p {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-col ul li a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-col ul li a:hover {
+            color: var(--accent-gold);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 1.2rem;
+        }
+
+        .social-links a:hover {
+            background: var(--text-white);
+            color: var(--bg-dark);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border-dark);
+            padding-top: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-bottom-left {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .footer-bottom-right {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .footer-bottom-right a {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-bottom-right a:hover {
+            color: var(--accent-gold);
+        }
+
+        .size-guide-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-top: 50px;
+            margin-bottom: 50px;
+        }
+        
+        .size-guide-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e74c3c;
+        }
+        
+        .size-guide-header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .size-guide-header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        
+        .size-section {
+            margin-bottom: 40px;
+        }
+        
+        .size-section h2 {
+            color: #e74c3c;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .size-section h3 {
+            color: #2c3e50;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            margin-top: 25px;
+        }
+        
+        .size-section p, .size-section li {
+            color: #34495e;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        
+        .size-section ul {
+            padding-left: 20px;
+        }
+        
+        .highlight-box {
+            background: #f8f9fa;
+            border-left: 4px solid #e74c3c;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .highlight-box h4 {
+            color: #e74c3c;
+            margin-bottom: 10px;
+        }
+        
+        .size-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .size-table th {
+            background: #e74c3c;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .size-table td {
+            padding: 12px 15px;
+            text-align: center;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .size-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .size-table tr:hover {
+            background: #e8f5e8;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #e74c3c;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 20px;
+            transition: color 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: #c0392b;
+        }
+        
+        .measurement-guide {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .measurement-card {
+            background: #fff;
+            border: 2px solid #ecf0f1;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .measurement-card:hover {
+            border-color: #e74c3c;
+            transform: translateY(-3px);
+        }
+        
+        .measurement-card h4 {
+            color: #e74c3c;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .warning-box h4 {
+            color: #856404;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .warning-box p {
+            color: #856404;
+            font-weight: 500;
+        }
+        
+        @media (max-width: 768px) {
+            .size-guide-container {
+                margin: 20px 10px;
+                padding: 20px 15px;
+            }
+            
+            .size-guide-header h1 {
+                font-size: 2rem;
+            }
+            
+            .size-table {
+                font-size: 0.9rem;
+            }
+            
+            .size-table th,
+            .size-table td {
+                padding: 8px 10px;
+            }
+            
+            .measurement-guide {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                    <a href="index.html">
+                        <h1>URBAN NUCLEUS</h1>
+                    </a>
+                </div>
+
+                <!-- Left Side Navigation -->
+                <nav class="nav left-nav">
+                    <ul class="nav-list">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="collections.html">Collections</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </nav>
+
+                <!-- Right Side Icons -->
+                <div class="header-icons">
+                    <a href="login.html"><i class="fas fa-user"></i> Login</a>
+                    <a href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+                    <a href="#"><i class="fas fa-search"></i></a>
+                    <a href="cart.html" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count">0</span></a>
+                </div>
+
+                <div class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="size-guide-container">
+        <a href="index.html" class="back-link">
+            <i class="fas fa-arrow-left"></i>
+            Back to Home
+        </a>
+        
+        <div class="size-guide-header">
+            <h1><i class="fas fa-ruler"></i> Size Guide</h1>
+            <p>Find your perfect fit for UA sneakers, luxury watches, and designer bags</p>
+        </div>
+
+        <div class="size-section">
+            <h2><i class="fas fa-info-circle"></i> Important Size Information</h2>
+            <p>At Urban Nucleus, we specialize in <strong>Unauthorized Authentic (UA) sneakers</strong>, <strong>luxury watches</strong>, and <strong>designer bags</strong>. These products are made with the same materials and sizing as retail versions, but it's crucial to provide the correct size when ordering.</p>
+            
+            <div class="warning-box">
+                <h4><i class="fas fa-exclamation-triangle"></i> Critical Notice</h4>
+                <p><strong>Please provide your correct EUR/UK size when placing orders.</strong> We are not responsible for size issues due to incorrect size selection by the customer. Exchanges are only possible with proper unboxing video documentation.</p>
+            </div>
+        </div>
+
+        <div class="size-section">
+            <h2><i class="fas fa-table"></i> Size Conversion Chart</h2>
+            <p>Use this chart to find your correct size. We recommend using <strong>EUR (European)</strong> or <strong>UK</strong> sizes as they are most accurate for our UA sneakers.</p>
+            
+            <table class="size-table">
+                <thead>
+                    <tr>
+                        <th>US Size</th>
+                        <th>UK Size</th>
+                        <th>EUR Size</th>
+                        <th>CM</th>
+                        <th>INCH</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>6</td>
+                        <td>5.5</td>
+                        <td>39</td>
+                        <td>24.5</td>
+                        <td>9.6</td>
+                    </tr>
+                    <tr>
+                        <td>6.5</td>
+                        <td>6</td>
+                        <td>39.5</td>
+                        <td>25</td>
+                        <td>9.8</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>6.5</td>
+                        <td>40</td>
+                        <td>25.5</td>
+                        <td>10</td>
+                    </tr>
+                    <tr>
+                        <td>7.5</td>
+                        <td>7</td>
+                        <td>40.5</td>
+                        <td>26</td>
+                        <td>10.2</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>7.5</td>
+                        <td>41</td>
+                        <td>26.5</td>
+                        <td>10.4</td>
+                    </tr>
+                    <tr>
+                        <td>8.5</td>
+                        <td>8</td>
+                        <td>41.5</td>
+                        <td>27</td>
+                        <td>10.6</td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td>8.5</td>
+                        <td>42</td>
+                        <td>27.5</td>
+                        <td>10.8</td>
+                    </tr>
+                    <tr>
+                        <td>9.5</td>
+                        <td>9</td>
+                        <td>42.5</td>
+                        <td>28</td>
+                        <td>11</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>9.5</td>
+                        <td>43</td>
+                        <td>28.5</td>
+                        <td>11.2</td>
+                    </tr>
+                    <tr>
+                        <td>10.5</td>
+                        <td>10</td>
+                        <td>43.5</td>
+                        <td>29</td>
+                        <td>11.4</td>
+                    </tr>
+                    <tr>
+                        <td>11</td>
+                        <td>10.5</td>
+                        <td>44</td>
+                        <td>29.5</td>
+                        <td>11.6</td>
+                    </tr>
+                    <tr>
+                        <td>11.5</td>
+                        <td>11</td>
+                        <td>44.5</td>
+                        <td>30</td>
+                        <td>11.8</td>
+                    </tr>
+                    <tr>
+                        <td>12</td>
+                        <td>11.5</td>
+                        <td>45</td>
+                        <td>30.5</td>
+                        <td>12</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="size-section">
+            <h2><i class="fas fa-ruler-combined"></i> How to Measure Your Foot</h2>
+            <p>For the most accurate sizing, follow these steps to measure your foot:</p>
+            
+            <div class="measurement-guide">
+                <div class="measurement-card">
+                    <h4><i class="fas fa-shoe-prints"></i> Step 1: Prepare</h4>
+                    <ul>
+                        <li>Wear the socks you plan to wear with the sneakers</li>
+                        <li>Stand on a flat surface</li>
+                        <li>Have a ruler or measuring tape ready</li>
+                        <li>Measure both feet (use the larger measurement)</li>
+                    </ul>
+                </div>
+                
+                <div class="measurement-card">
+                    <h4><i class="fas fa-pencil-ruler"></i> Step 2: Measure Length</h4>
+                    <ul>
+                        <li>Place your foot on a piece of paper</li>
+                        <li>Mark the longest point of your toe</li>
+                        <li>Mark the back of your heel</li>
+                        <li>Measure the distance between the marks</li>
+                    </ul>
+                </div>
+                
+                <div class="measurement-card">
+                    <h4><i class="fas fa-expand-arrows-alt"></i> Step 3: Measure Width</h4>
+                    <ul>
+                        <li>Measure the widest part of your foot</li>
+                        <li>This is usually across the ball of your foot</li>
+                        <li>Note both length and width measurements</li>
+                        <li>Compare with our size chart</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="size-section">
+            <h2><i class="fas fa-clock"></i> Watch Sizing Guide</h2>
+            
+            <h3>Watch Case Size Guide</h3>
+            <div class="size-chart">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Case Diameter</th>
+                            <th>Wrist Size</th>
+                            <th>Fit</th>
+                            <th>Examples</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>36-38mm</td>
+                            <td>Small (5.5-6.5")</td>
+                            <td>Classic, elegant</td>
+                            <td>Rolex Datejust, Cartier Tank</td>
+                        </tr>
+                        <tr>
+                            <td>39-41mm</td>
+                            <td>Medium (6.5-7.5")</td>
+                            <td>Most versatile</td>
+                            <td>Rolex Submariner, Omega Seamaster</td>
+                        </tr>
+                        <tr>
+                            <td>42-44mm</td>
+                            <td>Large (7.5-8.5")</td>
+                            <td>Sporty, bold</td>
+                            <td>Rolex GMT, Panerai Luminor</td>
+                        </tr>
+                        <tr>
+                            <td>45mm+</td>
+                            <td>Extra Large (8.5"+)</td>
+                            <td>Statement piece</td>
+                            <td>Panerai Radiomir, Hublot Big Bang</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <h3>How to Measure Your Wrist</h3>
+            <ol>
+                <li><strong>Use a flexible measuring tape</strong> or a piece of string</li>
+                <li><strong>Wrap around your wrist</strong> just below the wrist bone</li>
+                <li><strong>Note the measurement</strong> in inches or centimeters</li>
+                <li><strong>Add 0.5-1 inch</strong> for comfortable fit with the watch</li>
+            </ol>
+            
+            <h3>Watch Strap Adjustments</h3>
+            <ul>
+                <li><strong>Metal Bracelets:</strong> Can be adjusted by removing links</li>
+                <li><strong>Leather Straps:</strong> Usually have multiple holes for adjustment</li>
+                <li><strong>Rubber Straps:</strong> Often have micro-adjustments</li>
+                <li><strong>NATO Straps:</strong> One size fits most wrists</li>
+            </ul>
+        </div>
+
+        <div class="size-section">
+            <h2><i class="fas fa-shopping-bag"></i> Bag Sizing Guide</h2>
+            
+            <h3>Bag Size Categories</h3>
+            <div class="size-chart">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Size</th>
+                            <th>Dimensions (approx.)</th>
+                            <th>Best For</th>
+                            <th>Examples</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Mini/Small</td>
+                            <td>8-12" x 6-8" x 2-4"</td>
+                            <td>Evening, essentials only</td>
+                            <td>Chanel Mini Flap, Louis Vuitton Nano</td>
+                        </tr>
+                        <tr>
+                            <td>Medium</td>
+                            <td>12-15" x 8-10" x 4-6"</td>
+                            <td>Daily use, work</td>
+                            <td>Chanel Classic Flap, Hermès Birkin 30</td>
+                        </tr>
+                        <tr>
+                            <td>Large</td>
+                            <td>15-18" x 10-12" x 6-8"</td>
+                            <td>Travel, work, shopping</td>
+                            <td>Louis Vuitton Neverfull, Hermès Birkin 35</td>
+                        </tr>
+                        <tr>
+                            <td>Extra Large</td>
+                            <td>18"+ x 12"+ x 8"+</td>
+                            <td>Travel, weekend trips</td>
+                            <td>Louis Vuitton Keepall, Hermès Birkin 40</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <h3>Bag Style Guide</h3>
+            <ul>
+                <li><strong>Crossbody:</strong> Hands-free, secure, good for travel</li>
+                <li><strong>Shoulder:</strong> Classic, versatile, professional</li>
+                <li><strong>Top Handle:</strong> Elegant, formal occasions</li>
+                <li><strong>Backpack:</strong> Casual, practical, good for travel</li>
+                <li><strong>Tote:</strong> Spacious, work-friendly, everyday use</li>
+            </ul>
+        </div>
+
+        <div class="size-section">
+            <h2><i class="fas fa-lightbulb"></i> Size Selection Tips</h2>
+            
+            <h3>General Guidelines</h3>
+            <ul>
+                <li><strong>Always measure your feet:</strong> Don't rely on your usual shoe size</li>
+                <li><strong>Consider the brand:</strong> Different brands may fit differently</li>
+                <li><strong>Think about usage:</strong> Will you wear thick socks? Consider going half a size up</li>
+                <li><strong>Check reviews:</strong> Look for sizing feedback from other customers</li>
+            </ul>
+            
+            <h3>Common Sizing Issues</h3>
+            <ul>
+                <li><strong>Too Tight:</strong> Usually means you need to go up half a size</li>
+                <li><strong>Too Loose:</strong> Consider going down half a size</li>
+                <li><strong>Width Issues:</strong> Some models run narrow or wide</li>
+                <li><strong>Break-in Period:</strong> New shoes may feel tight initially</li>
+            </ul>
+            
+            <div class="highlight-box">
+                <h4><i class="fas fa-info"></i> Pro Tip</h4>
+                <p>If you're between sizes, we recommend going up half a size for comfort, especially if you plan to wear the sneakers for extended periods.</p>
+            </div>
+        </div>
+
+        <div class="size-section">
+            <h2><i class="fas fa-brands"></i> Brand-Specific Sizing</h2>
+            
+            <h3>Nike/Jordan</h3>
+            <ul>
+                <li>Generally true to size</li>
+                <li>Some models run narrow (Air Max, Air Force 1)</li>
+                <li>Consider going up half a size for wide feet</li>
+            </ul>
+            
+            <h3>Adidas</h3>
+            <ul>
+                <li>Most models true to size</li>
+                <li>Ultraboost series may run small</li>
+                <li>Yeezy models often run small (go up half size)</li>
+            </ul>
+            
+            <h3>Other Brands</h3>
+            <ul>
+                <li><strong>New Balance:</strong> Generally true to size, good for wide feet</li>
+                <li><strong>Puma:</strong> Slightly narrow, consider going up half size</li>
+                <li><strong>Converse:</strong> Often run large, consider going down half size</li>
+            </ul>
+        </div>
+
+        <div class="size-section">
+            <h2><i class="fas fa-question-circle"></i> Still Unsure?</h2>
+            <p>If you're still not sure about your size, don't hesitate to contact us:</p>
+            
+            <div class="measurement-guide">
+                <div class="measurement-card">
+                    <h4><i class="fab fa-whatsapp"></i> WhatsApp Support</h4>
+                    <p><a href="https://wa.me/918806600982" style="color: #e74c3c;">+91 88066 00982</a></p>
+                    <p>Send us your measurements and we'll help you find the right size</p>
+                </div>
+                
+                <div class="measurement-card">
+                    <h4><i class="fab fa-instagram"></i> Instagram DM</h4>
+                    <p><a href="https://www.instagram.com/urbannucleus/" style="color: #e74c3c;">@urbannucleus</a></p>
+                    <p>DM us with your size questions and we'll respond quickly</p>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h4><i class="fas fa-handshake"></i> Our Commitment</h4>
+                <p>We want you to be completely satisfied with your purchase. If you provide the correct size information and still receive the wrong size due to our error, we'll arrange an exchange (with proper unboxing video documentation).</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer section-padding">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>URBAN NUCLEUS</h3>
+                    <p>Redefining luxury fashion with timeless pieces crafted for the modern individual.</p>
+                    <div class="social-links">
+                        <a href="https://instagram.com/urbannucleus" target="_blank" title="Follow us on Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://wa.me/918806600982" target="_blank" rel="noopener" title="Chat on WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="mailto:urban.nucleus@gmail.com" title="Email us"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Shop</h4>
+                    <ul>
+                        <li><a href="collections.html">All Collections</a></li>
+                        <li><a href="index.html#featured-products">New Arrivals</a></li>
+                        <li><a href="collections.html#best-sellers">Best Sellers</a></li>
+                        <li><a href="index.html#limitedDropSection">Sale</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>About</h4>
+                    <ul>
+                        <li><a href="about.html">Our Story</a></li>
+                        <li><a href="about.html#sustainability">Sustainability</a></li>
+                        <li><a href="about.html#craftsmanship">Craftsmanship</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Customer Care</h4>
+                    <ul>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="shipping-policy.html">Shipping & Returns</a></li>
+                        <li><a href="return-policy.html">Return Policy</a></li>
+                        <li><a href="size-guide.html">Size Guide</a></li>
+                        <li><a href="faq.html">FAQs</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-bottom-left">
+                    <p>&copy; 2024 URBAN NUCLEUS. All rights reserved.</p>
+                </div>
+                <div class="footer-bottom-right">
+                    <a href="privacy-policy.html">Privacy Policy</a>
+                    <a href="terms-of-service.html">Terms of Service</a>
+                    <a href="#">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/918806600982" class="floating-whatsapp" target="_blank" title="Contact Us">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script>
+        // Check login state and update header
+        function checkLoginState() {
+            const currentUser = localStorage.getItem('currentUser');
+            const headerIcons = document.querySelector('.header-icons');
+            
+            if (!headerIcons) return;
+            
+            if (currentUser) {
+                try {
+                    const user = JSON.parse(currentUser);
+                    headerIcons.innerHTML = `
+                        <a href="profile.html" class="user-info">
+                            <i class="fas fa-user"></i> 
+                            <span class="user-name">${user.username || user.email}</span>
+                        </a>
+                        <a href="#" onclick="logout()" class="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                        <a href="cart.html" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count">0</span></a>
+                    `;
+                    updateCartCountFromStorage();
+                } catch (error) {
+                    localStorage.removeItem('currentUser');
+                    checkLoginState();
+                }
+            } else {
+                headerIcons.innerHTML = `
+                    <a href="login.html"><i class="fas fa-user"></i> Login</a>
+                    <a href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+                    <a href="cart.html" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count">0</span></a>
+                `;
+                updateCartCountFromStorage();
+            }
+        }
+        
+        function updateCartCountFromStorage() {
+            try {
+                const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+                const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+                document.querySelectorAll('.cart-count').forEach(countElement => {
+                    countElement.textContent = totalItems;
+                });
+            } catch (error) {
+                document.querySelectorAll('.cart-count').forEach(countElement => {
+                    countElement.textContent = '0';
+                });
+            }
+        }
+        
+        function logout() {
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('authToken');
+            checkLoginState();
+            alert('Logged out successfully');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLoginState();
+            
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) checkLoginState();
+            });
+            
+            window.addEventListener('focus', function() {
+                checkLoginState();
+            });
+        });
+    </script>
+    <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Clickable Product Cards</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section h2 {
+            color: #333;
+            border-bottom: 2px solid #D4AF37;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .test-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .test-link {
+            display: block;
+            padding: 15px;
+            background: #D4AF37;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            transition: background 0.3s ease;
+        }
+        .test-link:hover {
+            background: #B8941F;
+        }
+        .instructions {
+            background: #e8f4fd;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .instructions h3 {
+            color: #1976D2;
+            margin-top: 0;
+        }
+        .instructions ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .instructions li {
+            margin: 5px 0;
+        }
+        .status {
+            background: #e8f5e8;
+            border-left: 4px solid #4CAF50;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .status h3 {
+            color: #2E7D32;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test Clickable Product Cards</h1>
+    
+    <div class="status">
+        <h3>✅ Implementation Status</h3>
+        <p><strong>All product cards have been updated to be clickable!</strong> Users can now click anywhere on a product card to go to the product detail page.</p>
+    </div>
+
+    <div class="instructions">
+        <h3>📋 What Was Changed</h3>
+        <ul>
+            <li><strong>category.js</strong> - Product cards now have onclick handlers and removed "View Details" button</li>
+            <li><strong>main.js</strong> - Featured product cards are now clickable with event listeners</li>
+            <li><strong>subcategory.js</strong> - Subcategory product cards are now clickable</li>
+            <li><strong>style.css</strong> - Added hover effects and cursor styles for clickable cards</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>🧪 Test the Implementation</h2>
+        <p>Click on any of the links below to test the clickable product cards on different pages:</p>
+        
+        <div class="test-links">
+            <a href="index.html" class="test-link">🏠 Home Page (Featured Products)</a>
+            <a href="collections.html" class="test-link">📚 Collections Page</a>
+            <a href="category.html?id=1" class="test-link">👕 Category Page (Sneakers)</a>
+            <a href="subcategory.html?id=1" class="test-link">👟 Subcategory Page</a>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>🎯 How to Test</h2>
+        <ol>
+            <li>Go to any of the pages above</li>
+            <li>Look for product cards (they should show product image, name, and price)</li>
+            <li><strong>Click anywhere on the product card</strong> (not on buttons)</li>
+            <li>You should be redirected to <code>product-detail.html?id=[product_id]</code></li>
+            <li>Buttons (Add to Cart, Quick View, etc.) should still work independently</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>🔧 Technical Details</h2>
+        <ul>
+            <li><strong>Event Handling:</strong> Cards use <code>onclick</code> or <code>addEventListener</code> for click events</li>
+            <li><strong>Button Protection:</strong> <code>event.stopPropagation()</code> prevents card clicks when clicking buttons</li>
+            <li><strong>Visual Feedback:</strong> Hover effects with <code>transform</code> and <code>box-shadow</code></li>
+            <li><strong>Cursor:</strong> Cards show pointer cursor, buttons maintain their own cursor</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>📱 Responsive Design</h2>
+        <p>The clickable cards work on all device sizes and maintain the existing responsive grid layout.</p>
+    </div>
+
+    <script>
+        // Add some interactivity to the test page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🧪 Test page loaded successfully!');
+            console.log('✅ Clickable product cards have been implemented across all pages');
+            
+            // Add click tracking for test links
+            document.querySelectorAll('.test-link').forEach(link => {
+                link.addEventListener('click', function() {
+                    console.log('🧪 Testing:', this.textContent.trim());
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
+

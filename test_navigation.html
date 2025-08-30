@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Test - URBAN NUCLEUS</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ccc; }
+        .test-button { padding: 10px 20px; margin: 10px; background: #007bff; color: white; border: none; cursor: pointer; }
+        .test-button:hover { background: #0056b3; }
+        .log { background: #f8f9fa; padding: 10px; margin: 10px 0; border-radius: 4px; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <h1>Navigation Test Page</h1>
+    
+    <div class="test-section">
+        <h2>Test Category Navigation</h2>
+        <button class="test-button" onclick="testCategoryNavigation()">Test Category Navigation</button>
+        <button class="test-button" onclick="testSubcategoryNavigation()">Test Subcategory Navigation</button>
+        <button class="test-button" onclick="testDirectLinks()">Test Direct Links</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test API Endpoints</h2>
+        <button class="test-button" onclick="testCategoriesAPI()">Test Categories API</button>
+        <button class="test-button" onclick="testSubcategoriesAPI()">Test Subcategories API</button>
+        <button class="test-button" onclick="testProductsAPI()">Test Products API</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>Console Log</h2>
+        <div id="log" class="log"></div>
+        <button class="test-button" onclick="clearLog()">Clear Log</button>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:3000';
+        
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `[${timestamp}] ${message}<br>`;
+            console.log(message);
+        }
+        
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
+        }
+        
+        function testCategoryNavigation() {
+            log('Testing category navigation...');
+            try {
+                const url = 'category.html?id=6';
+                log(`Attempting to navigate to: ${url}`);
+                window.location.href = url;
+            } catch (error) {
+                log(`Error: ${error.message}`);
+            }
+        }
+        
+        function testSubcategoryNavigation() {
+            log('Testing subcategory navigation...');
+            try {
+                const url = 'subcategory.html?id=15&name=ADIDAS';
+                log(`Attempting to navigate to: ${url}`);
+                window.location.href = url;
+            } catch (error) {
+                log(`Error: ${error.message}`);
+            }
+        }
+        
+        function testDirectLinks() {
+            log('Testing direct links...');
+            const links = [
+                '<a href="category.html?id=6">Category 6</a>',
+                '<a href="subcategory.html?id=15&name=ADIDAS">Subcategory ADIDAS</a>'
+            ];
+            
+            links.forEach(link => {
+                const div = document.createElement('div');
+                div.innerHTML = link;
+                document.body.appendChild(div);
+            });
+        }
+        
+        async function testCategoriesAPI() {
+            log('Testing categories API...');
+            try {
+                const response = await fetch(`${API_BASE_URL}/categories`);
+                const data = await response.json();
+                log(`Categories API response: ${JSON.stringify(data, null, 2)}`);
+            } catch (error) {
+                log(`Categories API error: ${error.message}`);
+            }
+        }
+        
+        async function testSubcategoriesAPI() {
+            log('Testing subcategories API...');
+            try {
+                const response = await fetch(`${API_BASE_URL}/categories/6/subcategories`);
+                const data = await response.json();
+                log(`Subcategories API response: ${JSON.stringify(data, null, 2)}`);
+            } catch (error) {
+                log(`Subcategories API error: ${error.message}`);
+            }
+        }
+        
+        async function testProductsAPI() {
+            log('Testing products API...');
+            try {
+                const response = await fetch(`${API_BASE_URL}/categories/6/products`);
+                const data = await response.json();
+                log(`Products API response: ${JSON.stringify(data, null, 2)}`);
+            } catch (error) {
+                log(`Products API error: ${error.message}`);
+            }
+        }
+        
+        // Test on page load
+        window.addEventListener('load', () => {
+            log('Page loaded successfully');
+            log(`Current URL: ${window.location.href}`);
+            log(`API Base URL: ${API_BASE_URL}`);
+        });
+    </script>
+</body>
+</html>

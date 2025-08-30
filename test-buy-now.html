@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Buy Now Functionality - URBAN NUCLEUS</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .test-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+        
+        .test-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .test-button {
+            background: #000;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+        
+        .test-button:hover {
+            background: #333;
+        }
+        
+        .test-button.secondary {
+            background: #666;
+        }
+        
+        .test-button.secondary:hover {
+            background: #555;
+        }
+        
+        .product-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        
+        .product-info h4 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        
+        .product-info p {
+            margin: 5px 0;
+            color: #666;
+        }
+        
+        .code-example {
+            background: #f1f3f4;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Test Buy Now Functionality</h1>
+        <p>This page demonstrates how the "Buy Now" button works and redirects users to the checkout page with product data.</p>
+        
+        <div class="test-section">
+            <h3>📱 Test Single Product Buy Now</h3>
+            <p>Click the button below to test buying a single product:</p>
+            
+            <div class="product-info">
+                <h4>Test Product</h4>
+                <p><strong>Name:</strong> Premium Cotton T-Shirt</p>
+                <p><strong>Price:</strong> ₹1,999</p>
+                <p><strong>Size:</strong> M</p>
+                <p><strong>Quantity:</strong> 1</p>
+            </div>
+            
+            <button class="test-button" onclick="testSingleProductBuyNow()">
+                🚀 Buy Now - Single Product
+            </button>
+            
+            <div class="code-example">
+// This will redirect to: checkout.html?product=encodedProductData
+function testSingleProductBuyNow() {
+    const productData = {
+        id: 'test-001',
+        name: 'Premium Cotton T-Shirt',
+        price: 1999,
+        image: 'uploads/images/1754636223677-118256129.png',
+        size: 'M',
+        quantity: 1,
+        sku: 'TSH-001',
+        category: 'T-Shirts'
+    };
+    
+    const encodedData = encodeURIComponent(JSON.stringify(productData));
+    window.location.href = `checkout.html?product=${encodedData}`;
+}
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🛒 Test Multiple Products Buy Now</h3>
+            <p>Click the button below to test buying multiple products:</p>
+            
+            <div class="product-info">
+                <h4>Test Order</h4>
+                <p><strong>Product 1:</strong> Premium Cotton T-Shirt - ₹1,999</p>
+                <p><strong>Product 2:</strong> Denim Jeans - ₹2,499</p>
+                <p><strong>Total:</strong> ₹4,498</p>
+            </div>
+            
+            <button class="test-button" onclick="testMultipleProductsBuyNow()">
+                🚀 Buy Now - Multiple Products
+            </button>
+            
+            <div class="code-example">
+// This will redirect to: checkout.html?products=encodedProductsData
+function testMultipleProductsBuyNow() {
+    const productsData = [
+        {
+            id: 'test-001',
+            name: 'Premium Cotton T-Shirt',
+            price: 1999,
+            image: 'uploads/images/1754636223677-118256129.png',
+            size: 'M',
+            quantity: 1
+        },
+        {
+            id: 'test-002',
+            name: 'Denim Jeans',
+            price: 2499,
+            image: 'uploads/images/1754801882851-563674824.png',
+            size: '32',
+            quantity: 1
+        }
+    ];
+    
+    const encodedData = encodeURIComponent(JSON.stringify(productsData));
+    window.location.href = `checkout.html?products=${encodedData}`;
+}
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔧 Test Individual Parameters</h3>
+            <p>Click the button below to test with individual URL parameters:</p>
+            
+            <button class="test-button secondary" onclick="testIndividualParameters()">
+                🔧 Test Individual Parameters
+            </button>
+            
+            <div class="code-example">
+// This will redirect to: checkout.html?id=test-001&name=Test%20Product&price=1999&size=M&quantity=1
+function testIndividualParameters() {
+    const params = new URLSearchParams({
+        id: 'test-001',
+        name: 'Test Product',
+        price: '1999',
+        image: 'uploads/images/1754636223677-118256129.png',
+        size: 'M',
+        quantity: '1'
+    });
+    
+    window.location.href = `checkout.html?${params.toString()}`;
+}
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>📋 How It Works</h3>
+            <ol>
+                <li><strong>User clicks "Buy Now"</strong> on product detail page</li>
+                <li><strong>Product data is collected</strong> (name, price, size, quantity, image)</li>
+                <li><strong>Data is encoded</strong> and added to URL parameters</li>
+                <li><strong>User is redirected</strong> to checkout page</li>
+                <li><strong>Checkout page reads</strong> the URL parameters</li>
+                <li><strong>Order summary is displayed</strong> with product details</li>
+                <li><strong>User can edit order</strong> or add more products</li>
+            </ol>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔗 Test Links</h3>
+            <p>Quick test links to verify functionality:</p>
+            
+            <a href="checkout.html?product=%7B%22id%22%3A%22test-001%22%2C%22name%22%3A%22Test%20Product%22%2C%22price%22%3A1999%2C%22image%22%3A%22uploads%2Fimages%2F1754636223677-118256129.png%22%2C%22size%22%3A%22M%22%2C%22quantity%22%3A1%7D" 
+               class="test-button secondary" target="_blank">
+                🔗 Direct Checkout Link
+            </a>
+            
+            <a href="product-detail.html?id=13" class="test-button secondary" target="_blank">
+                🔗 Product Detail Page
+            </a>
+            
+            <a href="checkout.html" class="test-button secondary" target="_blank">
+                🔗 Empty Checkout Page
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Test Single Product Buy Now
+        function testSingleProductBuyNow() {
+            console.log('🧪 Testing single product buy now...');
+            
+            const productData = {
+                id: 'test-001',
+                name: 'Premium Cotton T-Shirt',
+                price: 1999,
+                image: 'uploads/images/1754636223677-118256129.png',
+                size: 'M',
+                quantity: 1,
+                sku: 'TSH-001',
+                category: 'T-Shirts'
+            };
+            
+            console.log('📦 Product data:', productData);
+            
+            const encodedData = encodeURIComponent(JSON.stringify(productData));
+            console.log('🔗 Encoded data:', encodedData);
+            
+            // Redirect to checkout
+            window.location.href = `checkout.html?product=${encodedData}`;
+        }
+        
+        // Test Multiple Products Buy Now
+        function testMultipleProductsBuyNow() {
+            console.log('🧪 Testing multiple products buy now...');
+            
+            const productsData = [
+                {
+                    id: 'test-001',
+                    name: 'Premium Cotton T-Shirt',
+                    price: 1999,
+                    image: 'uploads/images/1754636223677-118256129.png',
+                    size: 'M',
+                    quantity: 1
+                },
+                {
+                    id: 'test-002',
+                    name: 'Denim Jeans',
+                    price: 2499,
+                    image: 'uploads/images/1754801882851-563674824.png',
+                    size: '32',
+                    quantity: 1
+                }
+            ];
+            
+            console.log('📦 Products data:', productsData);
+            
+            const encodedData = encodeURIComponent(JSON.stringify(productsData));
+            console.log('🔗 Encoded data:', encodedData);
+            
+            // Redirect to checkout
+            window.location.href = `checkout.html?products=${encodedData}`;
+        }
+        
+        // Test Individual Parameters
+        function testIndividualParameters() {
+            console.log('🧪 Testing individual parameters...');
+            
+            const params = new URLSearchParams({
+                id: 'test-001',
+                name: 'Test Product',
+                price: '1999',
+                image: 'uploads/images/1754636223677-118256129.png',
+                size: 'M',
+                quantity: '1'
+            });
+            
+            const url = `checkout.html?${params.toString()}`;
+            console.log('🔗 Generated URL:', url);
+            
+            // Redirect to checkout
+            window.location.href = url;
+        }
+        
+        // Log when page loads
+        console.log('🧪 Test Buy Now page loaded');
+        console.log('📋 Available test functions:');
+        console.log('  - testSingleProductBuyNow()');
+        console.log('  - testMultipleProductsBuyNow()');
+        console.log('  - testIndividualParameters()');
+    </script>
+</body>
+</html>
+
+

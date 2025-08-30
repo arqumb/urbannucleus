@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Comparison Price</title>
+    <style>
+        .product-price {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 2rem;
+            padding: 1rem;
+            border: 2px solid #ccc;
+        }
+        
+        .current-price {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+        
+        .compare-price {
+            font-size: 1.2rem;
+            color: #999;
+            text-decoration: line-through;
+            /* Debug styling */
+            background: yellow !important;
+            border: 2px solid red !important;
+            padding: 5px !important;
+        }
+        
+        .discount-badge {
+            background: #dc3545;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            /* Debug styling */
+            border: 2px solid blue !important;
+            box-shadow: 0 0 10px blue !important;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Comparison Price Display</h1>
+    
+    <div id="product-price" class="product-price">
+        <span class="current-price">$0.00</span>
+        <span class="compare-price" id="compare-price" style="display: none;">$0.00</span>
+        <span class="discount-badge" id="discount-badge" style="display: none;">0% OFF</span>
+    </div>
+    
+    <button onclick="showComparison()">Show Comparison Price</button>
+    <button onclick="hideComparison()">Hide Comparison Price</button>
+    
+    <script>
+        function showComparison() {
+            const comparePriceElement = document.getElementById('compare-price');
+            const discountBadgeElement = document.getElementById('discount-badge');
+            
+            if (comparePriceElement) {
+                comparePriceElement.textContent = '$15500.00';
+                comparePriceElement.style.display = 'inline';
+                console.log('Compare price shown, display style:', comparePriceElement.style.display);
+            }
+            
+            if (discountBadgeElement) {
+                discountBadgeElement.textContent = '45% OFF';
+                discountBadgeElement.style.display = 'inline';
+                console.log('Discount badge shown, display style:', discountBadgeElement.style.display);
+            }
+        }
+        
+        function hideComparison() {
+            const comparePriceElement = document.getElementById('compare-price');
+            const discountBadgeElement = document.getElementById('discount-badge');
+            
+            if (comparePriceElement) {
+                comparePriceElement.style.display = 'none';
+            }
+            
+            if (discountBadgeElement) {
+                discountBadgeElement.style.display = 'none';
+            }
+        }
+        
+        // Test on page load
+        setTimeout(() => {
+            console.log('=== PAGE LOAD TEST ===');
+            const comparePriceElement = document.getElementById('compare-price');
+            const discountBadgeElement = document.getElementById('discount-badge');
+            console.log('Compare price element found:', !!comparePriceElement);
+            console.log('Discount badge element found:', !!discountBadgeElement);
+            if (comparePriceElement) {
+                console.log('Initial display style:', comparePriceElement.style.display);
+                console.log('Initial text:', comparePriceElement.textContent);
+            }
+        }, 500);
+    </script>
+</body>
+</html>
+

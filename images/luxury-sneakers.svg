@@ -1,0 +1,37 @@
+<svg width="1000" height="1000" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1000" height="1000" fill="#1a1a1a"/>
+  
+  <!-- Sneaker Box -->
+  <rect x="150" y="300" width="700" height="400" rx="20" fill="#ffffff"/>
+  
+  <!-- Left Sneaker -->
+  <ellipse cx="350" cy="450" rx="120" ry="80" fill="#d3d3d3"/>
+  <ellipse cx="350" cy="420" rx="100" ry="60" fill="#ffffff"/>
+  
+  <!-- Right Sneaker -->
+  <ellipse cx="650" cy="450" rx="120" ry="80" fill="#d3d3d3"/>
+  <ellipse cx="650" cy="420" rx="100" ry="60" fill="#ffffff"/>
+  
+  <!-- Nike Swoosh on Left -->
+  <path d="M 280 450 Q 320 440 350 435 Q 380 430 410 435 Q 380 440 350 445 Q 320 450 280 450 Z" fill="#000080" stroke="#000080" stroke-width="4"/>
+  
+  <!-- Nike Swoosh on Right -->
+  <path d="M 580 450 Q 620 440 650 435 Q 680 430 710 435 Q 680 440 650 445 Q 620 450 580 450 Z" fill="#000080" stroke="#000080" stroke-width="4"/>
+  
+  <!-- Dior Tag -->
+  <rect x="600" y="380" width="80" height="30" fill="#ffffff" stroke="#000000" stroke-width="2" rx="5"/>
+  <text x="640" y="400" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#000000">DIOR</text>
+  
+  <!-- Air Dior Logo -->
+  <text x="500" y="250" font-family="Arial, sans-serif" font-size="40" font-weight="bold" text-anchor="middle" fill="#ffffff">AIR DIOR</text>
+  
+  <!-- Luxury Text -->
+  <text x="500" y="200" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#ffffff">LUXURY COLLABORATION</text>
+  
+  <!-- Decorative Elements -->
+  <circle cx="200" cy="200" r="8" fill="#ffffff" opacity="0.8"/>
+  <circle cx="800" cy="200" r="8" fill="#ffffff" opacity="0.8"/>
+  <circle cx="200" cy="800" r="8" fill="#ffffff" opacity="0.8"/>
+  <circle cx="800" cy="800" r="8" fill="#ffffff" opacity="0.8"/>
+</svg>

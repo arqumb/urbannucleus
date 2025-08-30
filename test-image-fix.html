@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Image Fix - URBAN NUCLEUS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        .image-preview {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        .image-preview img {
+            max-width: 100px;
+            max-height: 100px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test Image Fix for Checkout</h1>
+    
+    <div class="test-section">
+        <h3>Test 1: Product with Valid Image</h3>
+        <p>This test uses a product with a valid image path that should display correctly.</p>
+        <div class="image-preview">
+            <strong>Image Preview:</strong><br>
+            <img src="uploads/images/1754636223677-118256129.png" alt="Test Image" onerror="this.style.display='none'">
+        </div>
+        <button class="test-button" onclick="testValidImage()">Test Valid Image</button>
+    </div>
+    
+    <div class="test-section">
+        <h3>Test 2: Product with Invalid Image</h3>
+        <p>This test uses a product with an invalid image path to test fallback behavior.</p>
+        <button class="test-button" onclick="testInvalidImage()">Test Invalid Image</button>
+    </div>
+    
+    <div class="test-section">
+        <h3>Test 3: Product with No Image</h3>
+        <p>This test uses a product with no image to test default fallback.</p>
+        <button class="test-button" onclick="testNoImage()">Test No Image</button>
+    </div>
+    
+    <div class="test-section">
+        <h3>Test 3.5: Product with Empty String Image (Error Fix Test)</h3>
+        <p>This test specifically tests the fix for the "startsWith is not a function" error with empty strings.</p>
+        <button class="test-button" onclick="testEmptyStringImage()">Test Empty String Image</button>
+    </div>
+    
+    <div class="test-section">
+        <h3>Test 3.6: Product with Image Object (Real Data Structure Test)</h3>
+        <p>This test simulates the real product data structure with image objects that was causing the issue.</p>
+        <button class="test-button" onclick="testImageObject()">Test Image Object</button>
+    </div>
+    
+    <div class="test-section">
+        <h3>Test 4: Product with Absolute URL</h3>
+        <p>This test uses a product with an absolute URL image path.</p>
+        <button class="test-button" onclick="testAbsoluteImage()">Test Absolute Image</button>
+    </div>
+    
+    <div class="test-section">
+        <h3>Test 5: Multiple Products with Mixed Images</h3>
+        <p>This test uses multiple products with different image scenarios.</p>
+        <button class="test-button" onclick="testMultipleProducts()">Test Multiple Products</button>
+    </div>
+    
+    <div class="test-section">
+        <h3>Debug Information</h3>
+        <p>Check the browser console for detailed logging of image handling.</p>
+        <p>All tests will redirect to the checkout page with different product data.</p>
+    </div>
+
+    <script>
+        // Test 1: Valid Image
+        function testValidImage() {
+            const productData = {
+                id: 'test-valid-001',
+                name: 'Test Product - Valid Image',
+                price: 1999,
+                image: 'uploads/images/1754636223677-118256129.png',
+                size: 'M',
+                quantity: 1,
+                sku: 'TEST-001',
+                category: 'Test'
+            };
+            
+            console.log('🧪 Testing valid image product:', productData);
+            const encodedData = encodeURIComponent(JSON.stringify(productData));
+            window.location.href = `checkout.html?product=${encodedData}`;
+        }
+        
+        // Test 2: Invalid Image
+        function testInvalidImage() {
+            const productData = {
+                id: 'test-invalid-001',
+                name: 'Test Product - Invalid Image',
+                price: 1999,
+                image: 'invalid/path/image.jpg',
+                size: 'M',
+                quantity: 1,
+                sku: 'TEST-002',
+                category: 'Test'
+            };
+            
+            console.log('🧪 Testing invalid image product:', productData);
+            const encodedData = encodeURIComponent(JSON.stringify(productData));
+            window.location.href = `checkout.html?product=${encodedData}`;
+        }
+        
+        // Test 3: No Image
+        function testNoImage() {
+            const productData = {
+                id: 'test-no-image-001',
+                name: 'Test Product - No Image',
+                price: 1999,
+                image: '',
+                size: 'M',
+                quantity: 1,
+                sku: 'TEST-003',
+                category: 'Test'
+            };
+            
+            console.log('🧪 Testing no image product:', productData);
+            const encodedData = encodeURIComponent(JSON.stringify(productData));
+            window.location.href = `checkout.html?product=${encodedData}`;
+        }
+        
+        // Test 3.5: Empty String Image (Error Fix Test)
+        function testEmptyStringImage() {
+            const productData = {
+                id: 'test-empty-string-001',
+                name: 'Test Product - Empty String Image',
+                price: 1999,
+                image: '', // This was causing the "startsWith is not a function" error
+                size: 'M',
+                quantity: 1,
+                sku: 'TEST-003.5',
+                category: 'Test'
+            };
+            
+            console.log('🧪 Testing empty string image product (Error Fix Test):', productData);
+            console.log('🔍 Image type:', typeof productData.image);
+            console.log('🔍 Image value:', JSON.stringify(productData.image));
+            const encodedData = encodeURIComponent(JSON.stringify(productData));
+            window.location.href = `checkout.html?product=${encodedData}`;
+        }
+        
+        // Test 3.6: Image Object (Real Data Structure Test)
+        function testImageObject() {
+            const productData = {
+                id: 'test-image-object-001',
+                name: 'Test Product - Image Object Structure',
+                price: 1999,
+                image: {
+                    id: 10,
+                    product_id: 13,
+                    image_url: 'http://localhost:3000/uploads/images/1754842044992-20991826.JPG',
+                    file_path: '/uploads/images/1754842044992-20991826.JPG',
+                    position: 1
+                },
+                size: 'M',
+                quantity: 1,
+                sku: 'TEST-003.6',
+                category: 'Test'
+            };
+            
+            console.log('🧪 Testing image object product (Real Data Structure Test):', productData);
+            console.log('🔍 Image type:', typeof productData.image);
+            console.log('🔍 Image structure:', JSON.stringify(productData.image, null, 2));
+            const encodedData = encodeURIComponent(JSON.stringify(productData));
+            window.location.href = `checkout.html?product=${encodedData}`;
+        }
+        
+        // Test 4: Absolute URL Image
+        function testAbsoluteImage() {
+            const productData = {
+                id: 'test-absolute-001',
+                name: 'Test Product - Absolute Image',
+                price: 1999,
+                image: 'https://via.placeholder.com/150x200/007bff/ffffff?text=Test+Image',
+                size: 'M',
+                quantity: 1,
+                sku: 'TEST-004',
+                category: 'Test'
+            };
+            
+            console.log('🧪 Testing absolute image product:', productData);
+            const encodedData = encodeURIComponent(JSON.stringify(productData));
+            window.location.href = `checkout.html?product=${encodedData}`;
+        }
+        
+        // Test 5: Multiple Products
+        function testMultipleProducts() {
+            const productsData = [
+                {
+                    id: 'test-multi-001',
+                    name: 'Product 1 - Valid Image',
+                    price: 1999,
+                    image: 'uploads/images/1754636223677-118256129.png',
+                    size: 'M',
+                    quantity: 1
+                },
+                {
+                    id: 'test-multi-002',
+                    name: 'Product 2 - Invalid Image',
+                    price: 2499,
+                    image: 'invalid/path/image.jpg',
+                    size: 'L',
+                    quantity: 1
+                },
+                {
+                    id: 'test-multi-003',
+                    name: 'Product 3 - No Image',
+                    price: 999,
+                    image: '',
+                    size: 'S',
+                    quantity: 2
+                }
+            ];
+            
+            console.log('🧪 Testing multiple products:', productsData);
+            const encodedData = encodeURIComponent(JSON.stringify(productsData));
+            window.location.href = `checkout.html?products=${encodedData}`;
+        }
+        
+        // Log when page loads
+        console.log('🧪 Image Fix Test Page Loaded');
+        console.log('📋 Available test functions:');
+        console.log('  - testValidImage()');
+        console.log('  - testInvalidImage()');
+        console.log('  - testNoImage()');
+        console.log('  - testEmptyStringImage()');
+        console.log('  - testImageObject()');
+        console.log('  - testAbsoluteImage()');
+        console.log('  - testMultipleProducts()');
+    </script>
+</body>
+</html>

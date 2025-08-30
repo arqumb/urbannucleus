@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Checkout - URBAN NUCLEUS</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-section {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #000;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 5px;
+            transition: background 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .btn:hover {
+            background: #333;
+        }
+        .btn-success {
+            background: #28a745;
+        }
+        .btn-success:hover {
+            background: #218838;
+        }
+        .btn-info {
+            background: #17a2b8;
+        }
+        .btn-info:hover {
+            background: #138496;
+        }
+        .debug-info {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .url-display {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: monospace;
+            word-break: break-all;
+            border: 1px solid #dee2e6;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test Checkout Functionality</h1>
+    <p>This page tests the checkout functionality to ensure product details are properly passed and displayed.</p>
+    
+    <div class="test-section">
+        <h2>✅ Test Method 1: JSON Object (Buy Now)</h2>
+        <p>This method passes all product data as a single JSON object:</p>
+        
+        <div class="debug-info">
+            <strong>Product Data:</strong><br>
+            ID: 123<br>
+            Name: AJ 1 Low x Travis Scott Fragment<br>
+            Price: ₹10,499<br>
+            Image: uploads/images/1755099278465-46588799.jpg<br>
+            Size: 9<br>
+            Quantity: 1
+        </div>
+        
+        <button onclick="testBuyNow()" class="btn btn-success">Test Buy Now - Fragment</button>
+        
+        <div class="url-display" id="url1">
+            <strong>Generated URL will appear here</strong>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>📋 Test Method 2: Individual Parameters</h2>
+        <p>This method passes each product parameter separately:</p>
+        
+        <div class="debug-info">
+            <strong>Product Data:</strong><br>
+            ID: 456<br>
+            Name: AJ 1 Low x Travis Scott Reverse Mocha<br>
+            Price: ₹9,499<br>
+            Image: uploads/images/1754805938293-451464119.png<br>
+            Size: 10<br>
+            Quantity: 2
+        </div>
+        
+        <button onclick="testBuyNowSimple()" class="btn btn-info">Test Simple Buy - Reverse Mocha</button>
+        
+        <div class="url-display" id="url2">
+            <strong>Generated URL will appear here</strong>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🔍 Debug Information</h2>
+        <p>Open your browser's developer console (F12) to see detailed logging when testing the checkout functionality.</p>
+        
+        <div class="debug-info">
+            <strong>Expected Console Output:</strong><br>
+            🔄 Initializing checkout...<br>
+            📋 URL Parameters: { product: "...", id: "...", name: "...", etc. }<br>
+            🔍 Found parameters: { productData: "...", orderId: null, cartId: null }<br>
+            📦 Parsing product data...<br>
+            ✅ Parsed product: { id: "...", name: "...", price: ..., etc. }<br>
+            🎯 Displaying product in checkout: { ... }<br>
+            📝 Generated HTML: &lt;div class="summary-item"&gt;...&lt;/div&gt;<br>
+            ✅ Product HTML inserted successfully<br>
+            💰 Updating order totals for product: { ... }<br>
+            📊 Calculated totals: { subtotal: ..., total: ... } (prices inclusive of all taxes)<br>
+            ✅ Totals updated successfully
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🚀 Test Instructions</h2>
+        <ol>
+            <li>Click any of the test buttons above</li>
+            <li>You'll be redirected to the checkout page</li>
+            <li>Check the browser console for debug information</li>
+            <li>Verify that product details appear in the order summary</li>
+            <li>Check that totals are calculated correctly</li>
+        </ol>
+        
+        <a href="checkout.html" class="btn">View Empty Checkout Page</a>
+    </div>
+
+    <script>
+        // Test Buy Now function
+        function testBuyNow() {
+            const productData = {
+                id: '123',
+                name: 'AJ 1 Low x Travis Scott Fragment',
+                price: 10499,
+                image: 'uploads/images/1755099278465-46588799.jpg',
+                size: '9',
+                quantity: 1
+            };
+            
+            console.log('🧪 Testing Buy Now with data:', productData);
+            
+            // Show the URL that will be generated
+            const encodedData = encodeURIComponent(JSON.stringify(productData));
+            const url = `checkout.html?product=${encodedData}`;
+            document.getElementById('url1').innerHTML = `<strong>Generated URL:</strong><br>${url}`;
+            
+            // Redirect to checkout
+            setTimeout(() => {
+                window.location.href = url;
+            }, 1000);
+        }
+
+        // Test Buy Now Simple function
+        function testBuyNowSimple() {
+            const params = new URLSearchParams({
+                id: '456',
+                name: 'AJ 1 Low x Travis Scott Reverse Mocha',
+                price: '9499',
+                image: 'uploads/images/1754805938293-451464119.png',
+                size: '10',
+                quantity: '2'
+            });
+            
+            const url = `checkout.html?${params.toString()}`;
+            console.log('🧪 Testing Buy Now Simple with URL:', url);
+            
+            // Show the URL that will be generated
+            document.getElementById('url2').innerHTML = `<strong>Generated URL:</strong><br>${url}`;
+            
+            // Redirect to checkout
+            setTimeout(() => {
+                window.location.href = url;
+            }, 1000);
+        }
+
+        // Log when page loads
+        console.log('🧪 Test checkout page loaded');
+        console.log('📋 Available test functions: testBuyNow(), testBuyNowSimple()');
+    </script>
+</body>
+</html>
+
+

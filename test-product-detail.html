@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Product Detail Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .test-links {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .test-link {
+            padding: 15px 30px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+        .test-link:hover {
+            background: #0056b3;
+        }
+        .info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Product Detail Page Test</h1>
+    
+    <div class="info">
+        <p>This page allows you to test the new product detail page functionality.</p>
+        <p>Click on any of the links below to test different products:</p>
+    </div>
+    
+    <div class="test-links">
+        <a href="product-detail.html?id=1" class="test-link">Test Product ID 1</a>
+        <a href="product-detail.html?id=2" class="test-link">Test Product ID 2</a>
+        <a href="product-detail.html?id=3" class="test-link">Test Product ID 3</a>
+        <a href="product-detail.html?id=4" class="test-link">Test Product ID 4</a>
+    </div>
+    
+    <div class="info">
+        <p><strong>Note:</strong> Make sure the backend server is running on port 3000</p>
+        <p>If you get a "Product not found" error, it means the product ID doesn't exist in the database.</p>
+        <p>You can check available products by visiting: <a href="http://localhost:3000/products" target="_blank">http://localhost:3000/products</a></p>
+    </div>
+    
+    <div class="info">
+        <h3>What to Test:</h3>
+        <ul style="text-align: left; max-width: 500px; margin: 0 auto;">
+            <li>Product images and video display</li>
+            <li>Size selection functionality</li>
+            <li>Quantity controls</li>
+            <li>Add to cart functionality</li>
+            <li>Product tabs (Description, Specifications, Reviews, Shipping)</li>
+            <li>Related products display</li>
+            <li>Modal interactions (image zoom, size guide, add to cart success)</li>
+        </ul>
+    </div>
+</body>
+</html>
+
+

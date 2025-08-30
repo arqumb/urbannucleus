@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Return Policy - Urban Nucleus</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* Luxury UI Variables */
+        :root {
+            --primary-color: #000000;
+            --secondary-color: #ffffff;
+            --accent-gold: #D4AF37;
+            --accent-blue: #667eea;
+            --text-primary: #000000;
+            --text-secondary: #333333;
+            --text-light: #666666;
+            --text-white: #ffffff;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f8f8;
+            --bg-dark: #000000;
+            --bg-grey: #f5f5f5;
+            --border-color: #e0e0e0;
+            --border-dark: #333333;
+            --border-gold: #D4AF37;
+            --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.05);
+            --shadow-medium: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --shadow-heavy: 0 8px 40px rgba(0, 0, 0, 0.15);
+            --shadow-luxury: 0 10px 50px rgba(0, 0, 0, 0.2);
+            --shadow-gold: 0 4px 20px rgba(212, 175, 55, 0.3);
+            --border-radius: 8px;
+            --border-radius-sm: 4px;
+            --border-radius-lg: 12px;
+            --border-radius-xl: 16px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --transition-slow: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --font-primary: 'Playfair Display', serif;
+            --font-secondary: 'Poppins', sans-serif;
+        }
+
+        /* Basic Reset and Body Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-secondary);
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            opacity: 1;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Header Styles */
+        .header {
+            background: var(--bg-dark);
+            color: var(--text-white);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .header .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo h1 {
+            font-family: var(--font-primary);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-white);
+            text-decoration: none;
+        }
+
+        .logo a {
+            text-decoration: none;
+            color: var(--text-white);
+        }
+
+        .nav-list {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-list a {
+            color: var(--text-white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-list a:hover {
+            color: var(--accent-gold);
+        }
+
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-icons a {
+            color: var(--text-white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .header-icons a:hover {
+            color: var(--accent-gold);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            color: var(--text-white);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: var(--bg-dark);
+            color: var(--text-white);
+            padding: 3rem 0 1rem;
+        }
+
+        .section-padding {
+            padding: 4rem 0;
+        }
+
+        .footer .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-col h3, .footer-col h4 {
+            color: var(--text-white);
+            margin-bottom: 1rem;
+            font-family: var(--font-primary);
+        }
+
+        .footer-col p {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-col ul li a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-col ul li a:hover {
+            color: var(--accent-gold);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 1.2rem;
+        }
+
+        .social-links a:hover {
+            background: var(--text-white);
+            color: var(--bg-dark);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border-dark);
+            padding-top: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-bottom-left {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .footer-bottom-right {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .footer-bottom-right a {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-bottom-right a:hover {
+            color: var(--accent-gold);
+        }
+
+        .return-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-top: 50px;
+            margin-bottom: 50px;
+        }
+        
+        .return-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e74c3c;
+        }
+        
+        .return-header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .return-header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        
+        .return-section {
+            margin-bottom: 35px;
+        }
+        
+        .return-section h2 {
+            color: #e74c3c;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .return-section h3 {
+            color: #2c3e50;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            margin-top: 20px;
+        }
+        
+        .return-section p, .return-section li {
+            color: #34495e;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        
+        .return-section ul {
+            padding-left: 20px;
+        }
+        
+        .highlight-box {
+            background: #f8f9fa;
+            border-left: 4px solid #e74c3c;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .highlight-box h4 {
+            color: #e74c3c;
+            margin-bottom: 10px;
+        }
+        
+        .critical-notice {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .critical-notice h4 {
+            color: #856404;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .critical-notice p {
+            color: #856404;
+            font-weight: 500;
+        }
+        
+        .video-requirement {
+            background: #e8f5e8;
+            border: 2px solid #27ae60;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .video-requirement h4 {
+            color: #27ae60;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .video-requirement p {
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #e74c3c;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 20px;
+            transition: color 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: #c0392b;
+        }
+        
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .process-step {
+            background: #fff;
+            border: 2px solid #ecf0f1;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .process-step:hover {
+            border-color: #e74c3c;
+            transform: translateY(-3px);
+        }
+        
+        .process-step .step-number {
+            background: #e74c3c;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin: 0 auto 15px;
+        }
+        
+        .process-step h4 {
+            color: #e74c3c;
+            margin-bottom: 10px;
+        }
+        
+        .eligibility-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .eligibility-card {
+            background: #fff;
+            border: 2px solid #ecf0f1;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .eligibility-card.eligible {
+            border-color: #27ae60;
+        }
+        
+        .eligibility-card.not-eligible {
+            border-color: #e74c3c;
+        }
+        
+        .eligibility-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .eligibility-card h4 {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .eligibility-card.eligible h4 {
+            color: #27ae60;
+        }
+        
+        .eligibility-card.not-eligible h4 {
+            color: #e74c3c;
+        }
+        
+        @media (max-width: 768px) {
+            .return-container {
+                margin: 20px 10px;
+                padding: 20px 15px;
+            }
+            
+            .return-header h1 {
+                font-size: 2rem;
+            }
+            
+            .process-steps {
+                grid-template-columns: 1fr;
+            }
+            
+            .eligibility-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Announcement Bar -->
+    <div id="announcement-bar" style="background: #000000; color: #ffffff; padding: 12px 0; position: fixed; top: 0; left: 0; right: 0; z-index: 10001; border-bottom: 2px solid #333; box-shadow: 0 2px 10px rgba(0,0,0,0.5); overflow: hidden; display: none;">
+        <div class="marquee-content" style="display: flex; animation: marquee 25s linear infinite; white-space: nowrap; font-size: 14px; font-weight: 600; font-family: 'Poppins', sans-serif; color: #ffffff;">
+            <!-- Content will be loaded dynamically from API -->
+        </div>
+    </div>
+
+    <style>
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        body { padding-top: 120px; }
+        .header { top: 50px; }
+    </style>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                    <a href="index.html">
+                        <h1>URBAN NUCLEUS</h1>
+                    </a>
+                </div>
+
+                <!-- Left Side Navigation -->
+                <nav class="nav left-nav">
+                    <ul class="nav-list">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="collections.html">Collections</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </nav>
+
+                <!-- Right Side Icons -->
+                <div class="header-icons">
+                    <a href="login.html"><i class="fas fa-user"></i> Login</a>
+                    <a href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+                    <a href="#"><i class="fas fa-search"></i></a>
+                    <a href="cart.html" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count">0</span></a>
+                </div>
+
+                <div class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="return-container">
+        <a href="index.html" class="back-link">
+            <i class="fas fa-arrow-left"></i>
+            Back to Home
+        </a>
+        
+        <div class="return-header">
+            <h1><i class="fas fa-undo"></i> Return & Exchange Policy</h1>
+            <p>Our commitment to your satisfaction with UA sneakers, luxury watches, and designer bags</p>
+        </div>
+
+        <div class="return-section">
+            <h2><i class="fas fa-info-circle"></i> Policy Overview</h2>
+            <p>At Urban Nucleus, we want you to be completely satisfied with your UA sneakers, luxury watches, and designer bags purchase. Our return and exchange policy is designed to protect both you and us while ensuring fair resolution of any issues.</p>
+            
+            <div class="critical-notice">
+                <h4><i class="fas fa-exclamation-triangle"></i> Important Notice</h4>
+                <p><strong>360° Unboxing Video Required:</strong> All exchanges require a complete 360° unboxing video showing the entire unboxing process. This is mandatory for processing any return or exchange request.</p>
+            </div>
+        </div>
+
+        <div class="return-section">
+            <h2><i class="fas fa-check-circle"></i> What Can Be Returned/Exchanged</h2>
+            
+            <div class="eligibility-grid">
+                <div class="eligibility-card eligible">
+                    <h4><i class="fas fa-check"></i> Size Issues (Our Error)</h4>
+                    <ul>
+                        <li>Wrong size sent due to our mistake</li>
+                        <li>Size mismatch from what was ordered</li>
+                        <li>Manufacturing size defect</li>
+                    </ul>
+                </div>
+                
+                <div class="eligibility-card eligible">
+                    <h4><i class="fas fa-check"></i> Damaged Products</h4>
+                    <ul>
+                        <li>Items damaged during shipping</li>
+                        <li>Manufacturing defects</li>
+                        <li>Quality issues not visible in photos</li>
+                    </ul>
+                </div>
+                
+                <div class="eligibility-card eligible">
+                    <h4><i class="fas fa-check"></i> Wrong Item</h4>
+                    <ul>
+                        <li>Different product than ordered</li>
+                        <li>Color/model mismatch</li>
+                        <li>Brand/model confusion</li>
+                    </ul>
+                </div>
+                
+                <div class="eligibility-card not-eligible">
+                    <h4><i class="fas fa-times"></i> Customer Size Error</h4>
+                    <ul>
+                        <li>Incorrect size provided by customer</li>
+                        <li>Size doesn't fit as expected</li>
+                        <li>Changed mind about size</li>
+                    </ul>
+                </div>
+                
+                <div class="eligibility-card not-eligible">
+                    <h4><i class="fas fa-times"></i> Used/Worn Items</h4>
+                    <ul>
+                        <li>Items worn after delivery</li>
+                        <li>Items used outdoors</li>
+                        <li>Items with signs of wear</li>
+                    </ul>
+                </div>
+                
+                <div class="eligibility-card not-eligible">
+                    <h4><i class="fas fa-times"></i> No Video Documentation</h4>
+                    <ul>
+                        <li>Missing 360° unboxing video</li>
+                        <li>Incomplete video documentation</li>
+                        <li>Video doesn't show full process</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="return-section">
+            <h2><i class="fas fa-video"></i> 360° Unboxing Video Requirements</h2>
+            
+            <div class="video-requirement">
+                <h4><i class="fas fa-camera"></i> Video Must Include</h4>
+                <ul>
+                    <li><strong>Complete Unboxing:</strong> From opening the package to removing the shoes</li>
+                    <li><strong>360° Product View:</strong> Show all angles of the sneakers</li>
+                    <li><strong>Clear Visibility:</strong> Good lighting and clear camera work</li>
+                    <li><strong>Original Packaging:</strong> Show original box, labels, and tags</li>
+                    <li><strong>Issue Documentation:</strong> Clearly show any problems or defects</li>
+                </ul>
+            </div>
+            
+            <h3>Video Quality Standards</h3>
+            <ul>
+                <li>Minimum 30 seconds duration</li>
+                <li>Clear, stable footage</li>
+                <li>Good lighting conditions</li>
+                <li>Audio is optional but helpful</li>
+                <li>File size under 100MB</li>
+            </ul>
+            
+            <div class="highlight-box">
+                <h4><i class="fas fa-info"></i> Video Submission</h4>
+                <p>Send your unboxing video via WhatsApp or Instagram DM. We'll review it within 24 hours and respond with our decision.</p>
+            </div>
+        </div>
+
+        <div class="return-section">
+            <h2><i class="fas fa-clock"></i> Time Limits</h2>
+            
+            <div class="process-steps">
+                <div class="process-step">
+                    <div class="step-number">1</div>
+                    <h4>Contact Within 48 Hours</h4>
+                    <p>Report any issues within 48 hours of delivery</p>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <h4>Submit Video Within 72 Hours</h4>
+                    <p>Provide unboxing video within 72 hours of delivery</p>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <h4>Return Within 7 Days</h4>
+                    <p>Ship the item back within 7 days of approval</p>
+                </div>
+            </div>
+            
+            <div class="critical-notice">
+                <h4><i class="fas fa-exclamation-triangle"></i> Late Requests</h4>
+                <p>Requests submitted after the time limits will not be processed. We cannot accept returns for items that have been worn or used.</p>
+            </div>
+        </div>
+
+        <div class="return-section">
+            <h2><i class="fas fa-exchange-alt"></i> Exchange Process</h2>
+            
+            <h3>Step-by-Step Process</h3>
+            <ol>
+                <li><strong>Contact Us:</strong> Reach out via WhatsApp or Instagram within 48 hours</li>
+                <li><strong>Describe Issue:</strong> Explain the problem clearly</li>
+                <li><strong>Submit Video:</strong> Provide the required 360° unboxing video</li>
+                <li><strong>Review Process:</strong> We'll review your case within 24 hours</li>
+                <li><strong>Approval/Denial:</strong> We'll inform you of our decision</li>
+                <li><strong>Return Instructions:</strong> If approved, we'll provide return shipping details</li>
+                <li><strong>Ship Back:</strong> Return the item in original condition</li>
+                <li><strong>Replacement/Refund:</strong> Receive your replacement or refund</li>
+            </ol>
+            
+            <div class="highlight-box">
+                <h4><i class="fas fa-shipping-fast"></i> Return Shipping</h4>
+                <p>If the return is due to our error (wrong size, damaged item, wrong product), we'll cover the return shipping costs. For customer errors, return shipping is the customer's responsibility.</p>
+            </div>
+        </div>
+
+        <div class="return-section">
+            <h2><i class="fas fa-money-bill-wave"></i> Refund Policy</h2>
+            
+            <h3>Refund Methods</h3>
+            <ul>
+                <li><strong>Original Payment Method:</strong> Refunds processed to the original payment method</li>
+                <li><strong>Processing Time:</strong> 3-5 business days after receiving returned item</li>
+                <li><strong>Partial Refunds:</strong> May apply if item is not in original condition</li>
+            </ul>
+            
+            <h3>Exchange Options</h3>
+            <ul>
+                <li><strong>Size Exchange:</strong> Exchange for correct size (if available)</li>
+                <li><strong>Product Exchange:</strong> Exchange for different product</li>
+                <li><strong>Store Credit:</strong> Credit for future purchases</li>
+                <li><strong>Full Refund:</strong> Complete refund to original payment method</li>
+            </ul>
+        </div>
+
+        <div class="return-section">
+            <h2><i class="fas fa-shield-alt"></i> Item Condition Requirements</h2>
+            
+            <h3>Items Must Be:</h3>
+            <ul>
+                <li>In original, unworn condition</li>
+                <li>With all original tags and labels</li>
+                <li>In original packaging (if available)</li>
+                <li>Free from any damage caused by customer</li>
+                <li>Clean and odor-free</li>
+            </ul>
+            
+            <h3>Items Cannot Be:</h3>
+            <ul>
+                <li>Worn or used in any way</li>
+                <li>Damaged by customer misuse</li>
+                <li>Modified or altered</li>
+                <li>Missing original packaging or tags</li>
+                <li>Returned without proper documentation</li>
+            </ul>
+        </div>
+
+        <div class="return-section">
+            <h2><i class="fas fa-headset"></i> Contact for Returns</h2>
+            <p>To initiate a return or exchange, contact us through:</p>
+            
+            <div class="process-steps">
+                <div class="process-step">
+                    <h4><i class="fab fa-whatsapp"></i> WhatsApp</h4>
+                    <p><a href="https://wa.me/918806600982" style="color: #e74c3c;">+91 88066 00982</a></p>
+                    <p>Send your unboxing video and issue description</p>
+                </div>
+                
+                <div class="process-step">
+                    <h4><i class="fab fa-instagram"></i> Instagram DM</h4>
+                    <p><a href="https://www.instagram.com/urbannucleus/" style="color: #e74c3c;">@urbannucleus</a></p>
+                    <p>DM us with your return request and video</p>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <h4><i class="fas fa-info"></i> Response Time</h4>
+                <p>We respond to all return requests within 24 hours during business days. Please be patient as we carefully review each case.</p>
+            </div>
+        </div>
+
+        <div class="return-section">
+            <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+            
+            <h3>Q: Why do I need to make an unboxing video?</h3>
+            <p>A: The 360° unboxing video helps us verify the condition of items upon delivery and prevents fraudulent return claims. It protects both you and us.</p>
+            
+            <h3>Q: What if I don't have the original box?</h3>
+            <p>A: While we prefer original packaging, we understand that boxes may be damaged during shipping. The video should show the condition of the packaging you received.</p>
+            
+            <h3>Q: Can I exchange for a different size if I ordered the wrong size?</h3>
+            <p>A: If you provided the wrong size information, we cannot offer an exchange. Please use our size guide to ensure correct sizing before ordering.</p>
+            
+            <h3>Q: How long does the exchange process take?</h3>
+            <p>A: Once approved, the exchange process typically takes 7-10 business days from when we receive your returned item.</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer section-padding">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>URBAN NUCLEUS</h3>
+                    <p>Redefining luxury fashion with timeless pieces crafted for the modern individual.</p>
+                    <div class="social-links">
+                        <a href="https://instagram.com/urbannucleus" target="_blank" title="Follow us on Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://wa.me/918806600982" target="_blank" rel="noopener" title="Chat on WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="mailto:urban.nucleus@gmail.com" title="Email us"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Shop</h4>
+                    <ul>
+                        <li><a href="collections.html">All Collections</a></li>
+                        <li><a href="index.html#featured-products">New Arrivals</a></li>
+                        <li><a href="collections.html#best-sellers">Best Sellers</a></li>
+                        <li><a href="index.html#limitedDropSection">Sale</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>About</h4>
+                    <ul>
+                        <li><a href="about.html">Our Story</a></li>
+                        <li><a href="about.html#sustainability">Sustainability</a></li>
+                        <li><a href="about.html#craftsmanship">Craftsmanship</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Customer Care</h4>
+                    <ul>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="shipping-policy.html">Shipping & Returns</a></li>
+                        <li><a href="return-policy.html">Return Policy</a></li>
+                        <li><a href="size-guide.html">Size Guide</a></li>
+                        <li><a href="faq.html">FAQs</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-bottom-left">
+                    <p>&copy; 2024 URBAN NUCLEUS. All rights reserved.</p>
+                </div>
+                <div class="footer-bottom-right">
+                    <a href="privacy-policy.html">Privacy Policy</a>
+                    <a href="terms-of-service.html">Terms of Service</a>
+                    <a href="#">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/918806600982" class="floating-whatsapp" target="_blank" title="Contact Us">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script>
+        // Announcement Bar Functions
+        async function loadAnnouncementBarData() {
+            try {
+                const response = await fetch('http://localhost:3000/api/announcement');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.visible && data.messages && data.messages.length > 0) {
+                        updateAnnouncementBar(data.messages);
+                        showAnnouncementBar();
+                    } else {
+                        hideAnnouncementBar();
+                    }
+                } else {
+                    hideAnnouncementBar();
+                }
+            } catch (error) {
+                console.error('Error loading announcement bar:', error);
+                hideAnnouncementBar();
+            }
+        }
+
+        function showAnnouncementBar() {
+            const bar = document.getElementById('announcement-bar');
+            if (bar) {
+                bar.style.display = 'block';
+                bar.classList.remove('hidden');
+            }
+        }
+
+        function hideAnnouncementBar() {
+            const bar = document.getElementById('announcement-bar');
+            if (bar) {
+                bar.style.display = 'none';
+                bar.classList.add('hidden');
+            }
+        }
+
+        function updateAnnouncementBar(messages) {
+            const marqueeContent = document.querySelector('#announcement-bar .marquee-content');
+            if (marqueeContent && messages.length > 0) {
+                // Duplicate messages for seamless loop
+                const duplicatedMessages = [...messages, ...messages];
+                marqueeContent.innerHTML = duplicatedMessages.map(msg => 
+                    `<span style="margin-right: 50px;">${msg}</span>`
+                ).join('');
+            } else {
+                hideAnnouncementBar();
+            }
+        }
+
+        // Check login state and update header
+        function checkLoginState() {
+            console.log('Checking login state...');
+            const currentUser = localStorage.getItem('currentUser');
+            const headerIcons = document.querySelector('.header-icons');
+            
+            if (!headerIcons) {
+                console.error('Header icons element not found!');
+                return;
+            }
+            
+            if (currentUser) {
+                try {
+                    const user = JSON.parse(currentUser);
+                    console.log('User data:', user);
+                    
+                    headerIcons.innerHTML = `
+                        <a href="profile.html" class="user-info">
+                            <i class="fas fa-user"></i> 
+                            <span class="user-name">${user.username || user.email}</span>
+                        </a>
+                        <a href="#" onclick="logout()" class="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                        <a href="cart.html" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count">0</span></a>
+                    `;
+                    updateCartCountFromStorage();
+                } catch (error) {
+                    console.error('Error parsing user data:', error);
+                    localStorage.removeItem('currentUser');
+                    checkLoginState();
+                }
+            } else {
+                headerIcons.innerHTML = `
+                    <a href="login.html"><i class="fas fa-user"></i> Login</a>
+                    <a href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+                    <a href="cart.html" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count">0</span></a>
+                `;
+                updateCartCountFromStorage();
+            }
+        }
+        
+        function updateCartCountFromStorage() {
+            try {
+                const currentUser = localStorage.getItem('currentUser');
+                if (currentUser) {
+                    const user = JSON.parse(currentUser);
+                    fetch(`http://localhost:3000/cart/${user.id}`)
+                        .then(response => response.json())
+                        .then(cartItems => {
+                            const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+                            document.querySelectorAll('.cart-count').forEach(countElement => {
+                                countElement.textContent = totalItems;
+                            });
+                        })
+                        .catch(() => {
+                            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+                            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+                            document.querySelectorAll('.cart-count').forEach(countElement => {
+                                countElement.textContent = totalItems;
+                            });
+                        });
+                } else {
+                    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+                    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+                    document.querySelectorAll('.cart-count').forEach(countElement => {
+                        countElement.textContent = totalItems;
+                    });
+                }
+            } catch (error) {
+                console.error('Error updating cart count:', error);
+                document.querySelectorAll('.cart-count').forEach(countElement => {
+                    countElement.textContent = '0';
+                });
+            }
+        }
+        
+        function logout() {
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('authToken');
+            checkLoginState();
+            alert('Logged out successfully');
+        }
+
+        // Load announcement bar on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAnnouncementBarData();
+            setInterval(loadAnnouncementBarData, 30000);
+            checkLoginState();
+            
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) {
+                    checkLoginState();
+                }
+            });
+            
+            window.addEventListener('focus', function() {
+                checkLoginState();
+            });
+        });
+    </script>
+    <script src="main.js"></script>
+</body>
+</html>

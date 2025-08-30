@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - URBAN NUCLEUS</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="cart.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* Professional Notification System */
+        .notification-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 10002;
+            max-width: 400px;
+        }
+        
+        .notification {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            margin-bottom: 16px;
+            padding: 20px;
+            border-left: 4px solid #4caf50;
+            transform: translateX(100%);
+            transition: transform 0.3s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            border-left-color: #4caf50;
+        }
+        
+        .notification.error {
+            border-left-color: #f44336;
+        }
+        
+        .notification.warning {
+            border-left-color: #ff9800;
+        }
+        
+        .notification.info {
+            border-left-color: #2196f3;
+        }
+        
+        .notification-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        
+        .notification-title {
+            font-weight: 600;
+            font-size: 16px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .notification-close {
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        
+        .notification-close:hover {
+            background: #f5f5f5;
+            color: #666;
+        }
+        
+        .notification-message {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 0;
+        }
+        
+        .notification-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: #4caf50;
+            width: 100%;
+            animation: notification-progress 5s linear forwards;
+        }
+        
+        .notification.error .notification-progress {
+            background: #f44336;
+        }
+        
+        .notification.warning .notification-progress {
+            background: #ff9800;
+        }
+        
+        .notification.info .notification-progress {
+            background: #2196f3;
+        }
+        
+        @keyframes notification-progress {
+            from { width: 100%; }
+            to { width: 0%; }
+        }
+        
+        .notification-icon {
+            font-size: 18px;
+        }
+        
+        .notification.success .notification-icon {
+            color: #4caf50;
+        }
+        
+        .notification.error .notification-icon {
+            color: #f44336;
+        }
+        
+        .notification.warning .notification-icon {
+            color: #ff9800;
+        }
+        
+        .notification.info .notification-icon {
+            color: #2196f3;
+        }
+        
+        /* Mobile responsive notifications */
+        @media (max-width: 768px) {
+            .notification-container {
+                right: 10px;
+                left: 10px;
+                max-width: none;
+            }
+            
+            .notification {
+                padding: 16px;
+                margin-bottom: 12px;
+            }
+            
+            .notification-title {
+                font-size: 14px;
+            }
+            
+            .notification-message {
+                font-size: 13px;
+            }
+        }
+
+        /* Dropdown Styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-toggle:hover {
+            color: var(--accent-gold);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            min-width: 200px;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-category {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .dropdown-category:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-category:hover {
+            background-color: #f8f9fa;
+            color: var(--accent-gold);
+        }
+
+        .dropdown-loading {
+            padding: 12px 16px;
+            color: #666;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        /* Search Button in Header */
+        .search-button-header {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
+            transition: color 0.3s ease;
+        }
+
+        .search-button-header:hover {
+            color: var(--text-primary);
+        }
+
+        /* Search Modal */
+        .search-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+        }
+
+        .search-modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 0;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .search-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .search-modal-header h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .close-search-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+            padding: 4px;
+            transition: color 0.3s ease;
+        }
+
+        .close-search-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .search-input-section {
+            padding: 20px 24px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+        }
+
+        .perform-search-btn {
+            background-color: var(--accent-gold);
+            border: none;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .perform-search-btn:hover {
+            background-color: #d4af37;
+        }
+
+        .search-results-container {
+            padding: 0 24px 24px;
+        }
+
+        .search-suggestions {
+            margin-bottom: 20px;
+        }
+
+        .search-suggestions p {
+            margin: 0 0 12px 0;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .suggestion-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .suggestion-btn {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .suggestion-btn:hover {
+            background-color: var(--accent-gold);
+            color: white;
+            border-color: var(--accent-gold);
+        }
+
+        .search-results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .search-result-item {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .search-result-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-result-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .search-result-info {
+            padding: 12px;
+        }
+
+        .search-result-name {
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .search-result-price {
+            color: var(--accent-gold);
+            font-weight: 600;
+        }
+
+        .search-no-results {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Professional Notification Container -->
+    <div class="notification-container" id="notificationContainer"></div>
+    
+    <!-- Announcement Bar -->
+    <div id="announcement-bar" style="background: #000000; color: #ffffff; padding: 12px 0; position: fixed; top: 0; left: 0; right: 0; z-index: 10001; border-bottom: 2px solid #333; box-shadow: 0 2px 10px rgba(0,0,0,0.5); overflow: hidden; display: none;">
+        <div class="marquee-content" style="display: flex; animation: marquee 25s linear infinite; white-space: nowrap; font-size: 14px; font-weight: 600; font-family: 'Poppins', sans-serif; color: #ffffff;">
+            <!-- Content will be loaded dynamically from API -->
+        </div>
+    </div>
+
+    <style>
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        body { padding-top: 120px; }
+        .header { top: 50px; }
+    </style>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                    <a href="index.html">
+                        <h1>URBAN NUCLEUS</h1>
+                    </a>
+                </div>
+
+                <!-- Left Side Navigation -->
+                <nav class="nav left-nav">
+                    <ul class="nav-list">
+                        <li><a href="index.html">Home</a></li>
+                        <li class="dropdown">
+                            <a href="collections.html" class="dropdown-toggle">Collections <i class="fas fa-chevron-down"></i></a>
+                            <div class="dropdown-menu" id="categoriesDropdown">
+                                <div class="dropdown-loading">Loading categories...</div>
+                            </div>
+                        </li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </nav>
+
+                <!-- Right Side Icons -->
+                <div class="header-icons">
+                    <a href="login.html" id="loginLink"><i class="fas fa-user"></i> Login</a>
+                    <a href="signup.html" id="signupLink"><i class="fas fa-user-plus"></i> Sign Up</a>
+                    <button type="button" id="searchBtn" class="search-button-header">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <a href="cart.html" class="cart-icon active"><i class="fas fa-shopping-bag"></i><span class="cart-count">0</span></a>
+                </div>
+
+                <div class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu">
+        <div class="mobile-menu-close">
+            <i class="fas fa-times"></i>
+        </div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li class="mobile-dropdown">
+                <a href="collections.html" class="mobile-dropdown-toggle">Collections <i class="fas fa-chevron-down"></i></a>
+                <div class="mobile-dropdown-menu" id="mobileCategoriesDropdown">
+                    <div class="dropdown-loading">Loading categories...</div>
+                </div>
+            </li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="signup.html">Sign Up</a></li>
+        </ul>
+    </div>
+
+    <!-- Search Modal -->
+    <div id="searchModal" class="search-modal">
+        <div class="search-modal-content">
+            <div class="search-modal-header">
+                <h3>Search Products</h3>
+                <button type="button" id="closeSearchBtn" class="close-search-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="search-input-section">
+                <input type="text" id="searchInput" placeholder="Search for products..." class="search-input">
+                <button type="button" id="performSearchBtn" class="perform-search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            
+            <div id="searchResultsContainer" class="search-results-container">
+                <div class="search-suggestions">
+                    <p>Popular searches:</p>
+                    <div class="suggestion-buttons">
+                        <button type="button" class="suggestion-btn" data-query="sneakers">Sneakers</button>
+                        <button type="button" class="suggestion-btn" data-query="watches">Watches</button>
+                        <button type="button" class="suggestion-btn" data-query="bags">Bags</button>
+                        <button type="button" class="suggestion-btn" data-query="nike">Nike</button>
+                        <button type="button" class="suggestion-btn" data-query="adidas">Adidas</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Section -->
+    <section class="cart-section">
+        <div class="container">
+            <div class="cart-header">
+                <div class="cart-header-content">
+                    <h1>Shopping Cart</h1>
+                    <p>Review your selected items and proceed to checkout</p>
+                    <div class="cart-breadcrumb">
+                        <a href="index.html">Home</a> <i class="fas fa-chevron-right"></i> <span>Cart</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cart-container">
+                <!-- Cart Items -->
+                <div class="cart-items" id="cartItems">
+                    <!-- Cart items will be loaded here -->
+                    <div class="loading">Loading cart...</div>
+                </div>
+
+                <!-- Cart Summary -->
+                <div class="cart-summary">
+                    <div class="summary-header">
+                        <h3>Order Summary</h3>
+                        <div class="summary-icon">
+                            <i class="fas fa-receipt"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-details">
+                        <div class="summary-row">
+                            <span>Subtotal:</span>
+                            <span id="subtotal">₹0.00</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="tax-inclusive">All prices inclusive of taxes</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total:</span>
+                            <span id="total">₹0.00</span>
+                        </div>
+                    </div>
+                    
+                    <div class="cart-actions">
+                        <button class="btn-update" id="updateCartBtn">
+                            <i class="fas fa-sync-alt"></i> Update Cart
+                        </button>
+                        <button class="btn-checkout" id="checkoutBtn">
+                            <i class="fas fa-shopping-cart"></i> Proceed to Checkout
+                        </button>
+                    </div>
+                </div>
+
+                    <div class="cart-promo">
+                        <div class="promo-header">
+                            <h4><i class="fas fa-tag"></i> Have a Promo Code?</h4>
+                            <p>Enter your discount code to save on your order</p>
+                        </div>
+                        <div class="promo-input">
+                            <input type="text" id="promoCode" placeholder="Enter promo code">
+                            <button class="btn btn-small" id="applyPromo">Apply</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty Cart State -->
+            <div class="empty-cart" id="emptyCart" style="display: none;">
+                <div class="empty-cart-content">
+                    <div class="empty-cart-icon">
+                        <i class="fas fa-shopping-bag"></i>
+                    </div>
+                    <h2>Your cart is empty</h2>
+                    <p>Looks like you haven't added any items to your cart yet.</p>
+                    <p class="empty-cart-subtitle">Discover our latest collection and add some amazing pieces to your cart!</p>
+                    <div class="empty-cart-actions">
+                        <a href="index.html" class="btn btn-primary">Start Shopping</a>
+                        <a href="collections.html" class="btn btn-outline">Browse Collections</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer section-padding">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>URBAN NUCLEUS</h3>
+                    <p>Redefining luxury fashion with timeless pieces crafted for the modern individual.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.facebook.com/profile.php?id=61567457772408" target="_blank" rel="noopener"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://wa.me/918806600982" target="_blank" rel="noopener" title="Chat on WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Shop</h4>
+                    <ul>
+                        <li><a href="collections.html">All Collections</a></li>
+                        <li><a href="index.html#featured-products">New Arrivals</a></li>
+                        <li><a href="collections.html#best-sellers">Best Sellers</a></li>
+                        <li><a href="index.html#limitedDropSection">Sale</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>About</h4>
+                    <ul>
+                        <li><a href="about.html">Our Story</a></li>
+                        <li><a href="about.html#sustainability">Sustainability</a></li>
+                        <li><a href="about.html#craftsmanship">Craftsmanship</a></li>
+                        
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Customer Care</h4>
+                    <ul>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="shipping-policy.html">Shipping & Returns</a></li>
+                        <li><a href="return-policy.html">Return Policy</a></li>
+                        <li><a href="size-guide.html">Size Guide</a></li>
+                        <li><a href="faq.html">FAQs</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-bottom-left">
+                    <p>&copy; 2024 URBAN NUCLEUS. All rights reserved.</p>
+                </div>
+                <div class="footer-bottom-right">
+                    <a href="privacy-policy.html">Privacy Policy</a>
+                    <a href="terms-of-service.html">Terms of Service</a>
+                    <a href="#">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-to-top" id="scrollToTop" title="Scroll to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <script>
+        // Announcement Bar Functions
+        async function loadAnnouncementBarData() {
+            try {
+                const response = await fetch('http://localhost:3000/api/announcement');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.visible && data.messages && data.messages.length > 0) {
+                        updateAnnouncementBar(data.messages);
+                        showAnnouncementBar();
+                    } else {
+                        hideAnnouncementBar();
+                    }
+                } else {
+                    hideAnnouncementBar();
+                }
+            } catch (error) {
+                console.error('Error loading announcement bar:', error);
+                hideAnnouncementBar();
+            }
+        }
+
+        function showAnnouncementBar() {
+            const bar = document.getElementById('announcement-bar');
+            if (bar) {
+                bar.style.display = 'block';
+                bar.classList.remove('hidden');
+            }
+        }
+
+        function hideAnnouncementBar() {
+            const bar = document.getElementById('announcement-bar');
+            if (bar) {
+                bar.style.display = 'none';
+                bar.classList.add('hidden');
+            }
+        }
+
+        function updateAnnouncementBar(messages) {
+            const marqueeContent = document.querySelector('#announcement-bar .marquee-content');
+            if (marqueeContent && messages.length > 0) {
+                // Duplicate messages for seamless loop
+                const duplicatedMessages = [...messages, ...messages];
+                marqueeContent.innerHTML = duplicatedMessages.map(msg => 
+                    `<span style="margin-right: 50px;">${msg}</span>`
+                ).join('');
+            } else {
+                hideAnnouncementBar();
+            }
+        }
+
+        // Categories loading function
+        function loadCategories() {
+            console.log('Loading categories...');
+            
+            fetch('http://localhost:3000/categories')
+                .then(function(response) { 
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch categories');
+                    }
+                    return response.json(); 
+                })
+                .then(function(categories) {
+                    console.log('Categories loaded:', categories);
+                    
+                    // Update desktop dropdown
+                    var desktopDropdown = document.getElementById('categoriesDropdown');
+                    if (desktopDropdown) {
+                        desktopDropdown.innerHTML = '';
+                        
+                        if (categories && categories.length > 0) {
+                            categories.forEach(function(category) {
+                                var categoryItem = document.createElement('div');
+                                categoryItem.className = 'dropdown-category';
+                                categoryItem.textContent = category.name;
+                                categoryItem.addEventListener('click', function() {
+                                    window.location.href = 'category.html?id=' + category.id;
+                                });
+                                desktopDropdown.appendChild(categoryItem);
+                            });
+                        } else {
+                            var noCategories = document.createElement('div');
+                            noCategories.className = 'dropdown-loading';
+                            noCategories.textContent = 'No categories available';
+                            desktopDropdown.appendChild(noCategories);
+                        }
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Error loading categories:', error);
+                    
+                    var desktopDropdown = document.getElementById('categoriesDropdown');
+                    if (desktopDropdown) {
+                        desktopDropdown.innerHTML = '<div class="dropdown-loading">Error loading categories</div>';
+                    }
+                });
+        }
+
+        // Load announcement bar on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAnnouncementBarData();
+            // Refresh every 30 seconds
+            setInterval(loadAnnouncementBarData, 30000);
+            // Load categories for dropdown
+            loadCategories();
+        });
+
+        const API_BASE_URL = 'http://localhost:3000';
+        let currentUser = null;
+        let cartItems = [];
+
+        // Check login status
+        function checkLoginStatus() {
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                updateUserInterface();
+            } else {
+                // Redirect to login if not logged in
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Update user interface
+        function updateUserInterface() {
+            const loginLink = document.getElementById('loginLink');
+            const signupLink = document.getElementById('signupLink');
+            
+            if (currentUser) {
+                loginLink.innerHTML = `<i class="fas fa-user"></i> ${currentUser.username}`;
+                signupLink.style.display = 'none';
+            } else {
+                loginLink.innerHTML = '<i class="fas fa-user"></i> Login';
+                signupLink.style.display = 'inline';
+            }
+        }
+
+        // Load cart items
+        async function loadCart() {
+            if (!currentUser) return;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/cart/${currentUser.id}`);
+                if (response.ok) {
+                    cartItems = await response.json();
+                    console.log('🛒 Loaded cart items:', cartItems);
+                    displayCartItems();
+                    updateCartSummary();
+                    
+                    // Update cart count in header after loading cart items
+                    updateCartCountFromStorage();
+                } else {
+                    console.error('Failed to load cart');
+                }
+            } catch (error) {
+                console.error('Error loading cart:', error);
+            }
+        }
+
+        // Display cart items
+        function displayCartItems() {
+            const cartItemsContainer = document.getElementById('cartItems');
+            const emptyCart = document.getElementById('emptyCart');
+
+            if (cartItems.length === 0) {
+                cartItemsContainer.style.display = 'none';
+                emptyCart.style.display = 'block';
+                return;
+            }
+
+            cartItemsContainer.style.display = 'block';
+            emptyCart.style.display = 'none';
+
+            cartItemsContainer.innerHTML = cartItems.map(item => `
+                <div class="cart-item" data-id="${item.product_id}">
+                    <div class="cart-item-image">
+                        <img src="${item.image_url || 'dummy.png'}" alt="${item.name}">
+                    </div>
+                    <div class="cart-item-details">
+                        <h3>${item.name}</h3>
+                        <p class="price">₹${item.price}</p>
+                    </div>
+                    <div class="cart-item-quantity">
+                        <button class="quantity-btn minus" onclick="updateQuantity(${item.product_id}, -1)" title="Decrease quantity" data-product-id="${item.product_id}">-</button>
+                        <input type="number" value="${item.quantity}" min="1" max="99" onchange="updateQuantity(${item.product_id}, 0, this.value)" onkeyup="validateQuantityInput(this)" title="Enter quantity" data-product-id="${item.product_id}">
+                        <button class="quantity-btn plus" onclick="updateQuantity(${item.product_id}, 1)" title="Increase quantity" data-product-id="${item.product_id}">+</button>
+                    </div>
+                    <div class="cart-item-total">
+                        ₹${(item.price * item.quantity).toFixed(2)}
+                    </div>
+                    <div class="cart-item-actions">
+                        <button class="remove-btn" onclick="removeItem(${item.product_id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Validate quantity input
+        function validateQuantityInput(input) {
+            let value = parseInt(input.value);
+            if (isNaN(value) || value < 1) {
+                input.value = 1;
+                value = 1;
+            } else if (value > 99) {
+                input.value = 99;
+                value = 99;
+            }
+            return value;
+        }
+
+        // Update quantity
+        async function updateQuantity(productId, change, newValue = null) {
+            if (!currentUser) return;
+
+            const item = cartItems.find(item => item.product_id == productId);
+            if (!item) return;
+
+            let newQuantity;
+            if (newValue !== null) {
+                newQuantity = parseInt(newValue);
+                // Validate the input value
+                if (isNaN(newQuantity) || newQuantity < 1) {
+                    newQuantity = 1;
+                } else if (newQuantity > 99) {
+                    newQuantity = 99;
+                }
+            } else {
+                newQuantity = item.quantity + change;
+                // Ensure quantity doesn't go below 1
+                if (newQuantity < 1) {
+                    newQuantity = 1;
+                } else if (newQuantity > 99) {
+                    newQuantity = 99;
+                }
+            }
+
+            // Don't update if quantity hasn't changed
+            if (newQuantity === item.quantity) {
+                return;
+            }
+
+            // Show loading state
+            setQuantityLoadingState(productId, true);
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/cart/update`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        userId: currentUser.id,
+                        productId: productId,
+                        quantity: newQuantity
+                    })
+                });
+
+                if (response.ok) {
+                    await loadCart(); // Reload cart to get updated data
+                } else {
+                    console.error('Failed to update quantity');
+                    // Revert the input value on error
+                    const input = document.querySelector(`input[data-product-id="${productId}"]`);
+                    if (input) {
+                        input.value = item.quantity;
+                    }
+                }
+            } catch (error) {
+                console.error('Error updating quantity:', error);
+                // Revert the input value on error
+                const input = document.querySelector(`input[data-product-id="${productId}"]`);
+                if (input) {
+                    input.value = item.quantity;
+                }
+            } finally {
+                // Hide loading state
+                setQuantityLoadingState(productId, false);
+            }
+        }
+
+        // Set loading state for quantity controls
+        function setQuantityLoadingState(productId, isLoading) {
+            const minusBtn = document.querySelector(`button.minus[data-product-id="${productId}"]`);
+            const plusBtn = document.querySelector(`button.plus[data-product-id="${productId}"]`);
+            const input = document.querySelector(`input[data-product-id="${productId}"]`);
+
+            if (minusBtn) {
+                minusBtn.disabled = isLoading;
+                minusBtn.style.opacity = isLoading ? '0.5' : '1';
+            }
+            if (plusBtn) {
+                plusBtn.disabled = isLoading;
+                plusBtn.style.opacity = isLoading ? '0.5' : '1';
+            }
+            if (input) {
+                input.disabled = isLoading;
+                input.style.opacity = isLoading ? '0.5' : '1';
+            }
+        }
+
+        // Remove item from cart
+        async function removeItem(productId) {
+            if (!currentUser) return;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/cart/remove`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        userId: currentUser.id,
+                        productId: productId
+                    })
+                });
+
+                if (response.ok) {
+                    await loadCart(); // Reload cart
+                }
+            } catch (error) {
+                console.error('Error removing item:', error);
+            }
+        }
+
+        // Update cart summary
+        function updateCartSummary() {
+            const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+            const total = subtotal; // No shipping or tax - prices are inclusive
+
+            document.getElementById('subtotal').textContent = `₹${subtotal.toFixed(2)}`;
+            document.getElementById('total').textContent = `₹${total.toFixed(2)}`;
+
+            // Enable/disable checkout button
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            checkoutBtn.disabled = cartItems.length === 0;
+        }
+
+        // Update cart function
+        function updateCart() {
+            loadCart();
+        }
+
+        // Proceed to checkout function
+        function proceedToCheckout() {
+            if (cartItems.length > 0) {
+                // Prepare cart data for checkout
+                const cartData = {
+                    items: cartItems.map(item => {
+                        // Resolve image path consistently
+                        let imagePath = 'uploads/images/placeholder.svg'; // Default fallback
+                        
+                        if (item.image_url) {
+                            imagePath = item.image_url;
+                        } else if (item.image) {
+                            imagePath = item.image;
+                        }
+                        
+                        // Ensure consistent path format
+                        if (imagePath && !imagePath.startsWith('http') && !imagePath.startsWith('/') && !imagePath.startsWith('uploads/')) {
+                            imagePath = `uploads/images/${imagePath}`;
+                        }
+                        
+                        return {
+                            id: item.product_id || item.id,
+                            name: item.name,
+                            price: parseFloat(item.price),
+                            image: imagePath,
+                            size: item.size || 'Standard',
+                            quantity: parseInt(item.quantity),
+                            sku: item.sku || item.product_id || '',
+                            category: item.category || ''
+                        };
+                    }),
+                    subtotal: cartItems.reduce((total, item) => total + (item.price * item.quantity), 0),
+                    total: cartItems.reduce((total, item) => total + (item.price * item.quantity), 0),
+                    itemCount: cartItems.length
+                };
+                
+                console.log('🚀 Proceeding to checkout with cart data:', cartData);
+                console.log('🖼️ Image paths being sent to checkout:', cartData.items.map(item => ({
+                    id: item.id,
+                    name: item.name,
+                    image: item.image,
+                    originalImageUrl: cartItems.find(ci => (ci.product_id || ci.id) === item.id)?.image_url,
+                    originalImage: cartItems.find(ci => (ci.product_id || ci.id) === item.id)?.image
+                })));
+                
+                // Encode cart data and redirect to checkout
+                const encodedData = encodeURIComponent(JSON.stringify(cartData));
+                window.location.href = `checkout.html?cart=${encodedData}`;
+            }
+        }
+
+        // Professional Notification System
+        function showNotification(type, title, message, duration = 5000) {
+            const container = document.getElementById('notificationContainer');
+            const notification = document.createElement('div');
+            const icon = getNotificationIcon(type);
+            
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div class="notification-header">
+                    <div class="notification-title">
+                        <i class="fas ${icon} notification-icon"></i>
+                        ${title}
+                    </div>
+                    <button class="notification-close" onclick="this.parentElement.parentElement.remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="notification-message">${message}</div>
+                <div class="notification-progress"></div>
+            `;
+            
+            container.appendChild(notification);
+            
+            // Trigger animation
+            setTimeout(() => notification.classList.add('show'), 100);
+            
+            // Auto-remove after duration
+            if (duration > 0) {
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.classList.remove('show');
+                        setTimeout(() => notification.remove(), 300);
+                    }
+                }, duration);
+            }
+        }
+        
+        function getNotificationIcon(type) {
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                warning: 'fa-exclamation-triangle',
+                info: 'fa-info-circle'
+            };
+            return icons[type] || 'fa-info-circle';
+        }
+        
+        // Add event listeners when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Checkout button
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            if (checkoutBtn) {
+                checkoutBtn.addEventListener('click', proceedToCheckout);
+            }
+
+            // Update cart button
+            const updateCartBtn = document.getElementById('updateCartBtn');
+            if (updateCartBtn) {
+                updateCartBtn.addEventListener('click', updateCart);
+            }
+
+            // Apply promo button
+            const applyPromoBtn = document.getElementById('applyPromo');
+            if (applyPromoBtn) {
+                applyPromoBtn.addEventListener('click', function() {
+                    const promoCode = document.getElementById('promoCode').value;
+                    if (promoCode.trim()) {
+                        showNotification('success', 'Promo Code Applied!', `Promo code "${promoCode}" has been applied successfully.`, 5000);
+                        // Add promo code logic here
+                    }
+                });
+            }
+
+            // Mobile menu toggle
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            const mobileMenuClose = document.querySelector('.mobile-menu-close');
+            const mobileMenu = document.querySelector('.mobile-menu');
+
+            if (mobileMenuBtn && mobileMenuClose && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    mobileMenu.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+
+                mobileMenuClose.addEventListener('click', function() {
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            }
+
+            // Initialize page
+            checkLoginStatus();
+            loadCart();
+            
+            // Scroll to top functionality
+            const scrollToTopBtn = document.getElementById('scrollToTop');
+            if (scrollToTopBtn) {
+                window.addEventListener('scroll', function() {
+                    if (window.pageYOffset > 300) {
+                        scrollToTopBtn.style.display = 'block';
+                    } else {
+                        scrollToTopBtn.style.display = 'none';
+                    }
+                });
+                
+                scrollToTopBtn.addEventListener('click', function() {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+        });
+        
+        // Check login state and update header
+        function checkLoginState() {
+            console.log('Checking login state...');
+            const currentUser = localStorage.getItem('currentUser');
+            const headerIcons = document.querySelector('.header-icons');
+            
+            if (!headerIcons) {
+                console.error('Header icons element not found!');
+                return;
+            }
+            
+            if (currentUser) {
+                try {
+                    const user = JSON.parse(currentUser);
+                    console.log('User data:', user);
+                    
+                    // Update header to show user info instead of login/signup
+                    headerIcons.innerHTML = `
+                        <a href="profile.html" class="user-info">
+                            <i class="fas fa-user"></i> 
+                            <span class="user-name">${user.username || user.email}</span>
+                        </a>
+                        <a href="#" onclick="logout()" class="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                        <button type="button" id="searchBtn" class="search-button-header">
+                        <i class="fas fa-search"></i>
+                    </button>
+                        <a href="cart.html" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count">0</span></a>
+                    `;
+                    console.log('Updated header for logged-in user');
+                    
+                    // Update cart count after header is rebuilt
+                    updateCartCountFromStorage();
+                } catch (error) {
+                    console.error('Error parsing user data:', error);
+                    localStorage.removeItem('currentUser');
+                    checkLoginState(); // Retry with cleared data
+                }
+            } else {
+                // Show login/signup buttons
+                headerIcons.innerHTML = `
+                    <a href="login.html"><i class="fas fa-user"></i> Login</a>
+                    <a href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+                    <button type="button" id="searchBtn" class="search-button-header">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <a href="cart.html" class="cart-icon"><i class="fas fa-shopping-bag"></i><span class="cart-count">0</span></a>
+                `;
+                console.log('Updated header for logged-out user');
+                
+                // Update cart count after header is rebuilt
+                updateCartCountFromStorage();
+            }
+        }
+        
+        // Update cart count from database cart items
+        function updateCartCountFromStorage() {
+            // Use the cartItems from database instead of localStorage
+            if (cartItems && cartItems.length > 0) {
+                const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+                
+                document.querySelectorAll('.cart-count').forEach(countElement => {
+                    countElement.textContent = totalItems;
+                });
+                
+                console.log('Cart count updated from database cart to:', totalItems);
+            } else {
+                // Fallback: try localStorage
+                const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+                const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+                
+                document.querySelectorAll('.cart-count').forEach(countElement => {
+                    countElement.textContent = totalItems;
+                });
+                
+                console.log('Cart count updated from localStorage to:', totalItems);
+            }
+        }
+        
+        // Logout function
+        function logout() {
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('authToken');
+            checkLoginState(); // Update header
+            showMessage('Logged out successfully', 'success');
+        }
+        
+        // Show message function
+        function showMessage(message, type) {
+            let messageDiv = document.getElementById('message');
+            if (!messageDiv) {
+                messageDiv = document.createElement('div');
+                messageDiv.id = 'message';
+                messageDiv.className = 'message-container';
+                document.body.appendChild(messageDiv);
+            }
+            
+            messageDiv.textContent = message;
+            messageDiv.className = `message-container ${type}`;
+            
+            setTimeout(() => {
+                messageDiv.textContent = '';
+                messageDiv.className = 'message-container';
+            }, 3000);
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLoginState();
+            
+            // Also check login state when page becomes visible
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) {
+                    checkLoginState();
+                }
+            });
+            
+            // Check login state when window gains focus
+            window.addEventListener('focus', function() {
+                checkLoginState();
+            });
+        });
+    </script>
+
+    <!-- Search Functionality -->
+    <script>
+        // Search functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔍 Initializing search functionality for cart page...');
+            
+            // Get elements
+            const searchBtns = document.querySelectorAll('#searchBtn');
+            const searchModal = document.getElementById('searchModal');
+            const closeSearchBtn = document.getElementById('closeSearchBtn');
+            const searchInput = document.getElementById('searchInput');
+            const performSearchBtn = document.getElementById('performSearchBtn');
+            const searchResultsContainer = document.getElementById('searchResultsContainer');
+            const suggestionButtons = document.querySelectorAll('.suggestion-btn');
+            
+            // Debug: Check if elements exist
+            console.log('🔍 Search elements found:', {
+                searchBtns: searchBtns.length,
+                searchModal: !!searchModal,
+                closeSearchBtn: !!closeSearchBtn
+            });
+            
+            // Add click handlers to all search buttons
+            searchBtns.forEach((searchBtn, index) => {
+                if (searchBtn) {
+                    searchBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log(`🔍 Search button ${index + 1} clicked! Opening modal...`);
+                        
+                        if (searchModal) {
+                            searchModal.style.display = 'flex';
+                            searchModal.classList.add('show');
+                            console.log('🔍 Modal should be visible now');
+                            
+                            setTimeout(() => {
+                                if (searchInput) {
+                                    searchInput.focus();
+                                }
+                            }, 100);
+                        } else {
+                            console.error('❌ Search modal not found!');
+                        }
+                    });
+                    
+                    console.log(`🔍 Event listener added to search button ${index + 1}`);
+                }
+            });
+            
+            // Close search modal
+            if (closeSearchBtn && searchModal) {
+                closeSearchBtn.addEventListener('click', function() {
+                    console.log('🔍 Closing search modal...');
+                    searchModal.classList.remove('show');
+                    setTimeout(() => {
+                        searchModal.style.display = 'none';
+                    }, 300);
+                });
+            }
+            
+            // Close modal when clicking outside
+            if (searchModal) {
+                searchModal.addEventListener('click', function(e) {
+                    if (e.target === searchModal) {
+                        closeSearchBtn.click();
+                    }
+                });
+            }
+            
+            // Perform search function
+            async function performSearch(query) {
+                if (!query || query.trim() === '') {
+                    return;
+                }
+                
+                console.log('🔍 Performing search for:', query);
+                
+                try {
+                    const response = await fetch(`/products/search?q=${encodeURIComponent(query)}`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const results = await response.json();
+                    console.log('🔍 Search results:', results);
+                    displaySearchResults(results);
+                } catch (error) {
+                    console.error('❌ Search error:', error);
+                    searchResultsContainer.innerHTML = `
+                        <div class="search-no-results">
+                            <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #ff6b6b; margin-bottom: 20px;"></i>
+                            <h3>Search Error</h3>
+                            <p>Unable to perform search. Please try again.</p>
+                        </div>
+                    `;
+                }
+            }
+            
+            // Display search results
+            function displaySearchResults(results) {
+                if (!results || results.length === 0) {
+                    searchResultsContainer.innerHTML = `
+                        <div class="search-no-results">
+                            <i class="fas fa-search" style="font-size: 3rem; color: var(--text-secondary); margin-bottom: 20px;"></i>
+                            <h3>No products found</h3>
+                            <p>Try different keywords or browse our collections.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                const resultsHTML = results.map(product => `
+                    <div class="search-result-item" onclick="window.location.href='product-detail.html?id=${product.id}'">
+                        <img src="${product.image_url || '/images/placeholder.jpg'}" alt="${product.name}" class="search-result-image" loading="lazy">
+                        <div class="search-result-info">
+                            <div class="search-result-name">${product.name}</div>
+                            <div class="search-result-price">₹${product.price}</div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                searchResultsContainer.innerHTML = `
+                    <div class="search-results-grid">
+                        ${resultsHTML}
+                    </div>
+                `;
+            }
+            
+            // Search input events
+            if (searchInput && performSearchBtn) {
+                performSearchBtn.addEventListener('click', function() {
+                    performSearch(searchInput.value);
+                });
+                
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        performSearch(searchInput.value);
+                    }
+                });
+            }
+            
+            // Suggestion buttons
+            suggestionButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const query = this.getAttribute('data-query');
+                    if (searchInput) {
+                        searchInput.value = query;
+                    }
+                    performSearch(query);
+                });
+            });
+        });
+    </script>
+
+    <a class="floating-whatsapp" href="https://wa.me/918806600982" target="_blank" rel="noopener" aria-label="Chat on WhatsApp" title="Contact Us">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+</body>
+</html>

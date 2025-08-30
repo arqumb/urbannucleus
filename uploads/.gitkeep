@@ -1,0 +1,2 @@
+# Keep this directory in Git
+# This ensures the uploads folder exists for production deployment
