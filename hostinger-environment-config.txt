@@ -1,0 +1,32 @@
+# Urban Nucleus - Hostinger Environment Variables
+# Copy this content to create .env file in your backend/ directory
+
+# Database Configuration (Get from Hostinger cPanel → MySQL Databases)
+MYSQL_HOST=localhost
+MYSQL_USER=your_hostinger_db_user
+MYSQL_PASSWORD=your_hostinger_db_password
+MYSQL_DATABASE=your_hostinger_database_name
+MYSQL_PORT=3306
+
+# Application Configuration
+NODE_ENV=production
+PORT=3000
+DOMAIN_URL=https://yourdomain.com
+
+# Admin Credentials
+ADMIN_EMAIL=bubere908@gmail.com
+ADMIN_PASSWORD=@Arqum789
+
+# Payment Gateway (Use LIVE credentials for production)
+RAZORPAY_KEY_ID=your_live_razorpay_key_id
+RAZORPAY_KEY_SECRET=your_live_razorpay_key_secret
+
+# Email Configuration (Optional - for notifications)
+EMAIL_HOST=smtp.hostinger.com
+EMAIL_PORT=587
+EMAIL_USER=your_email@yourdomain.com
+EMAIL_PASSWORD=your_email_password
+
+# Security (Generate strong secrets)
+JWT_SECRET=your_jwt_secret_key_here
+SESSION_SECRET=your_session_secret_here
