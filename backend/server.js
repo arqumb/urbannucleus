@@ -44,8 +44,19 @@ app.use((req, res, next) => {
   }
 });
 
-// Serve static files from the parent directory
-app.use(express.static('../'));
+// Serve static files from the parent directory (adjusted for deployment)
+const staticPath = process.env.NODE_ENV === 'production' 
+  ? path.join(__dirname, '../') 
+  : '../';
+app.use(express.static(staticPath));
+
+// Ensure index.html is served at root
+app.get('/', (req, res) => {
+  const indexPath = process.env.NODE_ENV === 'production' 
+    ? path.join(__dirname, '../index.html')
+    : '../index.html';
+  res.sendFile(path.resolve(indexPath));
+});
 
 // Serve uploads directory specifically
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
