@@ -4210,6 +4210,93 @@ app.get('/payment/methods', (req, res) => {
   });
 });
 
+// Database setup endpoint (run once)
+app.get('/setup-database', async (req, res) => {
+  try {
+    console.log('🔧 Setting up database tables...');
+    
+    // Create tables SQL
+    const createTablesSQL = `
+      CREATE TABLE IF NOT EXISTS users (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        username VARCHAR(255) NOT NULL,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        phone VARCHAR(20) DEFAULT NULL,
+        phone_verified BOOLEAN DEFAULT FALSE,
+        google_id VARCHAR(255) DEFAULT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+      
+      CREATE TABLE IF NOT EXISTS categories (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(100) NOT NULL UNIQUE,
+        description TEXT
+      );
+      
+      CREATE TABLE IF NOT EXISTS products (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        description TEXT,
+        price DECIMAL(10,2) NOT NULL,
+        compare_at_price DECIMAL(10,2) DEFAULT NULL,
+        image_url VARCHAR(500),
+        category_id INT DEFAULT NULL,
+        status ENUM('active', 'draft', 'archived') DEFAULT 'active',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      );
+      
+      INSERT IGNORE INTO categories (id, name, description) VALUES
+      (1, 'Sneakers', 'Premium and luxury sneakers'),
+      (2, 'Watches', 'Luxury and sport watches'),
+      (3, 'Perfumes', 'Designer fragrances'),
+      (4, 'Bags', 'Luxury bags and accessories'),
+      (5, 'Accessories', 'Fashion accessories');
+      
+      INSERT IGNORE INTO products (id, name, description, price, compare_at_price, image_url, category_id, status) VALUES
+      (1, 'AJ 1 Low x Travis Scott Fragment', 'Limited edition collaboration sneaker', 10499.00, 12999.00, 'https://4pfkicks.in/cdn/shop/files/0A88D887-95A5-4EC1-9D8E-BA10369666A7_700x.jpg', 1, 'active'),
+      (2, 'AJ 1 Low x Travis Scott Reverse Mocha', 'Exclusive Travis Scott collaboration', 9499.00, 11999.00, 'https://4pfkicks.in/cdn/shop/files/E1D540D9-FE88-44A4-8349-F35DA23E803F_700x.jpg', 1, 'active'),
+      (3, 'Yeezy Boost 350v2 Blue Tint', 'Comfortable and stylish Yeezy sneaker', 3999.00, 4999.00, 'https://4pfkicks.in/cdn/shop/files/E6FFA535-8532-44BA-9600-01B78A07E8BE_700x.jpg', 1, 'active'),
+      (4, 'Retro 4 x Off-White Sail', 'Premium basketball sneaker', 3999.00, 4999.00, 'https://4pfkicks.in/cdn/shop/files/8467E82B-1B44-45D4-A178-D5D168310B4E_700x.png', 1, 'active');
+    `;
+    
+    // Execute the SQL
+    await pool.promise().query(createTablesSQL);
+    
+    console.log('✅ Database tables created successfully!');
+    
+    res.send(`
+      <html>
+        <head><title>Database Setup Complete</title></head>
+        <body style="font-family: Arial; padding: 20px; background: #f5f5f5;">
+          <div style="max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px;">
+            <h1>🎉 Database Setup Complete!</h1>
+            <p>✅ All database tables have been created successfully.</p>
+            <p>✅ Sample products and categories have been added.</p>
+            <p><strong>Your Urban Nucleus e-commerce platform is now ready!</strong></p>
+            <p><a href="/" style="background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Visit Homepage</a></p>
+            <p><a href="/admin.html" style="background: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Admin Panel</a></p>
+          </div>
+        </body>
+      </html>
+    `);
+    
+  } catch (error) {
+    console.error('❌ Database setup error:', error);
+    res.status(500).send(`
+      <html>
+        <head><title>Database Setup Error</title></head>
+        <body style="font-family: Arial; padding: 20px;">
+          <h1>❌ Database Setup Error</h1>
+          <p>Error: ${error.message}</p>
+          <p><a href="/">Try Again</a></p>
+        </body>
+      </html>
+    `);
+  }
+});
+
 // Start the server
 const DOMAIN_URL = process.env.DOMAIN_URL || `http://localhost:${PORT}`;
 

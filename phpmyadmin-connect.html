@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Railway MySQL Connection Info</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; }
+        .credentials { background: #f8f9fa; padding: 20px; border-radius: 5px; margin: 20px 0; }
+        .field { margin: 10px 0; }
+        .label { font-weight: bold; color: #333; }
+        .value { font-family: monospace; background: #e9ecef; padding: 5px; border-radius: 3px; }
+        .button { background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 10px 0; }
+        .warning { background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 5px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Railway MySQL Database Setup</h1>
+        
+        <div class="warning">
+            <strong>⚠️ Important:</strong> Use these credentials to connect to your Railway MySQL database from any MySQL client.
+        </div>
+        
+        <div class="credentials">
+            <h3>📊 Database Connection Details</h3>
+            
+            <div class="field">
+                <div class="label">Host:</div>
+                <div class="value">centerbeam.proxy.rlwy.net</div>
+            </div>
+            
+            <div class="field">
+                <div class="label">Port:</div>
+                <div class="value">32551</div>
+            </div>
+            
+            <div class="field">
+                <div class="label">Username:</div>
+                <div class="value">root</div>
+            </div>
+            
+            <div class="field">
+                <div class="label">Password:</div>
+                <div class="value">hYxDnEvRNmmxfMxsrUyrrqcshk1fCsxg</div>
+            </div>
+            
+            <div class="field">
+                <div class="label">Database:</div>
+                <div class="value">railway</div>
+            </div>
+            
+            <div class="field">
+                <div class="label">Full URL:</div>
+                <div class="value">mysql://root:hYxDnEvRNmmxfMxsrUyrrqcshk1fCsxg@centerbeam.proxy.rlwy.net:32551/railway</div>
+            </div>
+        </div>
+        
+        <h3>🛠️ Connection Options</h3>
+        
+        <a href="https://sql.js.org/examples/GUI/" class="button" target="_blank">
+            🌐 Try Online SQL Editor
+        </a>
+        
+        <a href="https://phpmyadmin.co/" class="button" target="_blank">
+            🔧 Try Online phpMyAdmin
+        </a>
+        
+        <div style="margin: 20px 0;">
+            <h4>📱 Desktop Options:</h4>
+            <ul>
+                <li><strong>MySQL Workbench:</strong> Free official MySQL GUI</li>
+                <li><strong>HeidiSQL:</strong> Lightweight MySQL client (Windows)</li>
+                <li><strong>DBeaver:</strong> Universal database tool</li>
+            </ul>
+        </div>
+        
+        <div style="margin: 20px 0;">
+            <h4>💻 Command Line:</h4>
+            <div class="value">
+                mysql -h centerbeam.proxy.rlwy.net -P 32551 -u root -p railway
+            </div>
+            <small>Enter password when prompted: hYxDnEvRNmmxfMxsrUyrrqcshk1fCsxg</small>
+        </div>
+        
+        <div class="warning">
+            <h4>🎯 Next Steps:</h4>
+            <ol>
+                <li>Choose one of the connection methods above</li>
+                <li>Connect to your Railway MySQL database</li>
+                <li>Copy and paste the SQL schema from <code>railway_database_setup.sql</code></li>
+                <li>Execute the SQL to create all your e-commerce tables</li>
+            </ol>
+        </div>
+    </div>
+</body>
+</html>
