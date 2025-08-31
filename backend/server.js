@@ -4210,6 +4210,125 @@ app.get('/payment/methods', (req, res) => {
   });
 });
 
+// Export local database to Railway
+app.get('/export-database', async (req, res) => {
+  try {
+    console.log('📦 Exporting local database structure and data...');
+    
+    // Query all tables and their data
+    const tables = ['users', 'categories', 'subcategories', 'products', 'product_images', 'product_sizes', 'cart', 'orders', 'order_items', 'newsletter_subscribers', 'contact_submissions', 'hero_slides'];
+    
+    let exportSQL = '-- Urban Nucleus Database Export\n\n';
+    
+    for (const table of tables) {
+      try {
+        // Get table structure
+        const [structure] = await pool.promise().query(`SHOW CREATE TABLE ${table}`);
+        if (structure.length > 0) {
+          exportSQL += `-- Table: ${table}\n`;
+          exportSQL += `DROP TABLE IF EXISTS ${table};\n`;
+          exportSQL += structure[0]['Create Table'] + ';\n\n';
+          
+          // Get table data
+          const [data] = await pool.promise().query(`SELECT * FROM ${table}`);
+          if (data.length > 0) {
+            exportSQL += `-- Data for table: ${table}\n`;
+            
+            for (const row of data) {
+              const columns = Object.keys(row).join(', ');
+              const values = Object.values(row).map(val => {
+                if (val === null) return 'NULL';
+                if (typeof val === 'string') return `'${val.replace(/'/g, "''")}'`;
+                if (val instanceof Date) return `'${val.toISOString().slice(0, 19).replace('T', ' ')}'`;
+                return val;
+              }).join(', ');
+              
+              exportSQL += `INSERT INTO ${table} (${columns}) VALUES (${values});\n`;
+            }
+            exportSQL += '\n';
+          }
+        }
+      } catch (err) {
+        console.log(`⚠️ Table ${table} doesn't exist, skipping...`);
+      }
+    }
+    
+    res.setHeader('Content-Type', 'text/plain');
+    res.setHeader('Content-Disposition', 'attachment; filename="urban_nucleus_export.sql"');
+    res.send(exportSQL);
+    
+  } catch (error) {
+    console.error('❌ Export error:', error);
+    res.status(500).send('Export failed: ' + error.message);
+  }
+});
+
+// Import database from uploaded SQL
+app.post('/import-database', async (req, res) => {
+  try {
+    const { sql } = req.body;
+    
+    if (!sql) {
+      return res.status(400).send('No SQL provided');
+    }
+    
+    console.log('📥 Importing database...');
+    
+    // Split SQL into individual statements
+    const statements = sql.split(';').filter(stmt => stmt.trim().length > 0);
+    
+    for (const statement of statements) {
+      try {
+        await pool.promise().query(statement);
+      } catch (err) {
+        console.log(`⚠️ Statement failed: ${err.message}`);
+      }
+    }
+    
+    console.log('✅ Database imported successfully!');
+    
+    res.send(`
+      <html>
+        <head><title>Database Import Complete</title></head>
+        <body style="font-family: Arial; padding: 20px; background: #f5f5f5;">
+          <div style="max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px;">
+            <h1>🎉 Database Import Complete!</h1>
+            <p>✅ Your local database has been imported successfully.</p>
+            <p><strong>Your Urban Nucleus e-commerce platform is now ready with your data!</strong></p>
+            <p><a href="/" style="background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Visit Homepage</a></p>
+            <p><a href="/admin.html" style="background: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Admin Panel</a></p>
+          </div>
+        </body>
+      </html>
+    `);
+    
+  } catch (error) {
+    console.error('❌ Import error:', error);
+    res.status(500).send('Import failed: ' + error.message);
+  }
+});
+
+// Simple import form
+app.get('/import-form', (req, res) => {
+  res.send(`
+    <html>
+      <head><title>Import Database</title></head>
+      <body style="font-family: Arial; padding: 20px; background: #f5f5f5;">
+        <div style="max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px;">
+          <h1>📥 Import Your Database</h1>
+          <form action="/import-database" method="POST">
+            <p><strong>Paste your SQL export here:</strong></p>
+            <textarea name="sql" rows="20" cols="100" style="width: 100%; font-family: monospace; font-size: 12px;" placeholder="Paste your urban_nucleus_export.sql content here..."></textarea>
+            <br><br>
+            <button type="submit" style="background: #007bff; color: white; padding: 15px 30px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">Import Database</button>
+          </form>
+          <p><small>⚠️ This will replace all data in the Railway database with your local data.</small></p>
+        </div>
+      </body>
+    </html>
+  `);
+});
+
 // Database setup endpoint (run once)
 app.get('/setup-database', async (req, res) => {
   try {
