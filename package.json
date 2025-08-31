@@ -13,11 +13,23 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/YOUR_GITHUB_USERNAME/urban-nucleus.git"
+    "url": "https://github.com/arqumb/urban-nucleus.git"
   },
   "homepage": "https://urbannucleus.in",
   "engines": {
     "node": ">=16.0.0",
     "npm": ">=8.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.11.0",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "csv-parser": "^3.2.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.2",
+    "mysql2": "^3.14.3",
+    "nodemailer": "^7.0.5",
+    "razorpay": "^2.9.6"
   }
 }
