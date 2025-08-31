@@ -245,7 +245,7 @@ app.post('/products/:id/upload-images', upload.array('images', 10), (req, res) =
   if (!files || files.length === 0) return res.status(400).json({ error: 'No files uploaded' });
   
   // Create full URLs for the images
-  const baseUrl = process.env.DOMAIN_URL || `https://urban-nucleus-production.up.railway.app`;
+  const baseUrl = `http://localhost:${PORT}`;
   const imageValues = files.map((file, idx) => [
     productId, 
     `${baseUrl}/uploads/images/${file.filename}`, 
@@ -297,7 +297,7 @@ app.post('/products/:id/upload-videos', upload.array('videos', 5), (req, res) =>
   if (!files || files.length === 0) return res.status(400).json({ error: 'No files uploaded' });
   
   // Create full URLs for the videos
-  const baseUrl = process.env.DOMAIN_URL || `https://urban-nucleus-production.up.railway.app`;
+  const baseUrl = `http://localhost:${PORT}`;
   const videoValues = files.map((file, idx) => [
     productId, 
     `${baseUrl}/uploads/videos/${file.filename}`, 
@@ -3682,7 +3682,7 @@ app.post('/admin/hero-slides/upload-media', heroSlideUpload.single('media'), (re
   }
   
   const mediaType = req.body.media_type || 'image';
-  const baseUrl = process.env.DOMAIN_URL || `https://urban-nucleus-production.up.railway.app`;
+  const baseUrl = `http://localhost:${PORT}`;
   const mediaUrl = `${baseUrl}/uploads/hero-slides/${req.file.filename}`;
   
   console.log('Hero slide media uploaded:', {

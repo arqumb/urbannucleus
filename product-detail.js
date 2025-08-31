@@ -12,7 +12,7 @@ let productVideos = [];
 
 
 // Constants
-const API_BASE_URL = 'https://urban-nucleus-production.up.railway.app';
+const API_BASE_URL = 'http://localhost:3000';
 
 // Initialize the page when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
