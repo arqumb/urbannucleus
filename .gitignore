@@ -1,20 +1,8 @@
 # Dependencies
 node_modules/
-*/node_modules/
-
-# Environment variables
-.env
-.env.local
-.env.production
-
-# Database
-*.sqlite
-*.db
-
-# Logs
-logs
-*.log
 npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # Runtime data
 pids
@@ -22,25 +10,69 @@ pids
 *.seed
 *.pid.lock
 
-# Uploads (keep structure but ignore files)
-uploads/*
-!uploads/.gitkeep
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
 
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
+# nyc test coverage
+.nyc_output
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env
 
 # IDE
 .vscode/
 .idea/
-*.swp
-*.swo
+
+# OS
+.DS_Store
+Thumbs.db
 
 # Temporary files
 tmp/
 temp/
+
+# Railway specific
+.railway/
+
+# Database backups
+*.sql
+
+# Large upload files (will use cloud storage later)
+uploads/images/*.jpg
+uploads/images/*.png
+uploads/images/*.jpeg
+uploads/images/*.webp
+uploads/images/*.gif
+
+# Keep dummy.png for fallbacks
+!uploads/images/dummy.png

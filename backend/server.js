@@ -62,13 +62,13 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Database connection
+// Database connection with environment variables
 const pool = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: '@Arqum789',
-  database: 'urban_nucleus',
-  port: 3306,
+  host: process.env.MYSQL_HOST || 'localhost',
+  user: process.env.MYSQL_USER || 'root',
+  password: process.env.MYSQL_PASSWORD || '@Arqum789',
+  database: process.env.MYSQL_DATABASE || 'urban_nucleus',
+  port: process.env.MYSQL_PORT || 3306,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
@@ -1436,14 +1436,17 @@ app.post('/auth/login', (req, res) => {
   }
   
   // Check if this is the admin user
-  if (email === 'bubere908@gmail.com' && password === '@Arqum789') {
+  const adminEmail = process.env.ADMIN_EMAIL || 'bubere908@gmail.com';
+  const adminPassword = process.env.ADMIN_PASSWORD || '@Arqum789';
+  
+  if (email === adminEmail && password === adminPassword) {
     // Admin user - return admin data
     res.json({
       message: 'Admin login successful',
       user: {
         id: 1,
         username: 'Admin',
-        email: 'bubere908@gmail.com',
+        email: adminEmail,
         role: 'admin'
       }
     });
@@ -4208,7 +4211,17 @@ app.get('/payment/methods', (req, res) => {
 });
 
 // Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-  console.log('Press Ctrl+C to stop the server');
+const DOMAIN_URL = process.env.DOMAIN_URL || `http://localhost:${PORT}`;
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🌐 Domain: ${DOMAIN_URL}`);
+  console.log('📱 Urban Nucleus E-commerce Platform');
+  console.log('💳 Payment gateway: Razorpay');
+  console.log('🗄️  Database: MySQL connected');
+  console.log('');
+  console.log(`🎯 Admin Panel: ${DOMAIN_URL}/admin.html`);
+  console.log(`🛍️  Website: ${DOMAIN_URL}`);
+  console.log('');
+  console.log('✨ Ready to receive requests!');
 });
