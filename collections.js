@@ -1,5 +1,5 @@
 // API Base URL
-const API_BASE_URL = 'http://localhost:3000';
+const API_BASE_URL = 'https://urban-nucleus-production.up.railway.app';
 
 // Make functions globally accessible for debugging
 window.viewCategory = function(categoryId) {
