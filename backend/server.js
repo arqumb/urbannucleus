@@ -4264,7 +4264,7 @@ app.get('/export-database', async (req, res) => {
 });
 
 // Import database from uploaded SQL
-app.post('/import-database', async (req, res) => {
+app.post('/import-database', express.urlencoded({ extended: true, limit: '50mb' }), async (req, res) => {
   try {
     const { sql } = req.body;
     
