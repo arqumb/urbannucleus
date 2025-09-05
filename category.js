@@ -1,5 +1,4 @@
-// API Base URL
-const API_BASE_URL = 'http://localhost:3000';
+// API Base URL is declared in the HTML file that includes this script
 
 // Global variables
 let currentCategory = null;
@@ -178,7 +177,7 @@ function renderProducts(products) {
         }
         
         // If the image URL is a relative path, make sure it's accessible
-        if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('uploads/')) {
+        if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/uploads/') && !imageUrl.startsWith('uploads/')) {
             imageUrl = `uploads/images/${imageUrl}`;
         }
         

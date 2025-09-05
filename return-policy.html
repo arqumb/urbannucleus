@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Return Policy - Urban Nucleus</title>
+    <script>const API_BASE_URL = 'https://urbannucleus.in';</script>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="responsive.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -840,7 +841,7 @@
         // Announcement Bar Functions
         async function loadAnnouncementBarData() {
             try {
-                const response = await fetch('http://localhost:3000/api/announcement');
+                const response = await fetch(`${API_BASE_URL}/api/announcement`);
                 if (response.ok) {
                     const data = await response.json();
                     if (data.visible && data.messages && data.messages.length > 0) {
@@ -934,7 +935,7 @@
                 const currentUser = localStorage.getItem('currentUser');
                 if (currentUser) {
                     const user = JSON.parse(currentUser);
-                    fetch(`http://localhost:3000/cart/${user.id}`)
+                    fetch(`${API_BASE_URL}/cart/${user.id}`)
                         .then(response => response.json())
                         .then(cartItems => {
                             const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);

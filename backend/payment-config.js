@@ -3,9 +3,9 @@
 
 const PAYMENT_CONFIG = {
     RAZORPAY: {
-        // Test Credentials (replace with live credentials for production)
-        KEY_ID: 'rzp_test_1234567890',         // Get from Razorpay Dashboard
-        KEY_SECRET: 'test_secret_1234567890',     // Get from Razorpay Dashboard
+        // LIVE Razorpay Credentials (for production launch)
+        KEY_ID: 'rzp_live_YOUR_LIVE_KEY_ID',         // Replace with your LIVE Key ID
+        KEY_SECRET: 'YOUR_LIVE_KEY_SECRET',     // Replace with your LIVE Key Secret
         
         // Webhook secret for verifying webhook signatures
         WEBHOOK_SECRET: 'test_webhook_secret_123',
@@ -17,7 +17,7 @@ const PAYMENT_CONFIG = {
         COMPANY: {
             NAME: 'Urban Nucleus',
             DESCRIPTION: 'Premium Fashion & Lifestyle',
-            LOGO: 'https://yourdomain.com/logo.png',  // Optional
+            LOGO: 'https://urbannucleus.in/images/urban-nucleus-logo-backup.svg',  // VPS logo
             THEME_COLOR: '#000000'
         }
     }

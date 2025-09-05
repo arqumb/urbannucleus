@@ -1,7 +1,6 @@
 // Subcategory Page JavaScript
 
-// Global constants
-const API_BASE_URL = 'http://localhost:3000';
+// API Base URL is declared in the HTML file that includes this script
 
 document.addEventListener('DOMContentLoaded', function() {
     // Get subcategory ID and name from URL parameters
@@ -113,7 +112,7 @@ function createProductCard(product, index) {
     }
     
     // If the image URL is a relative path, make sure it's accessible
-    if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('uploads/')) {
+    if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/uploads/') && !imageUrl.startsWith('uploads/')) {
         imageUrl = `uploads/images/${imageUrl}`;
     }
     

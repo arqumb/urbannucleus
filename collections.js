@@ -1,5 +1,4 @@
-// API Base URL
-const API_BASE_URL = 'http://localhost:3000';
+// API Base URL is already declared in collections.html
 
 // Make functions globally accessible for debugging
 window.viewCategory = function(categoryId) {
@@ -98,7 +97,7 @@ function renderCategories(categories) {
             : '<p class="no-subcategories">No subcategories available</p>';
         
         // Get category image URL or fallback to icon
-        const imageUrl = category.image_url || getCategoryIcon(category.name);
+        const imageUrl = category.image || getCategoryIcon(category.name);
         const isImage = imageUrl && !imageUrl.startsWith('fas fa-');
         
         return `

@@ -11,8 +11,7 @@ let productVideos = [];
 
 
 
-// Constants
-const API_BASE_URL = 'http://localhost:3000';
+// API Base URL is declared in the HTML file that includes this script
 
 // Initialize the page when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {

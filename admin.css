@@ -2213,6 +2213,27 @@ textarea.form-control {
     color: var(--text-white);
 }
 
+.category-image-card.no-image {
+    background: #f8f9fa;
+    border: 2px dashed #dee2e6;
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.category-image-card.no-image .category-image-info {
+    padding: 0;
+}
+
+.category-image-card.no-image h4 {
+    color: #6c757d;
+    margin-bottom: 10px;
+}
+
+.category-image-card.no-image p {
+    color: #adb5bd;
+    margin-bottom: 20px;
+}
+
 .form-help {
     color: var(--text-light);
     font-size: 0.8rem;

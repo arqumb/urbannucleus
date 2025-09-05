@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Collections - URBAN NUCLEUS | Premium Fashion Brand</title>
+    <script>const API_BASE_URL = 'https://urbannucleus.in';</script>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="responsive.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -403,6 +404,43 @@
             line-height: 1.8;
             font-size: 1rem;
             font-family: var(--font-secondary);
+        }
+
+        /* Loading and Error States */
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            font-size: 1.2rem;
+            color: var(--text-light);
+        }
+
+        .loading-spinner::before {
+            content: '';
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--accent-gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .no-categories, .error-message {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .error-message {
+            color: #e74c3c;
         }
 
         .subcategories-list {
@@ -1494,7 +1532,7 @@
         // Announcement Bar Functions
         async function loadAnnouncementBarData() {
             try {
-                const response = await fetch('http://localhost:3000/api/announcement');
+                const response = await fetch(`${API_BASE_URL}/api/announcement`);
                 if (response.ok) {
                     const data = await response.json();
                     if (data.visible && data.messages && data.messages.length > 0) {
@@ -1545,7 +1583,7 @@
         function loadCategoriesDropdown() {
             console.log('Loading categories...');
             
-            fetch('http://localhost:3000/categories')
+            fetch(`${API_BASE_URL}/categories`)
                 .then(function(response) { 
                     if (!response.ok) {
                         throw new Error('Failed to fetch categories');
@@ -1618,6 +1656,79 @@
                 });
         }
 
+        // Load and display categories in the main grid
+        function loadCategoriesGrid() {
+            console.log('Loading categories for grid...');
+            
+            const collectionsGrid = document.getElementById('collectionsGrid');
+            if (!collectionsGrid) {
+                console.error('Collections grid not found');
+                return;
+            }
+            
+            // Show loading spinner
+            collectionsGrid.innerHTML = '<div class="loading-spinner"></div>';
+            
+            fetch(`${API_BASE_URL}/categories`)
+                .then(function(response) { 
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch categories');
+                    }
+                    return response.json(); 
+                })
+                .then(function(categories) {
+                    console.log('Categories loaded for grid:', categories);
+                    
+                    if (categories && categories.length > 0) {
+                        collectionsGrid.innerHTML = '';
+                        
+                        categories.forEach(function(category) {
+                            const categoryCard = document.createElement('div');
+                            categoryCard.className = 'category-card';
+                            categoryCard.addEventListener('click', function() {
+                                window.location.href = `category.html?id=${category.id}`;
+                            });
+                            
+                            // Get category icon based on name
+                            let categoryIcon = 'fas fa-tag'; // default icon
+                            if (category.name.toLowerCase().includes('watch')) {
+                                categoryIcon = 'fas fa-clock';
+                            } else if (category.name.toLowerCase().includes('bag')) {
+                                categoryIcon = 'fas fa-shopping-bag';
+                            } else if (category.name.toLowerCase().includes('perfume')) {
+                                categoryIcon = 'fas fa-tag';
+                            } else if (category.name.toLowerCase().includes('sneaker')) {
+                                categoryIcon = 'fas fa-running';
+                            } else if (category.name.toLowerCase().includes('accessor')) {
+                                categoryIcon = 'fas fa-gem';
+                            }
+                            
+                            // Create category card HTML
+                            categoryCard.innerHTML = `
+                                <div class="category-image">
+                                    ${category.image ? 
+                                        `<img src="${category.image}" alt="${category.name}" class="category-img">` : 
+                                        `<i class="${categoryIcon}"></i>`
+                                    }
+                                </div>
+                                <div class="category-content">
+                                    <h3>${category.name.toUpperCase()}</h3>
+                                    <p>${category.description || `Explore our premium collection of ${category.name.toLowerCase()}.`}</p>
+                                </div>
+                            `;
+                            
+                            collectionsGrid.appendChild(categoryCard);
+                        });
+                    } else {
+                        collectionsGrid.innerHTML = '<div class="no-categories">No categories found</div>';
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Error loading categories for grid:', error);
+                    collectionsGrid.innerHTML = '<div class="error-message">Error loading categories. Please try again later.</div>';
+                });
+        }
+
         // Load announcement bar on page load
         document.addEventListener('DOMContentLoaded', function() {
             loadAnnouncementBarData();
@@ -1625,6 +1736,8 @@
             setInterval(loadAnnouncementBarData, 30000);
             // Load categories for dropdown
             loadCategoriesDropdown();
+            // Load categories for main grid
+            loadCategoriesGrid();
         });
     </script>
     <!-- Inline Auth State Management (copied from working cart.html) -->
@@ -1692,7 +1805,7 @@
                 if (currentUser) {
                     const user = JSON.parse(currentUser);
                     // Try to get cart from database first
-                    fetch(`http://localhost:3000/cart/${user.id}`)
+                    fetch(`${API_BASE_URL}/cart/${user.id}`)
                         .then(response => response.json())
                         .then(cartItems => {
                             const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
@@ -1870,7 +1983,7 @@
                 console.log('🔍 Performing search for:', query);
                 
                 try {
-                    const response = await fetch(`http://localhost:3000/products/search?q=${encodeURIComponent(query)}`);
+                    const response = await fetch(`${API_BASE_URL}/products/search?q=${encodeURIComponent(query)}`);
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }

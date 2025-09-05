@@ -1,5 +1,5 @@
 // Admin Dashboard JavaScript
-const API_BASE_URL = 'https://rosybrown-ram-255793.hostingersite.com';
+   const API_BASE_URL = 'https://urbannucleus.in';
 let currentSection = 'dashboard';
 let currentProductId = null;
 
@@ -1406,7 +1406,7 @@ function loadOrders() {
     
     window.isLoadingOrders = true;
     
-    const API_BASE_URL = 'https://rosybrown-ram-255793.hostingersite.com';
+    // API_BASE_URL is already declared at the top of the file
     const url = `${API_BASE_URL}/admin/orders`;
     
     showOrdersLoading();
@@ -2211,8 +2211,8 @@ async function viewOrderDetails(orderId) {
                                 <div class="order-item-card">
                                     <div class="item-image">
                                                     ${item.image_url && item.image_url !== 'null' && item.image_url !== 'undefined' && item.image_url.trim() !== '' ? 
-                                            `<img src="${item.image_url.startsWith('http') ? item.image_url : API_BASE_URL + '/' + item.image_url}" alt="${item.name}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSIjRjVGNUY1Ii8+CjxwYXRoIGQ9Ik02MCA2MEM2MCA2MCA2MCA2MCA2MCA2MEM2MCA2MCA2MCA2MCA2MCA2MFY2MEM2MCA2MCA2MCA2MCA2MCA2MEM2MCA2MCA2MCA2MCA2MCA2MFY2MEM2MCA2MCA2MCA2MCA2MCA2MEM2MCA2MCA2MCA2MCA2MCA2MFY2MEM2MCA2MCA2MCA2MCA2MCA2MEM2MCA2MCA2MCA2MCA2MCA2MFY2MEM2MCA2MCA2MCA2MCA2MCA2MEM2MCA2MCA2MCA2MCA2MCA2MFY2MEM2MCA2MCA2MCA2MCA2MCA2MEM2MCA2MCA2MCA2MCA2MCA2MFY2MEM2MCA2MCA2MCA2MCA2MCA2MEM2MCA2MCA2MCA2MCA2MCA2MFY2MEM2MCA2MCA2MCA2MCA2MCA2EMiBmaWxsPSIjQ0NDQ0NDIi8+Cjx0ZXh0IHg9IjYwIiB5PSI3MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEyIiBmaWxsPSIjOTk5OTk5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5ObyBJbWFnZTwvdGV4dD4KPC9zdmc+">` : 
-                                            `<img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSIjRjVGNUY1Ii8+CjxwYXRoIGQ9Ik02MCA2MEM2MCA2MCA2MCA2MCA2MCA2MEM2MCA2MCA2MCA2MCA2MCA2MFY2MEM2MCA2MCA2MCA2MCA2MCA2MEM2MCA2MCA2MCA2MCA2MCA2MFY2MEM2MCA2MCA2MCA2MCA2MCA2MEM2MCA2MCA2MCA2MCA2MCA2MFY2MEM2MCA2MCA2MCA2MCA2MCA2MEM2MCA2MCA2MCA2MCA2MCA2MFY2MEM2MCA2MCA2MCA2MCA2MCA2MEM2MCA2MCA2MCA2MCA2MCA2MFY2MEM2MCA2MCA2MCA2MCA2MCA2MEM2MCA2MCA2MCA2MCA2MCA2MFY2MEM2MCA2MCA2MCA2MCA2MCA2EMiBmaWxsPSIjQ0NDQ0NDIi8+Cjx0ZXh0IHg9IjYwIiB5PSI3MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjR4IiBmaWxsPSIjOTk5OTk5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5ObyBJbWFnZTwvdGV4dD4KPC9zdmc+" alt="No Image">`
+                                            `<img src="${item.image_url.startsWith('http') ? item.image_url : API_BASE_URL + '/' + item.image_url}" alt="${item.name}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSIjRjVGNUY1Ii8+CjxwYXRoIGQ9Ik02MCA2MEM2MCA2MCA2MCA2MCA2MCA2MEM2MCA2MCA2MCA2MCA2MCA2MFY2MEM2MCA2MCA2MCA2MCA2MCA2MEM2MCA2MCA2MCA2MCA2MCA2MFY2MEM2MCA2MCA2MCA2MCA2MCA2MEM2MCA2MCA2MCA2MCA2MCA2MFY2MEM2MCA2MCA2MCA2MCA2MCA2MEM2MCA2MCA2MCA2MCA2MCA2MFY2MEM2MCA2MCA2MCA2MCA2MCA2MEM2MCA2MCA2MCA2MCA2MCA2MFY2MEM2MCA2MCA2MCA2MCA2MCA2MEM2MCA2MCA2MCA2MCA2MCA2MFY2MEM2MCA2MCA2MCA2MCA2MCA2EMiBmaWxsPSIjQ0NDQ0NDIi8+Cjx0ZXh0IHg9IjYwIiB5PSI3MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEyIiBmaWxsPSIjOTk5OTk5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5ObyBJbWFnZTwvdGV4dD4KPC9zdmc+">` : 
+                                            `<img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSIjRjVGNUY1Ii8+CjxwYXRoIGQ9Ik02MCA2MEM2MCA2MCA2MCA2MCA2MCA2MEM2MCA2MCA2MCA2MCA2MCA2MFY2MEM2MCA2MCA2MCA2MCA2MCA2MEM2MCA2MCA2MCA2MCA2MCA2MFY2MEM2MCA2MCA2MCA2MCA2MCA2MEM2MCA2MCA2MCA2MCA2MCA2MFY2MEM2MCA2MCA2MCA2MCA2MCA2MEM2MCA2MCA2MCA2MCA2MCA2MFY2MEM2MCA2MCA2MCA2MCA2MCA2MEM2MCA2MCA2MCA2MCA2MCA2MFY2MEM2MCA2MCA2MCA2MCA2MCA2EMiBmaWxsPSIjQ0NDQ0NDIi8+Cjx0ZXh0IHg9IjYwIiB5PSI3MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjR4IiBmaWxsPSIjOTk5OTk5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5ObyBJbWFnZTwvdGV4dD4KPC9zdmc+" alt="No Image">`
                                                     }
                                                 </div>
                                     <div class="item-details">
@@ -2354,72 +2354,32 @@ async function loadAnalytics() {
 // Global function to load categories for product form
 window.loadCategories = async function() {
     try {
-        console.log('=== LOADING CATEGORIES FOR PRODUCT FORM ===');
-        console.log('API Base URL:', API_BASE_URL);
-        console.log('Full categories URL:', `${API_BASE_URL}/categories`);
-        
         const response = await fetch(`${API_BASE_URL}/categories`);
-        console.log('Categories response status:', response.status);
-        console.log('Categories response ok:', response.ok);
         
         if (response.ok) {
             const categories = await response.json();
-            console.log('Categories data received:', categories);
-            console.log('Categories count:', categories.length);
-            console.log('Categories type:', typeof categories);
-            console.log('Categories is array:', Array.isArray(categories));
             
             const categorySelect = document.getElementById('categorySelect');
-            console.log('Category select element found:', !!categorySelect);
-            
             if (!categorySelect) {
-                console.error('Category select element not found! DOM might not be ready yet.');
-                console.log('Available elements with "category" in ID:');
-                document.querySelectorAll('[id*="category"]').forEach(el => {
-                    console.log('- Element ID:', el.id, 'Tag:', el.tagName);
-                });
                 return;
             }
-            
-            console.log('Category select element found, populating...');
-            console.log('Before population - innerHTML length:', categorySelect.innerHTML.length);
             
             categorySelect.innerHTML = '<option value="">Select Category</option>';
             
             if (categories.length === 0) {
-                console.log('No categories found in database');
                 categorySelect.innerHTML = '<option value="">No categories available</option>';
                 return;
             }
             
-            categories.forEach((category, index) => {
-                console.log(`Processing category ${index + 1}:`, category);
-                console.log('Category ID:', category.id);
-                console.log('Category Name:', category.name);
-                console.log('Category structure:', JSON.stringify(category, null, 2));
-                
+            categories.forEach(category => {
                 if (category.id && category.name) {
                     const optionHtml = `<option value="${category.id}">${category.name}</option>`;
                     categorySelect.innerHTML += optionHtml;
-                    console.log('Category option added successfully:', optionHtml);
-                } else {
-                    console.warn('Category missing ID or name:', category);
                 }
             });
-            
-            console.log('After population - innerHTML length:', categorySelect.innerHTML.length);
-            console.log('Final dropdown HTML:', categorySelect.innerHTML);
-            console.log('Categories dropdown populated successfully');
-        } else {
-            console.error('Failed to load categories:', response.status, response.statusText);
-            const errorText = await response.text();
-            console.error('Error response:', errorText);
         }
-        
-        console.log('=== CATEGORIES LOADING COMPLETED ===');
     } catch (error) {
         console.error('Error loading categories:', error);
-        console.error('Error stack:', error.stack);
     }
 };
 
@@ -2637,17 +2597,12 @@ let bulkSelectedProducts = new Set();
 // Load categories for management section
 async function loadCategoriesManagement() {
     try {
-        console.log('Loading categories for management...');
         const response = await fetch(`${API_BASE_URL}/categories`);
-        console.log('Categories response status:', response.status);
         
         if (response.ok) {
             const categories = await response.json();
-            console.log('Categories loaded:', categories);
-            console.log('Categories count:', categories.length);
             
             if (categories.length === 0) {
-                console.log('No categories found in database');
                 // Show a message that no categories exist
                 const grid = document.getElementById('categoriesGrid');
                 if (grid) {
@@ -2668,8 +2623,6 @@ async function loadCategoriesManagement() {
             await renderCategoriesGrid(categories);
         } else {
             console.error('Failed to load categories:', response.status, response.statusText);
-            const errorText = await response.text();
-            console.error('Error response:', errorText);
         }
     } catch (error) {
         console.error('Error loading categories:', error);
@@ -3902,11 +3855,11 @@ function viewCustomerDetails(customerId) {
         // Fallback to enhanced implementation
         console.log('🔍 Opening customer details for ID:', customerId);
         
-        fetch(`https://rosybrown-ram-255793.hostingersite.com/users/${customerId}`)
+        fetch(`${API_BASE_URL}/users/${customerId}`)
             .then(response => response.json())
             .then(customer => {
                 // Fetch orders
-                return fetch(`https://rosybrown-ram-255793.hostingersite.com/users/${customerId}/orders`)
+                return fetch(`${API_BASE_URL}/users/${customerId}/orders`)
                     .then(ordersResponse => ordersResponse.ok ? ordersResponse.json() : [])
                     .then(orders => ({ customer, orders }));
             })
@@ -4453,12 +4406,26 @@ let currentEditingSlideId = null;
 // Load hero slides
 async function loadHeroSlides() {
     try {
+        console.log('🎯 Loading hero slides from:', `${API_BASE_URL}/admin/hero-slides`);
+        
         const response = await fetch(`${API_BASE_URL}/admin/hero-slides`);
+        console.log('🎯 Response status:', response.status);
+        
         if (!response.ok) {
             throw new Error('Failed to fetch hero slides');
         }
         
         const slides = await response.json();
+        console.log('🎯 Received slides data:', slides);
+        console.log('🎯 Slides type:', typeof slides);
+        console.log('🎯 Slides length:', slides ? slides.length : 'null');
+        
+        if (slides && slides.length > 0) {
+            slides.forEach((slide, index) => {
+                console.log(`🎯 Slide ${index}:`, slide);
+            });
+        }
+        
         displayHeroSlides(slides);
     } catch (error) {
         console.error('Error loading hero slides:', error);
@@ -4475,12 +4442,14 @@ function displayHeroSlides(slides) {
         return;
     }
     
-    slidesGrid.innerHTML = slides.map(slide => `
+    slidesGrid.innerHTML = slides.map(slide => {
+        console.log(`🎯 Rendering slide ${slide.id}:`, slide);
+        return `
         <div class="slide-card">
             <div class="slide-media">
                 ${slide.media_type === 'video' ? 
                     `<video src="${slide.media_url}" muted></video>` :
-                    `<img src="${slide.media_url}" alt="${slide.title}">`
+                    `<img src="${slide.media_url}" alt="${slide.title}" onerror="this.src='${API_BASE_URL}/uploads/images/placeholder.jpg'">`
                 }
                 <span class="media-type-badge">${slide.media_type}</span>
             </div>
@@ -4513,7 +4482,8 @@ function displayHeroSlides(slides) {
                 </div>
             </div>
         </div>
-    `).join('');
+    `;
+    }).join('');
 }
 
 // Open hero slide modal
@@ -4625,6 +4595,7 @@ async function saveHeroSlide() {
         } else {
             // Use existing media URL if no new file
             const existingUrl = document.getElementById('mediaPreview').dataset.url;
+            
             if (!existingUrl) {
                 showMessage('Media is required', 'error');
                 return;
@@ -6041,7 +6012,6 @@ async function deleteOrder(orderId) {
 // Load category images for admin panel
 async function loadCategoryImages() {
     try {
-        console.log('Loading category images...');
         const response = await fetch(`${API_BASE_URL}/admin/category-images`);
         
         if (!response.ok) {
@@ -6049,7 +6019,6 @@ async function loadCategoryImages() {
         }
         
         const categoryImages = await response.json();
-        console.log('Category images loaded:', categoryImages);
         
         // Populate category images grid
         displayCategoryImages(categoryImages);
@@ -6079,20 +6048,40 @@ function displayCategoryImages(categoryImages) {
     }
     
     const imagesHTML = categoryImages.map(category => {
-        const mainImage = category.images.find(img => img.image_url === category.current_image_url);
-        const otherImages = category.images.filter(img => img.image_url !== category.current_image_url);
+        // Check if category has images and filter out any with null/undefined image_url field
+        const validImages = category.images.filter(img => img && img.image_url && img.image_url !== 'null' && img.image_url !== 'undefined' && img.image_url.trim() !== '');
+        
+        if (validImages.length === 0) {
+            return `
+                <div class="category-image-card no-image">
+                    <div class="category-image-info">
+                        <h4>${category.name}</h4>
+                        <p>No images uploaded yet</p>
+                        <div class="category-image-actions">
+                            <button class="btn btn-primary" onclick="openCategoryImageUploadModal()">
+                                <i class="fas fa-upload"></i> Upload First Image
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        const mainImage = validImages.find(img => img.image_url === category.current_image_url) || validImages[0];
+        const otherImages = validImages.filter(img => img.image_url !== mainImage.image_url);
         
         let imagesHTML = '';
         
         // Display main image first
-        if (mainImage) {
+        if (mainImage && mainImage.image_url) {
+            const imageUrl = `${API_BASE_URL}${mainImage.image_url}`;
             imagesHTML += `
                 <div class="category-image-card">
-                    <img src="${API_BASE_URL}${mainImage.image_url}" alt="${category.name}" class="category-image-preview">
+                    <img src="${imageUrl}" alt="${category.name}" class="category-image-preview" onerror="this.src='${API_BASE_URL}/uploads/images/placeholder.jpg'">
                     <div class="category-image-info">
                         <span class="category-image-status main">Main Image</span>
                         <h4>${category.name}</h4>
-                        <p>Position: ${mainImage.position}</p>
+                        <p>Position: ${mainImage.position || 1}</p>
                         <div class="category-image-actions">
                             <button class="btn btn-secondary" onclick="replaceCategoryImage(${category.id}, '${mainImage.image_url}')">
                                 <i class="fas fa-edit"></i> Replace
@@ -6108,27 +6097,30 @@ function displayCategoryImages(categoryImages) {
         
         // Display other images
         otherImages.forEach(image => {
-            imagesHTML += `
-                <div class="category-image-card">
-                    <img src="${API_BASE_URL}${image.image_url}" alt="${category.name}" class="category-image-preview">
-                    <div class="category-image-info">
-                        <span class="category-image-status secondary">Secondary</span>
-                        <h4>${category.name}</h4>
-                        <p>Position: ${image.position}</p>
-                        <div class="category-image-actions">
-                            <button class="btn btn-primary" onclick="setAsMainImage(${category.id}, '${image.image_url}')">
-                                <i class="fas fa-star"></i> Set as Main
-                            </button>
-                            <button class="btn btn-secondary" onclick="replaceCategoryImage(${category.id}, '${image.image_url}')">
-                                <i class="fas fa-edit"></i> Replace
-                            </button>
-                            <button class="btn btn-danger" onclick="deleteCategoryImage(${image.id})">
-                                <i class="fas fa-trash"></i> Delete
-                            </button>
+            if (image && image.image_url) {
+                const imageUrl = `${API_BASE_URL}${image.image_url}`;
+                imagesHTML += `
+                    <div class="category-image-card">
+                        <img src="${imageUrl}" alt="${category.name}" class="category-image-preview" onerror="this.src='${API_BASE_URL}/uploads/images/placeholder.jpg'">
+                        <div class="category-image-info">
+                            <span class="category-image-status secondary">Secondary</span>
+                            <h4>${category.name}</h4>
+                            <p>Position: ${image.position || 1}</p>
+                            <div class="category-image-actions">
+                                <button class="btn btn-primary" onclick="setAsMainImage(${category.id}, '${image.image_url}')">
+                                    <i class="fas fa-star"></i> Set as Main
+                                </button>
+                                <button class="btn btn-secondary" onclick="replaceCategoryImage(${category.id}, '${image.image_url}')">
+                                    <i class="fas fa-edit"></i> Replace
+                                </button>
+                                <button class="btn btn-danger" onclick="deleteCategoryImage(${image.id})">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                                </div>
                         </div>
                     </div>
-                </div>
-            `;
+                `;
+            }
         });
         
         return imagesHTML;
@@ -6206,7 +6198,7 @@ async function uploadCategoryImage() {
         
         // If set as main image, update the category
         if (setAsMain) {
-            await setAsMainImage(categoryId, result.image_url);
+            await setAsMainImage(categoryId, result.image);
         }
         
         showSuccess('Category image uploaded successfully');

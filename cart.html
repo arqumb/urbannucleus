@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping Cart - URBAN NUCLEUS</title>
+    <script>const API_BASE_URL = 'https://urbannucleus.in';</script>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="responsive.css">
     <link rel="stylesheet" href="cart.css">
@@ -690,7 +691,7 @@
         // Announcement Bar Functions
         async function loadAnnouncementBarData() {
             try {
-                const response = await fetch('http://localhost:3000/api/announcement');
+                const response = await fetch(`${API_BASE_URL}/api/announcement`);
                 if (response.ok) {
                     const data = await response.json();
                     if (data.visible && data.messages && data.messages.length > 0) {
@@ -741,7 +742,7 @@
         function loadCategories() {
             console.log('Loading categories...');
             
-            fetch('http://localhost:3000/categories')
+            fetch(`${API_BASE_URL}/categories`)
                 .then(function(response) { 
                     if (!response.ok) {
                         throw new Error('Failed to fetch categories');
@@ -793,7 +794,7 @@
             loadCategories();
         });
 
-        const API_BASE_URL = 'http://localhost:3000';
+        // API_BASE_URL is already declared at the top of the file
         let currentUser = null;
         let cartItems = [];
 

@@ -38,7 +38,7 @@ const emailConfig = {
   
   // Reset URL Configuration
   resetUrl: {
-    baseUrl: 'http://localhost:5500', // Change to your domain in production
+    baseUrl: 'https://urbannucleus.in', // VPS domain
     path: '/reset-password.html'
   }
 };

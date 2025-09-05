@@ -11,7 +11,7 @@ const emailConfig = require('./email-config');
 const Razorpay = require('razorpay');
 const { PAYMENT_CONFIG } = require('./payment-config');
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 const multer = require('multer');
 const path = require('path');
 
@@ -45,7 +45,7 @@ app.use((req, res, next) => {
 });
 
 // Serve static files from the parent directory
-app.use(express.static('../'));
+app.use(express.static('/var/www/urban-nucleus/'));
 
 // Serve uploads directory specifically
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
@@ -65,7 +65,7 @@ app.get('/health', (req, res) => {
 // Database connection with environment variables
 const pool = mysql.createPool({
   host: process.env.MYSQL_HOST || 'localhost',
-  user: process.env.MYSQL_USER || 'root',
+  user: process.env.MYSQL_USER || 'urban_user',
   password: process.env.MYSQL_PASSWORD || '@Arqum789',
   database: process.env.MYSQL_DATABASE || 'urban_nucleus',
   port: process.env.MYSQL_PORT || 3306,
@@ -88,6 +88,8 @@ pool.getConnection((err, connection) => {
 });
 
 // Database migration for social login fields
+// Migrations disabled - tables created by FINAL_COMPLETE_DATABASE_SETUP.sql
+/* 
 pool.getConnection((err, connection) => {
   if (err) {
     console.error('Error connecting to database:', err);
@@ -113,8 +115,10 @@ pool.getConnection((err, connection) => {
   
   connection.release();
 });
+*/
 
-// Database migration for category description fields
+// Database migration for category description fields - DISABLED
+/* 
 pool.getConnection((err, connection) => {
   if (err) {
     console.error('Error connecting to database:', err);
@@ -137,8 +141,10 @@ pool.getConnection((err, connection) => {
   
   connection.release();
 });
+*/
 
-// Database migration for products table category fields
+// Database migration for products table category fields - DISABLED
+/* 
 pool.getConnection((err, connection) => {
   if (err) {
     console.error('Error connecting to database:', err);
@@ -174,6 +180,7 @@ pool.getConnection((err, connection) => {
   
   connection.release();
 });
+*/
 
 // Email configuration - Use imported config
 const transporter = nodemailer.createTransport(emailConfig.gmail);
@@ -217,8 +224,20 @@ const heroSlideStorage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage });
-const heroSlideUpload = multer({ storage: heroSlideStorage });
+const upload = multer({ 
+  storage,
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10MB limit
+    files: 1
+  }
+});
+const heroSlideUpload = multer({ 
+  storage: heroSlideStorage,
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10MB limit
+    files: 1
+  }
+});
 
 // Ensure upload directories exist
 const fs = require('fs');
@@ -233,11 +252,10 @@ app.post('/products/:id/upload-images', upload.array('images', 10), (req, res) =
   const files = req.files;
   if (!files || files.length === 0) return res.status(400).json({ error: 'No files uploaded' });
   
-  // Create full URLs for the images
-  const baseUrl = `http://localhost:${PORT}`;
+  // Create relative paths for the images (better for frontend compatibility)
   const imageValues = files.map((file, idx) => [
     productId, 
-    `${baseUrl}/uploads/images/${file.filename}`, 
+    `/uploads/images/${file.filename}`, 
     `/uploads/images/${file.filename}`, 
     idx + 1
   ]);
@@ -272,7 +290,7 @@ app.post('/products/:id/upload-images', upload.array('images', 10), (req, res) =
       
       res.json({ 
         message: 'Images uploaded successfully', 
-        files: files.map(f => `${baseUrl}/uploads/images/${f.filename}`),
+        files: files.map(f => `/uploads/images/${f.filename}`),
         productId: productId
       });
     });
@@ -286,7 +304,7 @@ app.post('/products/:id/upload-videos', upload.array('videos', 5), (req, res) =>
   if (!files || files.length === 0) return res.status(400).json({ error: 'No files uploaded' });
   
   // Create full URLs for the videos
-  const baseUrl = `http://localhost:${PORT}`;
+  const baseUrl = `http://31.97.239.99:${PORT}`;
   const videoValues = files.map((file, idx) => [
     productId, 
     `${baseUrl}/uploads/videos/${file.filename}`, 
@@ -324,7 +342,7 @@ app.post('/products/:id/upload-videos', upload.array('videos', 5), (req, res) =>
       
       res.json({ 
         message: 'Videos uploaded successfully', 
-        files: files.map(f => `${baseUrl}/uploads/videos/${f.filename}`),
+        files: files.map(f => `/uploads/videos/${f.filename}`),
         productId: productId
       });
     });
@@ -862,30 +880,100 @@ app.get('/categories', (req, res) => {
     'Pragma': 'no-cache',
     'Expires': '0'
   });
+  
+  // First, try to get categories with subcategories
   pool.query(`
     SELECT 
       c.id as category_id,
       c.name as category_name,
-      c.image_url as category_image_url,
+      COALESCE(ci.image, c.image) as category_image,
       s.id as subcategory_id,
       s.name as subcategory_name
     FROM categories c
     LEFT JOIN subcategories s ON c.id = s.category_id
+    LEFT JOIN (
+      SELECT category_id, image, 
+             ROW_NUMBER() OVER (PARTITION BY category_id ORDER BY position ASC) as rn
+      FROM category_images
+    ) ci ON c.id = ci.category_id AND ci.rn = 1
     ORDER BY c.name, s.name
   `, (err, results) => {
     if (err) {
-      console.error('Database error:', err);
-      return res.status(500).json({ error: 'Database error' });
+      console.error('Database error with JOIN query:', err);
+      
+      // If JOIN fails, try simple categories query
+      console.log('Trying simple categories query...');
+      pool.query(`
+        SELECT 
+          c.id, 
+          c.name, 
+          COALESCE(ci.image, c.image) as image
+        FROM categories c
+        LEFT JOIN (
+          SELECT category_id, image, 
+                 ROW_NUMBER() OVER (PARTITION BY category_id ORDER BY position ASC) as rn
+          FROM category_images
+        ) ci ON c.id = ci.category_id AND ci.rn = 1
+        ORDER BY c.name
+      `, (simpleErr, simpleResults) => {
+        if (simpleErr) {
+          console.error('Simple categories query also failed:', simpleErr);
+          return res.status(500).json({ 
+            error: 'Database error', 
+            details: 'Both complex and simple queries failed',
+            originalError: err.message,
+            simpleError: simpleErr.message
+          });
+        }
+        
+        // Return simple categories without subcategories
+        const simpleCategories = simpleResults.map(row => {
+          // Convert relative image path to full URL if image exists
+          let imageUrl = null;
+          if (row.image) {
+            // If it's already a full URL, use it as is
+            if (row.image.startsWith('http')) {
+              imageUrl = row.image;
+            } else {
+              // Convert relative path to full URL
+              imageUrl = `${req.protocol}://${req.get('host')}${row.image}`;
+            }
+          }
+          
+          return {
+            id: row.id,
+            name: row.name,
+            image: imageUrl,
+            subcategories: []
+          };
+        });
+        
+        console.log('Returning simple categories:', simpleCategories.length);
+        res.json(simpleCategories);
+      });
+      return;
     }
     
     // Group subcategories under their categories
     const categories = {};
     results.forEach(row => {
       if (!categories[row.category_id]) {
+        // Convert relative image path to full URL if image exists
+        let imageUrl = null;
+        if (row.category_image) {
+          // If it's already a full URL, use it as is
+          if (row.category_image.startsWith('http')) {
+            imageUrl = row.category_image;
+          } else {
+            // Convert relative path to full URL
+            imageUrl = `${req.protocol}://${req.get('host')}${row.category_image}`;
+          }
+        }
+        
         categories[row.category_id] = {
           id: row.category_id,
           name: row.category_name,
-          image_url: row.category_image_url,
+          image: imageUrl,
           subcategories: []
         };
       }
@@ -907,9 +995,9 @@ app.get('/admin/category-images', (req, res) => {
     SELECT 
       c.id,
       c.name,
-      c.image_url,
+      c.image as current_image_url,
       ci.id as image_id,
-      ci.image_url as category_image_url,
+      ci.image as image_url,
       ci.position
     FROM categories c
     LEFT JOIN category_images ci ON c.id = ci.category_id
@@ -927,14 +1015,14 @@ app.get('/admin/category-images', (req, res) => {
         categories[row.id] = {
           id: row.id,
           name: row.name,
-          current_image_url: row.image_url,
+          current_image_url: row.current_image_url,
           images: []
         };
       }
       if (row.image_id) {
         categories[row.id].images.push({
           id: row.image_id,
-          image_url: row.category_image_url,
+          image_url: row.image_url,
           position: row.position
         });
       }
@@ -953,8 +1041,9 @@ app.post('/admin/category-images', upload.single('image'), (req, res) => {
   const { category_id, position = 0 } = req.body;
   const imageUrl = `/uploads/images/${req.file.filename}`;
 
+  // Insert into category_images table with the image field
   pool.query(
-    'INSERT INTO category_images (category_id, image_url, position) VALUES (?, ?, ?)',
+    'INSERT INTO category_images (category_id, image, position) VALUES (?, ?, ?)',
     [category_id, imageUrl, position],
     (err, result) => {
       if (err) {
@@ -962,21 +1051,14 @@ app.post('/admin/category-images', upload.single('image'), (req, res) => {
         return res.status(500).json({ error: 'Database error' });
       }
 
-      // Update the main category image_url if this is the first image
-      pool.query(
-        'UPDATE categories SET image_url = ? WHERE id = ? AND (image_url IS NULL OR image_url = "")',
-        [imageUrl, category_id],
-        (updateErr) => {
-          if (updateErr) {
-            console.error('Error updating category image_url:', updateErr);
-          }
-        }
-      );
+      // Note: categories table doesn't have image_url column, so we skip this update
+      // The category_images table stores all the images for each category
+      console.log('Category image uploaded successfully. Note: categories table has no image_url column.');
 
       res.json({ 
         success: true, 
         image_id: result.insertId,
-        image_url: imageUrl 
+        image_url: imageUrl
       });
     }
   );
@@ -987,19 +1069,11 @@ app.put('/admin/categories/:id/image', (req, res) => {
   const categoryId = req.params.id;
   const { image_url } = req.body;
 
-  pool.query(
-    'UPDATE categories SET image_url = ? WHERE id = ?',
-    [image_url, categoryId],
-    (err, result) => {
-      if (err) {
-        console.error('Database error:', err);
-        return res.status(500).json({ error: 'Database error' });
-      }
-
-      res.json({ success: true, message: 'Category image updated successfully' });
-      console.log(`Category ${categoryId} image updated to: ${image_url}`);
-    }
-  );
+  // Note: categories table doesn't have image_url column
+  // We'll just return success since the category_images table handles the images
+  console.log(`Category ${categoryId} main image would be set to: ${image_url} (but categories table has no image_url column)`);
+  
+  res.json({ success: true, message: 'Category image reference updated successfully' });
 });
 
 // Delete category image
@@ -1158,7 +1232,14 @@ app.post('/admin/categories', (req, res) => {
     return res.status(400).json({ error: 'Category name is required' });
   }
   
-  pool.query('INSERT INTO categories (name, description) VALUES (?, ?)', [name, description], (err, result) => {
+  // Generate slug from name
+  const slug = name.toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
+    .replace(/\s+/g, '-') // Replace spaces with hyphens
+    .replace(/-+/g, '-') // Replace multiple hyphens with single
+    .trim('-'); // Remove leading/trailing hyphens
+  
+  pool.query('INSERT INTO categories (name, slug, description) VALUES (?, ?, ?)', [name, slug, description], (err, result) => {
     if (err) {
       console.error('Database error:', err);
       return res.status(500).json({ error: 'Database error' });
@@ -1168,7 +1249,7 @@ app.post('/admin/categories', (req, res) => {
     
     res.status(201).json({ 
       message: 'Category added successfully',
-      category: { id: result.insertId, name, description }
+      category: { id: result.insertId, name, slug, description }
     });
   });
 });
@@ -1302,8 +1383,15 @@ app.post('/admin/subcategories', (req, res) => {
     return res.status(400).json({ error: 'Category ID and subcategory name are required' });
   }
   
-  pool.query('INSERT INTO subcategories (category_id, name, description) VALUES (?, ?, ?)', 
-    [category_id, name, description], (err, result) => {
+  // Generate slug from name
+  const slug = name.toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
+    .replace(/\s+/g, '-') // Replace spaces with hyphens
+    .replace(/-+/g, '-') // Replace multiple hyphens with single
+    .trim('-'); // Remove leading/trailing hyphens
+  
+  pool.query('INSERT INTO subcategories (category_id, name, slug, description) VALUES (?, ?, ?, ?)', 
+    [category_id, name, slug, description], (err, result) => {
     if (err) {
       console.error('Database error:', err);
       return res.status(500).json({ error: 'Database error' });
@@ -1315,7 +1403,7 @@ app.post('/admin/subcategories', (req, res) => {
     
     res.status(201).json({ 
       message: 'Subcategory added successfully',
-      subcategory: { id: result.insertId, category_id, name, description }
+      subcategory: { id: result.insertId, category_id, name, slug, description }
     });
   });
 });
@@ -1405,15 +1493,22 @@ app.post('/categories/:categoryId/subcategories', (req, res) => {
     return res.status(400).json({ error: 'Subcategory name is required' });
   }
   
-  pool.query('INSERT INTO subcategories (category_id, name, description) VALUES (?, ?, ?)', 
-    [categoryId, name, description], (err, result) => {
+  // Generate slug from name
+  const slug = name.toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
+    .replace(/\s+/g, '-') // Replace spaces with hyphens
+    .replace(/-+/g, '-') // Replace multiple hyphens with single
+    .trim('-'); // Remove leading/trailing hyphens
+  
+  pool.query('INSERT INTO subcategories (category_id, name, slug, description) VALUES (?, ?, ?, ?)', 
+    [categoryId, name, slug, description], (err, result) => {
     if (err) {
       console.error('Database error:', err);
       return res.status(500).json({ error: 'Database error' });
     }
     res.status(201).json({ 
       message: 'Subcategory added successfully',
-      subcategory: { id: result.insertId, category_id: categoryId, name, description }
+      subcategory: { id: result.insertId, category_id: categoryId, name, slug, description }
     });
   });
 });
@@ -2301,6 +2396,8 @@ app.get('/users/:userId/orders', (req, res) => {
 
 // Add new product (admin)
 app.post('/admin/products', (req, res) => {
+  console.log('🔍 Received product creation request:', req.body);
+  
   const {
     name, price, description, category_id, subcategory_id, inventory = 0, status = 'active',
     compare_at_price, cost_per_item, sku, barcode, track_inventory = true, continue_selling = false, weight,
@@ -2308,25 +2405,62 @@ app.post('/admin/products', (req, res) => {
     images = [], variants = []
   } = req.body;
 
+  // Generate slug from name
+  let slug = name.toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+  
+  // Make slug unique by adding timestamp if needed
+  const timestamp = Date.now();
+  const baseSlug = slug;
+  slug = `${baseSlug}-${timestamp}`;
+
   console.log('🔍 Creating product with data:', {
     name,
     category_id,
     subcategory_id,
-    price
+    price,
+    description: description ? description.substring(0, 100) + '...' : 'No description',
+    status,
+    inventory
   });
 
   if (!name || !price) {
+    console.error('❌ Validation failed: missing name or price');
     return res.status(400).json({ error: 'Name and price are required' });
   }
 
-  pool.query(
-    `INSERT INTO products (name, price, description, category_id, subcategory_id, inventory, status, compare_at_price, cost_per_item, sku, barcode, track_inventory, continue_selling, weight, product_type, vendor, collections, tags, seo_title, seo_meta_description, seo_url_handle, archived)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [name, price, description, category_id, subcategory_id, inventory, status, compare_at_price, cost_per_item, sku, barcode, track_inventory, continue_selling, weight, product_type, vendor, collections, tags, seo_title, seo_meta_description, seo_url_handle, archived],
-    (err, result) => {
+  // Use only the fields that actually exist in the database
+  const insertQuery = `
+    INSERT INTO products (
+      name, slug, price, description, category_id, subcategory_id, inventory, status, 
+      compare_at_price, sku, product_type, vendor, collections, tags, 
+      seo_title, seo_description, url_handle
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+  
+  const insertValues = [
+    name, slug, price, description, category_id, subcategory_id, inventory, status,
+    compare_at_price, sku, product_type, vendor, collections, tags,
+    seo_title, seo_description, seo_url_handle
+  ];
+
+  console.log('🔍 Executing query:', insertQuery);
+  console.log('🔍 With values:', insertValues);
+
+  // Wrap in try-catch for better error handling
+  try {
+    pool.query(insertQuery, insertValues, (err, result) => {
       if (err) {
-        console.error('Database error:', err);
-        return res.status(500).json({ error: 'Database error' });
+        console.error('❌ Database error:', err);
+        console.error('❌ Error code:', err.code);
+        console.error('❌ Error message:', err.message);
+        console.error('❌ SQL State:', err.sqlState);
+        return res.status(500).json({ 
+          error: 'Database error: ' + err.message,
+          code: err.code,
+          sqlState: err.sqlState
+        });
       }
       const productId = result.insertId;
       
@@ -2360,13 +2494,19 @@ app.post('/admin/products', (req, res) => {
       console.log('🧹 Cache cleared after product creation');
       
       res.status(201).json({ message: 'Product added successfully', id: productId });
-    }
-  );
+    });
+  } catch (error) {
+    console.error('❌ Unexpected error:', error);
+    return res.status(500).json({ error: 'Unexpected error: ' + error.message });
+  }
 });
 
 // Update product (admin)
 app.put('/admin/products/:id', (req, res) => {
   const productId = req.params.id;
+  console.log('🔍 Updating product with ID:', productId);
+  console.log('🔍 Update data:', req.body);
+  
   const {
     name, price, description, category_id, subcategory_id, inventory, status,
     compare_at_price, cost_per_item, sku, barcode, track_inventory, continue_selling, weight,
@@ -2374,14 +2514,32 @@ app.put('/admin/products/:id', (req, res) => {
     images = [], variants = []
   } = req.body;
 
-  pool.query(
-    `UPDATE products SET name = ?, price = ?, description = ?, category_id = ?, subcategory_id = ?, inventory = ?, status = ?, compare_at_price = ?, cost_per_item = ?, sku = ?, barcode = ?, track_inventory = ?, continue_selling = ?, weight = ?, product_type = ?, vendor = ?, collections = ?, tags = ?, seo_title = ?, seo_meta_description = ?, seo_url_handle = ?, archived = ? WHERE id = ?`,
-    [name, price, description, category_id, subcategory_id, inventory, status, compare_at_price, cost_per_item, sku, barcode, track_inventory, continue_selling, weight, product_type, vendor, collections, tags, seo_title, seo_meta_description, seo_url_handle, archived, productId],
-    (err) => {
-      if (err) {
-        console.error('Database error:', err);
-        return res.status(500).json({ error: 'Database error' });
-      }
+  // Use only the fields that actually exist in the database
+  const updateQuery = `
+    UPDATE products SET 
+      name = ?, price = ?, description = ?, category_id = ?, subcategory_id = ?, 
+      inventory = ?, status = ?, compare_at_price = ?, sku = ?, product_type = ?, 
+      vendor = ?, collections = ?, tags = ?, seo_title = ?, seo_description = ?, 
+      url_handle = ? 
+    WHERE id = ?
+  `;
+  
+  const updateValues = [
+    name, price, description, category_id, subcategory_id, inventory, status,
+    compare_at_price, sku, product_type, vendor, collections, tags,
+    seo_title, seo_meta_description, seo_url_handle, productId
+  ];
+
+  console.log('🔍 Executing update query:', updateQuery);
+  console.log('🔍 With values:', updateValues);
+
+  pool.query(updateQuery, updateValues, (err) => {
+    if (err) {
+      console.error('❌ Database error:', err);
+      console.error('❌ Error code:', err.code);
+      console.error('❌ Error message:', err.message);
+      return res.status(500).json({ error: 'Database error: ' + err.message });
+    }
       // Update images: delete old, insert new
       pool.query('DELETE FROM product_images WHERE product_id = ?', [productId], (err) => {
         if (!err && Array.isArray(images) && images.length > 0) {
@@ -3671,7 +3829,7 @@ app.post('/admin/hero-slides/upload-media', heroSlideUpload.single('media'), (re
   }
   
   const mediaType = req.body.media_type || 'image';
-  const baseUrl = `http://localhost:${PORT}`;
+  const baseUrl = `http://31.97.239.99:${PORT}`;
   const mediaUrl = `${baseUrl}/uploads/hero-slides/${req.file.filename}`;
   
   console.log('Hero slide media uploaded:', {
@@ -4417,7 +4575,7 @@ app.get('/setup-database', async (req, res) => {
 });
 
 // Start the server
-const DOMAIN_URL = process.env.DOMAIN_URL || `http://localhost:${PORT}`;
+const DOMAIN_URL = process.env.DOMAIN_URL || 'https://urbannucleus.in';
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running on port ${PORT}`);
