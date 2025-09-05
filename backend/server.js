@@ -64,11 +64,11 @@ app.get('/health', (req, res) => {
 
 // Database connection with environment variables
 const pool = mysql.createPool({
-  host: process.env.MYSQL_HOST || 'localhost',
-  user: process.env.MYSQL_USER || 'urban_user',
-  password: process.env.MYSQL_PASSWORD || '@Arqum789',
-  database: process.env.MYSQL_DATABASE || 'urban_nucleus',
-  port: process.env.MYSQL_PORT || 3306,
+  host: process.env.DB_HOST || process.env.MYSQL_HOST || 'localhost',
+  user: process.env.DB_USER || process.env.MYSQL_USER || 'urban_user',
+  password: process.env.DB_PASSWORD || process.env.MYSQL_PASSWORD || '@Arqum789',
+  database: process.env.DB_NAME || process.env.MYSQL_DATABASE || 'urban_nucleus',
+  port: process.env.DB_PORT || process.env.MYSQL_PORT || 3306,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
