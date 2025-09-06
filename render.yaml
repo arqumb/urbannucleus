@@ -8,14 +8,14 @@ services:
       - key: NODE_ENV
         value: production
       - key: MYSQL_HOST
-        value: 31.97.239.99
+        value: nozomi.proxy.rlwy.net
       - key: MYSQL_USER
-        value: render_user
+        value: root
       - key: MYSQL_PASSWORD
-        value: @Arqum123
+        value: XspTBjxqXpnUydcWcIMsmiURiLsuuRpB
       - key: MYSQL_DATABASE
-        value: urban_nucleus
+        value: urban_db
       - key: MYSQL_PORT
-        value: 3306
+        value: 20402
       - key: PORT
         value: 3000
