@@ -2417,6 +2417,12 @@ app.post('/admin/products', (req, res) => {
   const timestamp = Date.now();
   const baseSlug = slug;
   slug = `${baseSlug}-${timestamp}`;
+  
+  // Generate SKU if empty
+  let finalSku = sku;
+  if (!finalSku || finalSku.trim() === '') {
+    finalSku = `SKU-${timestamp}-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
+  }
 
   console.log('🔍 Creating product with data:', {
     name,
@@ -2444,7 +2450,7 @@ app.post('/admin/products', (req, res) => {
   
   const insertValues = [
     name, slug, price, description, category_id, subcategory_id, inventory, status,
-    compare_at_price, sku, product_type, vendor, collections, tags,
+    compare_at_price, finalSku, product_type, vendor, collections, tags,
     seo_title, seo_meta_description, seo_url_handle
   ];
 
@@ -2526,14 +2532,20 @@ app.put('/admin/products/:id', (req, res) => {
     UPDATE products SET 
       name = ?, price = ?, description = ?, category_id = ?, subcategory_id = ?, 
       inventory = ?, status = ?, compare_at_price = ?, sku = ?, product_type = ?, 
-      vendor = ?, collections = ?, tags = ?, seo_title = ?, seo_description = ?, 
+      vendor = ?, collections = ?, tags = ?, seo_title = ?, seo_meta_description = ?, 
       url_handle = ? 
     WHERE id = ?
   `;
   
+  // Generate SKU if empty for updates too
+  let finalSku = sku;
+  if (!finalSku || finalSku.trim() === '') {
+    finalSku = `SKU-${Date.now()}-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
+  }
+
   const updateValues = [
     name, price, description, category_id, subcategory_id, inventory, status,
-    compare_at_price, sku, product_type, vendor, collections, tags,
+    compare_at_price, finalSku, product_type, vendor, collections, tags,
     seo_title, seo_meta_description, seo_url_handle, productId
   ];
 
