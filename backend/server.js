@@ -45,7 +45,7 @@ app.use((req, res, next) => {
 });
 
 // Serve static files from the parent directory
-app.use(express.static('/var/www/urban-nucleus/'));
+app.use(express.static(path.join(__dirname, '..')));
 
 // Serve uploads directory specifically
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));

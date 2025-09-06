@@ -4,6 +4,7 @@ services:
     env: node
     buildCommand: cd backend && npm install
     startCommand: cd backend && npm start
+    staticPublishPath: .
     envVars:
       - key: NODE_ENV
         value: production
