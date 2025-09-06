@@ -10,11 +10,11 @@ services:
       - key: MYSQL_HOST
         value: 31.97.239.99
       - key: MYSQL_USER
-        value: your_database_username
+        value: render_user
       - key: MYSQL_PASSWORD
-        value: your_database_password
+        value: @Arqum123
       - key: MYSQL_DATABASE
-        value: your_database_name
+        value: urban_nucleus
       - key: MYSQL_PORT
         value: 3306
       - key: PORT

@@ -24,9 +24,9 @@ Add these environment variables in Render dashboard:
 ```
 NODE_ENV=production
 MYSQL_HOST=31.97.239.99
-MYSQL_USER=your_database_username
-MYSQL_PASSWORD=your_database_password
-MYSQL_DATABASE=your_database_name
+MYSQL_USER=render_user
+MYSQL_PASSWORD=@Arqum123
+MYSQL_DATABASE=urban_nucleus
 MYSQL_PORT=3306
 PORT=3000
 DOMAIN_URL=https://your-app-name.onrender.com
@@ -42,8 +42,8 @@ sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
 
 # Create database user
 sudo mysql
-CREATE USER 'render_user'@'%' IDENTIFIED BY 'strong_password';
-GRANT ALL PRIVILEGES ON your_database.* TO 'render_user'@'%';
+CREATE USER 'render_user'@'%' IDENTIFIED BY '@Arqum123';
+GRANT ALL PRIVILEGES ON urban_nucleus.* TO 'render_user'@'%';
 FLUSH PRIVILEGES;
 ```
 
