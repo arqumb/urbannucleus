@@ -304,7 +304,7 @@ app.post('/products/:id/upload-videos', upload.array('videos', 5), (req, res) =>
   if (!files || files.length === 0) return res.status(400).json({ error: 'No files uploaded' });
   
   // Create full URLs for the videos
-  const baseUrl = `http://31.97.239.99:${PORT}`;
+  const baseUrl = process.env.DOMAIN_URL || `http://31.97.239.99:${PORT}`;
   const videoValues = files.map((file, idx) => [
     productId, 
     `${baseUrl}/uploads/videos/${file.filename}`, 
@@ -3829,7 +3829,7 @@ app.post('/admin/hero-slides/upload-media', heroSlideUpload.single('media'), (re
   }
   
   const mediaType = req.body.media_type || 'image';
-  const baseUrl = `http://31.97.239.99:${PORT}`;
+  const baseUrl = process.env.DOMAIN_URL || `http://31.97.239.99:${PORT}`;
   const mediaUrl = `${baseUrl}/uploads/hero-slides/${req.file.filename}`;
   
   console.log('Hero slide media uploaded:', {
@@ -4577,7 +4577,7 @@ app.get('/setup-database', async (req, res) => {
 // Start the server
 const DOMAIN_URL = process.env.DOMAIN_URL || 'https://urbannucleus.in';
 
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`🌐 Domain: ${DOMAIN_URL}`);
   console.log('📱 Urban Nucleus E-commerce Platform');
