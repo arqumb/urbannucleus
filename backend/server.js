@@ -50,6 +50,23 @@ app.use(express.static(path.join(__dirname, '..')));
 // Serve uploads directory specifically
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
+// Add debugging for image requests
+app.get('/uploads/images/:filename', (req, res, next) => {
+  const filename = req.params.filename;
+  const filePath = path.join(__dirname, '../uploads/images', filename);
+  console.log(`🔍 Image request: ${filename}`);
+  console.log(`🔍 File path: ${filePath}`);
+  
+  // Check if file exists
+  const fs = require('fs');
+  if (!fs.existsSync(filePath)) {
+    console.log(`❌ Image file not found: ${filename}`);
+    return res.status(404).json({ error: 'Image not found', filename, filePath });
+  }
+  
+  next();
+});
+
 // Serve hero slides media files
 app.use('/uploads/hero-slides', express.static(path.join(__dirname, '../uploads/hero-slides')));
 
@@ -251,6 +268,11 @@ app.post('/products/:id/upload-images', upload.array('images', 10), (req, res) =
   const productId = req.params.id;
   const files = req.files;
   if (!files || files.length === 0) return res.status(400).json({ error: 'No files uploaded' });
+  
+  console.log(`🔍 Uploading ${files.length} images for product ${productId}`);
+  files.forEach((file, idx) => {
+    console.log(`🔍 File ${idx + 1}: ${file.filename} -> ${file.path}`);
+  });
   
   // Create relative paths for the images (better for frontend compatibility)
   const imageValues = files.map((file, idx) => [
