@@ -2445,7 +2445,7 @@ app.post('/admin/products', (req, res) => {
   const insertValues = [
     name, slug, price, description, category_id, subcategory_id, inventory, status,
     compare_at_price, sku, product_type, vendor, collections, tags,
-    seo_title, seo_description, seo_url_handle
+    seo_title, seo_meta_description, seo_url_handle
   ];
 
   console.log('🔍 Executing query:', insertQuery);
