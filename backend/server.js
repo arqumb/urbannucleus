@@ -63,19 +63,12 @@ app.get('/health', (req, res) => {
 });
 
 // Database connection with environment variables
-console.log('🔍 Environment variables check:');
-console.log('MYSQL_HOST:', process.env.MYSQL_HOST);
-console.log('MYSQL_USER:', process.env.MYSQL_USER);
-console.log('MYSQL_PASSWORD:', process.env.MYSQL_PASSWORD ? '***SET***' : 'NOT SET');
-console.log('MYSQL_DATABASE:', process.env.MYSQL_DATABASE);
-console.log('MYSQL_PORT:', process.env.MYSQL_PORT);
-
 const pool = mysql.createPool({
-  host: process.env.MYSQL_HOST || 'mysql-11fd3f8-bubere908-3682.d.aivencloud.com',
-  user: process.env.MYSQL_USER || 'avnadmin',
-  password: process.env.MYSQL_PASSWORD || 'your_aiven_password_here',
-  database: process.env.MYSQL_DATABASE || 'defaultdb',
-  port: process.env.MYSQL_PORT || 12534,
+  host: process.env.MYSQL_HOST,
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASSWORD,
+  database: process.env.MYSQL_DATABASE,
+  port: process.env.MYSQL_PORT,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
