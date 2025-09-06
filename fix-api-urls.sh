@@ -60,3 +60,7 @@ echo "1. Copy these fixed files to your VPS"
 echo "2. Restart your Node.js application"
 echo "3. Test the admin panel product saving"
 
+
+
+
+

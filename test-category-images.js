@@ -135,3 +135,7 @@ async function testCategoryImages() {
 
 // Run the test
 testCategoryImages();
+
+
+
+

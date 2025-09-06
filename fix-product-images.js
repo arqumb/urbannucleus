@@ -178,3 +178,7 @@ async function fixProductImages() {
 // Run the fix
 fixProductImages().catch(console.error);
 
+
+
+
+

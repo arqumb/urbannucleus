@@ -157,3 +157,7 @@ print_status "success" "Database setup completed successfully!"
 print_status "info" "Your Urban Nucleus database is ready to use"
 print_status "info" "You can now start your application with: pm2 start ecosystem.config.js --env production"
 
+
+
+
+

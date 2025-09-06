@@ -253,3 +253,7 @@ tail -f /var/log/nginx/error.log
 
 **Need Help?** Check the logs first, then run the error fix script. The script will diagnose and fix most common issues automatically.
 
+
+
+
+

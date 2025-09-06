@@ -141,3 +141,7 @@ async function checkDatabaseCompatibility() {
 // Run the check
 checkDatabaseCompatibility().catch(console.error);
 
+
+
+
+

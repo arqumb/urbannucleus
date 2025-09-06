@@ -173,3 +173,7 @@ file /var/www/urban-nucleus/uploads/images/sample.jpg
 
 **This fix will resolve the product image display issue completely. Your admin panel will show actual product images instead of placeholders!** 🎉
 
+
+
+
+

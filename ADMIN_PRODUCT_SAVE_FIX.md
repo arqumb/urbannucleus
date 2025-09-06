@@ -179,3 +179,7 @@ mysql -u urban_user -p'@Arqum789' -e "USE urban_nucleus; DESCRIBE products;"
 
 **The fix maintains your existing functionality while resolving the deployment issues. Your website should now work exactly as it did on localhost!** 🎉
 
+
+
+
+
