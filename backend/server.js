@@ -2398,6 +2398,9 @@ app.get('/users/:userId/orders', (req, res) => {
 app.post('/admin/products', (req, res) => {
   console.log('🔍 Received product creation request:', req.body);
   
+  // Add error handling for the entire request
+  try {
+  
   const {
     name, price, description, category_id, subcategory_id, inventory = 0, status = 'active',
     compare_at_price, cost_per_item, sku, barcode, track_inventory = true, continue_selling = false, weight,
@@ -2498,6 +2501,10 @@ app.post('/admin/products', (req, res) => {
   } catch (error) {
     console.error('❌ Unexpected error:', error);
     return res.status(500).json({ error: 'Unexpected error: ' + error.message });
+  }
+  } catch (outerError) {
+    console.error('❌ Outer error in product creation:', outerError);
+    return res.status(500).json({ error: 'Failed to process product creation: ' + outerError.message });
   }
 });
 
