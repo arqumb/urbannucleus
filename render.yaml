@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: urban-nucleus
+    env: node
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MYSQL_HOST
+        value: 31.97.239.99
+      - key: MYSQL_USER
+        value: your_database_username
+      - key: MYSQL_PASSWORD
+        value: your_database_password
+      - key: MYSQL_DATABASE
+        value: your_database_name
+      - key: MYSQL_PORT
+        value: 3306
+      - key: PORT
+        value: 3000
