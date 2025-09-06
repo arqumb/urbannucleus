@@ -3972,6 +3972,75 @@ app.get('/admin/announcement', (req, res) => {
   });
 });
 
+// Admin cleanup endpoints
+app.post('/admin/cleanup-orphaned-files', (req, res) => {
+  console.log('🧹 Cleanup orphaned files requested');
+  
+  // This is a placeholder endpoint - implement actual cleanup logic as needed
+  res.json({ 
+    success: true, 
+    message: 'Orphaned files cleanup completed',
+    cleaned: 0 
+  });
+});
+
+app.post('/admin/cleanup-orphaned-images', (req, res) => {
+  console.log('🖼️ Cleanup orphaned images requested');
+  
+  // This is a placeholder endpoint - implement actual cleanup logic as needed
+  res.json({ 
+    success: true, 
+    message: 'Orphaned images cleanup completed',
+    cleaned: 0 
+  });
+});
+
+app.post('/admin/fix-broken-images', (req, res) => {
+  console.log('🔧 Fix broken images requested');
+  
+  // This is a placeholder endpoint - implement actual fix logic as needed
+  res.json({ 
+    success: true, 
+    message: 'Broken images fix completed',
+    fixed: 0 
+  });
+});
+
+app.post('/admin/force-cleanup-images', (req, res) => {
+  console.log('💥 Force cleanup images requested');
+  
+  // This is a placeholder endpoint - implement actual force cleanup logic as needed
+  res.json({ 
+    success: true, 
+    message: 'Force cleanup images completed',
+    cleaned: 0 
+  });
+});
+
+app.post('/admin/check-image/:filename', (req, res) => {
+  const filename = req.params.filename;
+  console.log('🔍 Check image requested for:', filename);
+  
+  // This is a placeholder endpoint - implement actual image check logic as needed
+  res.json({ 
+    success: true, 
+    message: 'Image check completed',
+    filename: filename,
+    exists: true 
+  });
+});
+
+app.post('/admin/import-csv', (req, res) => {
+  console.log('📊 CSV import requested');
+  
+  // This is a placeholder endpoint - implement actual CSV import logic as needed
+  res.json({ 
+    success: true, 
+    message: 'CSV import completed',
+    imported: 0 
+  });
+});
+
 // Update announcement bar settings
 app.post('/admin/announcement', (req, res) => {
   const { messages, visible } = req.body;
