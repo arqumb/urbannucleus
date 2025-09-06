@@ -1,5 +1,5 @@
 // Admin Dashboard JavaScript
-   const API_BASE_URL = 'https://urbannucleus.in';
+// API_BASE_URL is already declared in admin.html
 let currentSection = 'dashboard';
 let currentProductId = null;
 
