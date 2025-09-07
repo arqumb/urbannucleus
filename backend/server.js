@@ -218,8 +218,29 @@ const JWT_SECRET = 'your-secret-key';
 // Password reset tokens storage (in production, use Redis or database)
 const resetTokens = new Map();
 
-// Multer setup for file uploads
-const storage = multer.diskStorage({
+// Cloudinary setup for persistent file storage
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'your_cloud_name',
+  api_key: process.env.CLOUDINARY_API_KEY || 'your_api_key',
+  api_secret: process.env.CLOUDINARY_API_SECRET || 'your_api_secret'
+});
+
+// Cloudinary storage for images
+const cloudinaryStorage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'urban-nucleus/products',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+    transformation: [{ width: 800, height: 800, crop: 'limit' }]
+  }
+});
+
+// Fallback to local storage if Cloudinary not configured
+const localStorage = multer.diskStorage({
   destination: function (req, file, cb) {
     const type = file.mimetype.startsWith('video') ? 'videos' : 'images';
     cb(null, path.join(__dirname, '../uploads/', type));
@@ -229,6 +250,11 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + '-' + Math.round(Math.random() * 1E9) + ext);
   }
 });
+
+// Use Cloudinary if configured, otherwise fallback to local
+const storage = (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY) 
+  ? cloudinaryStorage 
+  : localStorage;
 
 // Special storage for hero slides
 const heroSlideStorage = multer.diskStorage({
@@ -271,16 +297,19 @@ app.post('/products/:id/upload-images', upload.array('images', 10), (req, res) =
   
   console.log(`🔍 Uploading ${files.length} images for product ${productId}`);
   files.forEach((file, idx) => {
-    console.log(`🔍 File ${idx + 1}: ${file.filename} -> ${file.path}`);
+    console.log(`🔍 File ${idx + 1}: ${file.filename} -> ${file.path || file.url}`);
   });
   
-  // Create relative paths for the images (better for frontend compatibility)
-  const imageValues = files.map((file, idx) => [
-    productId, 
-    `/uploads/images/${file.filename}`, 
-    `/uploads/images/${file.filename}`, 
-    idx + 1
-  ]);
+  // Create image URLs - use Cloudinary URL if available, otherwise local path
+  const imageValues = files.map((file, idx) => {
+    const imageUrl = file.url || `/uploads/images/${file.filename}`;
+    return [
+      productId, 
+      imageUrl, 
+      imageUrl, 
+      idx + 1
+    ];
+  });
   
   // First, clear existing images for this product
   pool.query('DELETE FROM product_images WHERE product_id = ?', [productId], (err) => {
@@ -312,7 +341,7 @@ app.post('/products/:id/upload-images', upload.array('images', 10), (req, res) =
       
       res.json({ 
         message: 'Images uploaded successfully', 
-        files: files.map(f => `/uploads/images/${f.filename}`),
+        files: files.map(f => f.url || `/uploads/images/${f.filename}`),
         productId: productId
       });
     });

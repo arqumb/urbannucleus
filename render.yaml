@@ -5,18 +5,24 @@ services:
     buildCommand: cd backend && npm install
     startCommand: cd backend && npm start
     staticPublishPath: .
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: MYSQL_HOST
-        value: mysql-11fd3f8-bubere908-3682.d.aivencloud.com
-      - key: MYSQL_USER
-        value: avnadmin
-      - key: MYSQL_PASSWORD
-        value: your_aiven_password_here
-      - key: MYSQL_DATABASE
-        value: defaultdb
-      - key: MYSQL_PORT
-        value: 12534
-      - key: PORT
-        value: 3000
+           envVars:
+             - key: NODE_ENV
+               value: production
+             - key: MYSQL_HOST
+               value: mysql-11fd3f8-bubere908-3682.d.aivencloud.com
+             - key: MYSQL_USER
+               value: avnadmin
+             - key: MYSQL_PASSWORD
+               value: your_aiven_password_here
+             - key: MYSQL_DATABASE
+               value: defaultdb
+             - key: MYSQL_PORT
+               value: 12534
+             - key: PORT
+               value: 3000
+             - key: CLOUDINARY_CLOUD_NAME
+               value: your_cloudinary_cloud_name
+             - key: CLOUDINARY_API_KEY
+               value: your_cloudinary_api_key
+             - key: CLOUDINARY_API_SECRET
+               value: your_cloudinary_api_secret
