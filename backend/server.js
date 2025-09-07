@@ -2630,32 +2630,33 @@ app.put('/admin/products/:id', (req, res) => {
       console.error('❌ Error message:', err.message);
       return res.status(500).json({ error: 'Database error: ' + err.message });
     }
-      // Update images: delete old, insert new
-      pool.query('DELETE FROM product_images WHERE product_id = ?', [productId], (err) => {
-        if (!err && Array.isArray(images) && images.length > 0) {
-          const imageValues = images.map((url, idx) => [productId, url, null, idx + 1]);
-          pool.query('INSERT INTO product_images (product_id, image_url, file_path, position) VALUES ?', [imageValues], (err) => {
-            if (err) console.error('Error updating product images:', err);
-          });
-        }
-      });
-      // Update variants: delete old, insert new
-      pool.query('DELETE FROM product_variants WHERE product_id = ?', [productId], (err) => {
-        if (!err && Array.isArray(variants) && variants.length > 0) {
-          const variantValues = variants.map(v => [productId, v.option_name, v.option_value, v.sku, v.price, v.inventory]);
-          pool.query('INSERT INTO product_variants (product_id, option_name, option_value, sku, price, inventory) VALUES ?', [variantValues], (err) => {
-            if (err) console.error('Error updating product variants:', err);
-          });
-        }
-      });
-      
-      // Clear cache after product update
-      // No caching anymore
-      console.log('🧹 Cache cleared after product update');
-      
-      res.json({ message: 'Product updated successfully' });
-    }
-  );
+    
+    // Update images: delete old, insert new
+    pool.query('DELETE FROM product_images WHERE product_id = ?', [productId], (err) => {
+      if (!err && Array.isArray(images) && images.length > 0) {
+        const imageValues = images.map((url, idx) => [productId, url, null, idx + 1]);
+        pool.query('INSERT INTO product_images (product_id, image_url, file_path, position) VALUES ?', [imageValues], (err) => {
+          if (err) console.error('Error updating product images:', err);
+        });
+      }
+    });
+    
+    // Update variants: delete old, insert new
+    pool.query('DELETE FROM product_variants WHERE product_id = ?', [productId], (err) => {
+      if (!err && Array.isArray(variants) && variants.length > 0) {
+        const variantValues = variants.map(v => [productId, v.option_name, v.option_value, v.sku, v.price, v.inventory]);
+        pool.query('INSERT INTO product_variants (product_id, option_name, option_value, sku, price, inventory) VALUES ?', [variantValues], (err) => {
+          if (err) console.error('Error updating product variants:', err);
+        });
+      }
+    });
+    
+    // Clear cache after product update
+    // No caching anymore
+    console.log('🧹 Cache cleared after product update');
+    
+    res.json({ message: 'Product updated successfully' });
+  });
 });
 
 // Bulk update product categories (admin)
