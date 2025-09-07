@@ -324,14 +324,32 @@ app.post('/products/:id/upload-images', upload.array('images', 10), (req, res) =
       originalname: file.originalname,
       mimetype: file.mimetype,
       size: file.size,
-      fieldname: file.fieldname
+      fieldname: file.fieldname,
+      url: file.url,
+      public_id: file.public_id,
+      secure_url: file.secure_url
     });
   });
   
   // Create image URLs - use Cloudinary URL if available, otherwise local path
   const imageValues = files.map((file, idx) => {
-    const imageUrl = file.url || `/uploads/images/${file.filename}`;
-    console.log(`🔍 Image URL for file ${idx + 1}: ${imageUrl}`);
+    let imageUrl;
+    
+    if (isCloudinaryConfigured && file.url) {
+      // Use Cloudinary URL directly
+      imageUrl = file.url;
+      console.log(`🔍 Using Cloudinary URL for file ${idx + 1}: ${imageUrl}`);
+    } else if (isCloudinaryConfigured && file.public_id) {
+      // Construct Cloudinary URL from public_id
+      imageUrl = `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/${file.public_id}`;
+      console.log(`🔍 Constructed Cloudinary URL for file ${idx + 1}: ${imageUrl}`);
+    } else {
+      // Fallback to local path
+      imageUrl = `/uploads/images/${file.filename}`;
+      console.log(`🔍 Using local path for file ${idx + 1}: ${imageUrl}`);
+    }
+    
+    console.log(`🔍 Final image URL for file ${idx + 1}: ${imageUrl}`);
     return [
       productId, 
       imageUrl, 
