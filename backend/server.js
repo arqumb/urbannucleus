@@ -303,6 +303,15 @@ app.post('/products/:id/upload-images', upload.array('images', 10), (req, res) =
   console.log(`🔍 Files received:`, files ? files.length : 'none');
   console.log(`🔍 Request body:`, req.body);
   
+  // Check if Cloudinary is configured
+  if (!isCloudinaryConfigured) {
+    console.log('❌ Cloudinary not configured - uploads disabled');
+    return res.status(503).json({ 
+      error: 'Image uploads are temporarily disabled. Cloudinary needs to be configured.',
+      details: 'Please set up Cloudinary environment variables: CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET'
+    });
+  }
+  
   if (!files || files.length === 0) {
     console.log('❌ No files uploaded');
     return res.status(400).json({ error: 'No files uploaded' });
