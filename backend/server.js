@@ -252,9 +252,14 @@ const localStorage = multer.diskStorage({
 });
 
 // Use Cloudinary if configured, otherwise fallback to local
-const storage = (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY) 
-  ? cloudinaryStorage 
-  : localStorage;
+const isCloudinaryConfigured = process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY;
+console.log(`🔍 Cloudinary configuration check:`);
+console.log(`🔍 CLOUDINARY_CLOUD_NAME: ${process.env.CLOUDINARY_CLOUD_NAME ? 'SET' : 'NOT SET'}`);
+console.log(`🔍 CLOUDINARY_API_KEY: ${process.env.CLOUDINARY_API_KEY ? 'SET' : 'NOT SET'}`);
+console.log(`🔍 CLOUDINARY_API_SECRET: ${process.env.CLOUDINARY_API_SECRET ? 'SET' : 'NOT SET'}`);
+console.log(`🔍 Using storage: ${isCloudinaryConfigured ? 'CLOUDINARY' : 'LOCAL'}`);
+
+const storage = isCloudinaryConfigured ? cloudinaryStorage : localStorage;
 
 // Special storage for hero slides
 const heroSlideStorage = multer.diskStorage({
@@ -293,16 +298,31 @@ const fs = require('fs');
 app.post('/products/:id/upload-images', upload.array('images', 10), (req, res) => {
   const productId = req.params.id;
   const files = req.files;
-  if (!files || files.length === 0) return res.status(400).json({ error: 'No files uploaded' });
+  
+  console.log(`🔍 Upload endpoint called for product ${productId}`);
+  console.log(`🔍 Files received:`, files ? files.length : 'none');
+  console.log(`🔍 Request body:`, req.body);
+  
+  if (!files || files.length === 0) {
+    console.log('❌ No files uploaded');
+    return res.status(400).json({ error: 'No files uploaded' });
+  }
   
   console.log(`🔍 Uploading ${files.length} images for product ${productId}`);
   files.forEach((file, idx) => {
     console.log(`🔍 File ${idx + 1}: ${file.filename} -> ${file.path || file.url}`);
+    console.log(`🔍 File details:`, {
+      originalname: file.originalname,
+      mimetype: file.mimetype,
+      size: file.size,
+      fieldname: file.fieldname
+    });
   });
   
   // Create image URLs - use Cloudinary URL if available, otherwise local path
   const imageValues = files.map((file, idx) => {
     const imageUrl = file.url || `/uploads/images/${file.filename}`;
+    console.log(`🔍 Image URL for file ${idx + 1}: ${imageUrl}`);
     return [
       productId, 
       imageUrl, 
