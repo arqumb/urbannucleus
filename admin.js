@@ -3458,16 +3458,6 @@ async function handleProductMediaUploads(productId) {
                 showMessage('Failed to upload images: ' + errorText, 'error');
                 throw new Error('Image upload failed: ' + errorText);
             }
-        } catch (uploadError) {
-            if (uploadError.name === 'AbortError') {
-                console.error('Image upload timed out after 30 seconds');
-                showMessage('Image upload timed out. Please try again.', 'error');
-                throw new Error('Image upload timed out');
-            } else {
-                console.error('Image upload error:', uploadError);
-                showMessage('Image upload error: ' + uploadError.message, 'error');
-                throw uploadError;
-            }
         }
 
         // Handle video files
@@ -3542,8 +3532,13 @@ async function handleProductMediaUploads(productId) {
         // The form will be cleared after the product save is complete
         
     } catch (error) {
-        console.error('Error handling media uploads:', error);
-        showMessage('Error handling media uploads: ' + error.message, 'error');
+        if (error.name === 'AbortError') {
+            console.error('Image upload timed out after 30 seconds');
+            showMessage('Image upload timed out. Please try again.', 'error');
+        } else {
+            console.error('Error handling media uploads:', error);
+            showMessage('Error handling media uploads: ' + error.message, 'error');
+        }
         throw error;
     }
 }
