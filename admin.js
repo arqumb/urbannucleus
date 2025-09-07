@@ -3429,10 +3429,23 @@ async function handleProductMediaUploads(productId) {
                 imageFormData.append('images', file);
             });
             
+            console.log(`🔍 Sending image upload request to: ${API_BASE_URL}/products/${productId}/upload-images`);
+            console.log(`🔍 FormData contents:`, Array.from(imageFormData.entries()));
+            
+            // Create AbortController for timeout
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+            
             const imageResponse = await fetch(`${API_BASE_URL}/products/${productId}/upload-images`, {
                 method: 'POST',
-                body: imageFormData
+                body: imageFormData,
+                signal: controller.signal
             });
+            
+            clearTimeout(timeoutId);
+            
+            console.log(`🔍 Image upload response status: ${imageResponse.status}`);
+            console.log(`🔍 Image upload response ok: ${imageResponse.ok}`);
             
             if (imageResponse.ok) {
                 const imageResult = await imageResponse.json();
@@ -3444,6 +3457,16 @@ async function handleProductMediaUploads(productId) {
                 console.error('Failed to upload images:', errorText);
                 showMessage('Failed to upload images: ' + errorText, 'error');
                 throw new Error('Image upload failed: ' + errorText);
+            }
+        } catch (uploadError) {
+            if (uploadError.name === 'AbortError') {
+                console.error('Image upload timed out after 30 seconds');
+                showMessage('Image upload timed out. Please try again.', 'error');
+                throw new Error('Image upload timed out');
+            } else {
+                console.error('Image upload error:', uploadError);
+                showMessage('Image upload error: ' + uploadError.message, 'error');
+                throw uploadError;
             }
         }
 
