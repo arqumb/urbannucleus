@@ -4235,6 +4235,11 @@ function addImageUrlInput() {
     container.appendChild(newGroup);
 }
 
+// Alias function to fix any buttons calling the wrong function name
+function addImageInput() {
+    addImageUrlInput();
+}
+
 function addVideoUrlInput() {
     const container = document.getElementById('videoUrlInputs');
     const newGroup = document.createElement('div');
